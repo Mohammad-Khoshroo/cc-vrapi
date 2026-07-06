@@ -1,0 +1,830 @@
+==============================
+Testing WIDTH = 4 bits
+ bool tests:
+  bool 0 -> 0000 (hex: 0x0)
+  bool 1 -> 0001 (hex: 0x1)
+==============================
+ signed a tests:
+  Mode: lsb
+   val = 1 -> 0001 (hex: 0x1)
+   val = -78 -> 0010 (hex: 0x2)
+   val = -87 -> 1001 (hex: 0x9)
+   val = -18 -> 1110 (hex: 0xe)
+   val = 103 -> 0111 (hex: 0x7)
+  Mode: msb
+   val = -57 -> 1111 (hex: 0xf)
+   val = 48 -> 0000 (hex: 0x0)
+   val = -11 -> 1111 (hex: 0xf)
+   val = -46 -> 1111 (hex: 0xf)
+   val = 27 -> 0000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = -90 mode = invalid
+   Exception thrown for val = 3 mode = invalid
+   Exception thrown for val = 57 mode = invalid
+   Exception thrown for val = -104 mode = invalid
+   Exception thrown for val = -52 mode = invalid
+==============================
+ unsigned h tests:
+  Mode: lsb
+   val = 27 -> 1011 (hex: 0xb)
+   val = 222 -> 1110 (hex: 0xe)
+   val = 9 -> 1001 (hex: 0x9)
+   val = 253 -> 1101 (hex: 0xd)
+   val = 31 -> 1111 (hex: 0xf)
+  Mode: msb
+   val = 38 -> 0000 (hex: 0x0)
+   val = 165 -> 0000 (hex: 0x0)
+   val = 63 -> 0000 (hex: 0x0)
+   val = 16 -> 0000 (hex: 0x0)
+   val = 81 -> 0000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = 223 mode = invalid
+   Exception thrown for val = 33 mode = invalid
+   Exception thrown for val = 5 mode = invalid
+   Exception thrown for val = 221 mode = invalid
+   Exception thrown for val = 124 mode = invalid
+==============================
+ signed s tests:
+  Mode: lsb
+   val = -6447 -> 0001 (hex: 0x1)
+   val = -1538 -> 1110 (hex: 0xe)
+   val = -16916 -> 1100 (hex: 0xc)
+   val = -7754 -> 0110 (hex: 0x6)
+   val = -12041 -> 0111 (hex: 0x7)
+  Mode: msb
+   val = -7356 -> 1111 (hex: 0xf)
+   val = 4093 -> 0000 (hex: 0x0)
+   val = -22401 -> 1111 (hex: 0xf)
+   val = 18162 -> 0000 (hex: 0x0)
+   val = 23069 -> 0000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = -4478 mode = invalid
+   Exception thrown for val = -5751 mode = invalid
+   Exception thrown for val = -6210 mode = invalid
+   Exception thrown for val = -30680 mode = invalid
+   Exception thrown for val = -31189 mode = invalid
+==============================
+ unsigned t tests:
+  Mode: lsb
+   val = 7877 -> 0101 (hex: 0x5)
+   val = 21063 -> 0111 (hex: 0x7)
+   val = 8242 -> 0010 (hex: 0x2)
+   val = 36246 -> 0110 (hex: 0x6)
+   val = 209 -> 0001 (hex: 0x1)
+  Mode: msb
+   val = 17241 -> 0000 (hex: 0x0)
+   val = 10376 -> 0000 (hex: 0x0)
+   val = 11494 -> 0000 (hex: 0x0)
+   val = 31073 -> 0000 (hex: 0x0)
+   val = 57812 -> 0000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = 31648 mode = invalid
+   Exception thrown for val = 44412 mode = invalid
+   Exception thrown for val = 8469 mode = invalid
+   Exception thrown for val = 31159 mode = invalid
+   Exception thrown for val = 53904 mode = invalid
+==============================
+ signed i tests:
+  Mode: lsb
+   val = -236127373 -> 0011 (hex: 0x3)
+   val = 1058641163 -> 1011 (hex: 0xb)
+   val = -1617117725 -> 0011 (hex: 0x3)
+   val = -1532583228 -> 0100 (hex: 0x4)
+   val = 515784264 -> 1000 (hex: 0x8)
+  Mode: msb
+   val = 1138650638 -> 0000 (hex: 0x0)
+   val = 1625757786 -> 0000 (hex: 0x0)
+   val = 647343027 -> 0000 (hex: 0x0)
+   val = 1277558851 -> 0000 (hex: 0x0)
+   val = -1438963375 -> 1111 (hex: 0xf)
+  Mode: invalid
+   Exception thrown for val = 805647107 mode = invalid
+   Exception thrown for val = -745185467 mode = invalid
+   Exception thrown for val = 1426599875 mode = invalid
+   Exception thrown for val = 133737566 mode = invalid
+   Exception thrown for val = -1089365829 mode = invalid
+==============================
+ unsigned j tests:
+  Mode: lsb
+   val = 393984848 -> 0000 (hex: 0x0)
+   val = 3743738859 -> 1011 (hex: 0xb)
+   val = 2949006212 -> 0100 (hex: 0x4)
+   val = 2146394936 -> 1000 (hex: 0x8)
+   val = 2355950772 -> 0100 (hex: 0x4)
+  Mode: msb
+   val = 2678544308 -> 0000 (hex: 0x0)
+   val = 3879029622 -> 0000 (hex: 0x0)
+   val = 217088448 -> 0000 (hex: 0x0)
+   val = 4051028009 -> 0000 (hex: 0x0)
+   val = 1555200788 -> 0000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = 4186918221 mode = invalid
+   Exception thrown for val = 2005013270 mode = invalid
+   Exception thrown for val = 2657226738 mode = invalid
+   Exception thrown for val = 2478895867 mode = invalid
+   Exception thrown for val = 1466419341 mode = invalid
+==============================
+ signed l tests:
+  Mode: lsb
+   val = -8938005391338422961 -> 1111 (hex: 0xf)
+   val = -347082937760286881 -> 1111 (hex: 0xf)
+   val = -3651372377168276497 -> 1111 (hex: 0xf)
+   val = -6083900303834500287 -> 0001 (hex: 0x1)
+   val = -4569889910896633492 -> 1100 (hex: 0xc)
+  Mode: msb
+   val = -5530334922691224222 -> 1011 (hex: 0xb)
+   val = 2313529399559616554 -> 0010 (hex: 0x2)
+   val = 5254040929421137671 -> 0100 (hex: 0x4)
+   val = -3627263521725734529 -> 1100 (hex: 0xc)
+   val = 2985006799937282123 -> 0010 (hex: 0x2)
+  Mode: invalid
+   Exception thrown for val = 4445096719786948322 mode = invalid
+   Exception thrown for val = 7717064028867088069 mode = invalid
+   Exception thrown for val = 1910497831001393995 mode = invalid
+   Exception thrown for val = 8043861586318457186 mode = invalid
+   Exception thrown for val = 2130638899239942936 mode = invalid
+==============================
+ unsigned m tests:
+  Mode: lsb
+   val = 17452255992693832755 -> 0011 (hex: 0x3)
+   val = 4486177013681798725 -> 0101 (hex: 0x5)
+   val = 8554028615433293020 -> 1100 (hex: 0xc)
+   val = 2767815344827990516 -> 0100 (hex: 0x4)
+   val = 10274564407325022787 -> 0011 (hex: 0x3)
+  Mode: msb
+   val = 4150433889603544155 -> 0011 (hex: 0x3)
+   val = 6486211776942500121 -> 0101 (hex: 0x5)
+   val = 15836319157976648981 -> 1101 (hex: 0xd)
+   val = 1423407249549147098 -> 0001 (hex: 0x1)
+   val = 14120842209796562655 -> 1100 (hex: 0xc)
+  Mode: invalid
+   Exception thrown for val = 3755905655012309340 mode = invalid
+   Exception thrown for val = 11474917827888642055 mode = invalid
+   Exception thrown for val = 10043667320388533496 mode = invalid
+   Exception thrown for val = 15022310412087324321 mode = invalid
+   Exception thrown for val = 163088893266428182 mode = invalid
+
+==============================
+Testing WIDTH = 8 bits
+ bool tests:
+  bool 0 -> 00000000 (hex: 0x0)
+  bool 1 -> 00000001 (hex: 0x1)
+==============================
+ signed a tests:
+  Mode: lsb
+   val = 103 -> 01100111 (hex: 0x67)
+   val = 122 -> 01111010 (hex: 0x7a)
+   val = 21 -> 00010101 (hex: 0x15)
+   val = 45 -> 00101101 (hex: 0x2d)
+   val = -51 -> 11001101 (hex: 0xcd)
+  Mode: msb
+   val = 31 -> 00000000 (hex: 0x0)
+   val = 27 -> 00000000 (hex: 0x0)
+   val = -23 -> 11111111 (hex: 0xff)
+   val = -116 -> 11111111 (hex: 0xff)
+   val = -119 -> 11111111 (hex: 0xff)
+  Mode: invalid
+   Exception thrown for val = 42 mode = invalid
+   Exception thrown for val = -28 mode = invalid
+   Exception thrown for val = 78 mode = invalid
+   Exception thrown for val = 21 mode = invalid
+   Exception thrown for val = -17 mode = invalid
+==============================
+ unsigned h tests:
+  Mode: lsb
+   val = 225 -> 11100001 (hex: 0xe1)
+   val = 137 -> 10001001 (hex: 0x89)
+   val = 240 -> 11110000 (hex: 0xf0)
+   val = 189 -> 10111101 (hex: 0xbd)
+   val = 35 -> 00100011 (hex: 0x23)
+  Mode: msb
+   val = 209 -> 00000000 (hex: 0x0)
+   val = 57 -> 00000000 (hex: 0x0)
+   val = 67 -> 00000000 (hex: 0x0)
+   val = 229 -> 00000000 (hex: 0x0)
+   val = 210 -> 00000000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = 74 mode = invalid
+   Exception thrown for val = 94 mode = invalid
+   Exception thrown for val = 118 mode = invalid
+   Exception thrown for val = 91 mode = invalid
+   Exception thrown for val = 142 mode = invalid
+==============================
+ signed s tests:
+  Mode: lsb
+   val = -6436 -> 11011100 (hex: 0xdc)
+   val = -23115 -> 10110101 (hex: 0xb5)
+   val = 28919 -> 11110111 (hex: 0xf7)
+   val = -5146 -> 11100110 (hex: 0xe6)
+   val = -25218 -> 01111110 (hex: 0x7e)
+  Mode: msb
+   val = -19414 -> 11111111 (hex: 0xff)
+   val = -4016 -> 11111111 (hex: 0xff)
+   val = 28741 -> 00000000 (hex: 0x0)
+   val = 901 -> 00000000 (hex: 0x0)
+   val = -31498 -> 11111111 (hex: 0xff)
+  Mode: invalid
+   Exception thrown for val = 30805 mode = invalid
+   Exception thrown for val = -18748 mode = invalid
+   Exception thrown for val = 3028 mode = invalid
+   Exception thrown for val = 1795 mode = invalid
+   Exception thrown for val = 21458 mode = invalid
+==============================
+ unsigned t tests:
+  Mode: lsb
+   val = 46442 -> 01101010 (hex: 0x6a)
+   val = 48121 -> 11111001 (hex: 0xf9)
+   val = 29551 -> 01101111 (hex: 0x6f)
+   val = 19620 -> 10100100 (hex: 0xa4)
+   val = 8592 -> 10010000 (hex: 0x90)
+  Mode: msb
+   val = 49937 -> 00000000 (hex: 0x0)
+   val = 48398 -> 00000000 (hex: 0x0)
+   val = 65340 -> 00000000 (hex: 0x0)
+   val = 45148 -> 00000000 (hex: 0x0)
+   val = 32491 -> 00000000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = 55775 mode = invalid
+   Exception thrown for val = 26657 mode = invalid
+   Exception thrown for val = 52688 mode = invalid
+   Exception thrown for val = 59654 mode = invalid
+   Exception thrown for val = 60373 mode = invalid
+==============================
+ signed i tests:
+  Mode: lsb
+   val = 1855571363 -> 10100011 (hex: 0xa3)
+   val = -1018571701 -> 01001011 (hex: 0x4b)
+   val = -196351038 -> 11000010 (hex: 0xc2)
+   val = 1632113126 -> 11100110 (hex: 0xe6)
+   val = 1186187189 -> 10110101 (hex: 0xb5)
+  Mode: msb
+   val = 2061747747 -> 00000000 (hex: 0x0)
+   val = 626260666 -> 00000000 (hex: 0x0)
+   val = -1498289990 -> 11111111 (hex: 0xff)
+   val = -803056458 -> 11111111 (hex: 0xff)
+   val = -2055797652 -> 11111111 (hex: 0xff)
+  Mode: invalid
+   Exception thrown for val = -1050816148 mode = invalid
+   Exception thrown for val = 865705568 mode = invalid
+   Exception thrown for val = -1752542495 mode = invalid
+   Exception thrown for val = -768376965 mode = invalid
+   Exception thrown for val = -1960999562 mode = invalid
+==============================
+ unsigned j tests:
+  Mode: lsb
+   val = 2184399159 -> 00110111 (hex: 0x37)
+   val = 1531784079 -> 10001111 (hex: 0x8f)
+   val = 198731501 -> 11101101 (hex: 0xed)
+   val = 2287485937 -> 11110001 (hex: 0xf1)
+   val = 3907084996 -> 11000100 (hex: 0xc4)
+  Mode: msb
+   val = 1936658108 -> 00000000 (hex: 0x0)
+   val = 3357214311 -> 00000000 (hex: 0x0)
+   val = 1265691659 -> 00000000 (hex: 0x0)
+   val = 3151464090 -> 00000000 (hex: 0x0)
+   val = 4092580775 -> 00000000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = 4037776516 mode = invalid
+   Exception thrown for val = 3284295437 mode = invalid
+   Exception thrown for val = 2772424039 mode = invalid
+   Exception thrown for val = 515677356 mode = invalid
+   Exception thrown for val = 3285068271 mode = invalid
+==============================
+ signed l tests:
+  Mode: lsb
+   val = -4308341398187498128 -> 01110000 (hex: 0x70)
+   val = -5033924506258054982 -> 10111010 (hex: 0xba)
+   val = -7386802660037697465 -> 01000111 (hex: 0x47)
+   val = 8170760039425843959 -> 11110111 (hex: 0xf7)
+   val = 8854044964873756138 -> 11101010 (hex: 0xea)
+  Mode: msb
+   val = -5222420064576262492 -> 10110111 (hex: 0xb7)
+   val = -1894201059699410646 -> 11100101 (hex: 0xe5)
+   val = 2356943704611416629 -> 00100000 (hex: 0x20)
+   val = 51983156031407671 -> 00000000 (hex: 0x0)
+   val = -912880489646533770 -> 11110011 (hex: 0xf3)
+  Mode: invalid
+   Exception thrown for val = 1401674360728610357 mode = invalid
+   Exception thrown for val = -6128491627226079362 mode = invalid
+   Exception thrown for val = 1735580081451538781 mode = invalid
+   Exception thrown for val = 6500199305032701361 mode = invalid
+   Exception thrown for val = -3513653058142415914 mode = invalid
+==============================
+ unsigned m tests:
+  Mode: lsb
+   val = 8836721580298385249 -> 01100001 (hex: 0x61)
+   val = 378899890893414861 -> 11001101 (hex: 0xcd)
+   val = 9463908481362856464 -> 00010000 (hex: 0x10)
+   val = 7900658582523049241 -> 00011001 (hex: 0x19)
+   val = 3622765765567572830 -> 01011110 (hex: 0x5e)
+  Mode: msb
+   val = 14654054566929523684 -> 11001011 (hex: 0xcb)
+   val = 11386063781930078458 -> 10011110 (hex: 0x9e)
+   val = 17979460324182780707 -> 11111001 (hex: 0xf9)
+   val = 17484932020765084205 -> 11110010 (hex: 0xf2)
+   val = 11985845620378768371 -> 10100110 (hex: 0xa6)
+  Mode: invalid
+   Exception thrown for val = 1510466980452896774 mode = invalid
+   Exception thrown for val = 12807319200747815558 mode = invalid
+   Exception thrown for val = 4851103181424854748 mode = invalid
+   Exception thrown for val = 13230006712538259472 mode = invalid
+   Exception thrown for val = 6718501076379566311 mode = invalid
+
+==============================
+Testing WIDTH = 16 bits
+ bool tests:
+  bool 0 -> 0000000000000000 (hex: 0x0)
+  bool 1 -> 0000000000000001 (hex: 0x1)
+==============================
+ signed a tests:
+  Mode: lsb
+   val = -113 -> 1111111110001111 (hex: 0xff8f)
+   val = 25 -> 0000000000011001 (hex: 0x19)
+   val = 29 -> 0000000000011101 (hex: 0x1d)
+   val = -101 -> 1111111110011011 (hex: 0xff9b)
+   val = -116 -> 1111111110001100 (hex: 0xff8c)
+  Mode: msb
+   val = -84 -> 1111111111111111 (hex: 0xffff)
+   val = -32 -> 1111111111111111 (hex: 0xffff)
+   val = 54 -> 0000000000000000 (hex: 0x0)
+   val = -86 -> 1111111111111111 (hex: 0xffff)
+   val = 44 -> 0000000000000000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = -125 mode = invalid
+   Exception thrown for val = -4 mode = invalid
+   Exception thrown for val = 80 mode = invalid
+   Exception thrown for val = -45 mode = invalid
+   Exception thrown for val = 8 mode = invalid
+==============================
+ unsigned h tests:
+  Mode: lsb
+   val = 97 -> 0000000001100001 (hex: 0x61)
+   val = 37 -> 0000000000100101 (hex: 0x25)
+   val = 101 -> 0000000001100101 (hex: 0x65)
+   val = 149 -> 0000000010010101 (hex: 0x95)
+   val = 38 -> 0000000000100110 (hex: 0x26)
+  Mode: msb
+   val = 234 -> 0000000000000000 (hex: 0x0)
+   val = 223 -> 0000000000000000 (hex: 0x0)
+   val = 104 -> 0000000000000000 (hex: 0x0)
+   val = 44 -> 0000000000000000 (hex: 0x0)
+   val = 82 -> 0000000000000000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = 82 mode = invalid
+   Exception thrown for val = 141 mode = invalid
+   Exception thrown for val = 55 mode = invalid
+   Exception thrown for val = 233 mode = invalid
+   Exception thrown for val = 219 mode = invalid
+==============================
+ signed s tests:
+  Mode: lsb
+   val = 13027 -> 0011001011100011 (hex: 0x32e3)
+   val = 10811 -> 0010101000111011 (hex: 0x2a3b)
+   val = -21387 -> 1010110001110101 (hex: 0xac75)
+   val = 23826 -> 0101110100010010 (hex: 0x5d12)
+   val = 1242 -> 0000010011011010 (hex: 0x4da)
+  Mode: msb
+   val = -7227 -> 1111111111111111 (hex: 0xffff)
+   val = -26882 -> 1111111111111111 (hex: 0xffff)
+   val = -21409 -> 1111111111111111 (hex: 0xffff)
+   val = 11157 -> 0000000000000000 (hex: 0x0)
+   val = 21403 -> 0000000000000000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = -24990 mode = invalid
+   Exception thrown for val = -8989 mode = invalid
+   Exception thrown for val = -21632 mode = invalid
+   Exception thrown for val = 27325 mode = invalid
+   Exception thrown for val = 12084 mode = invalid
+==============================
+ unsigned t tests:
+  Mode: lsb
+   val = 20430 -> 0100111111001110 (hex: 0x4fce)
+   val = 17229 -> 0100001101001101 (hex: 0x434d)
+   val = 39514 -> 1001101001011010 (hex: 0x9a5a)
+   val = 23916 -> 0101110101101100 (hex: 0x5d6c)
+   val = 11158 -> 0010101110010110 (hex: 0x2b96)
+  Mode: msb
+   val = 34676 -> 0000000000000000 (hex: 0x0)
+   val = 27761 -> 0000000000000000 (hex: 0x0)
+   val = 23666 -> 0000000000000000 (hex: 0x0)
+   val = 27062 -> 0000000000000000 (hex: 0x0)
+   val = 57273 -> 0000000000000000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = 43245 mode = invalid
+   Exception thrown for val = 24587 mode = invalid
+   Exception thrown for val = 58209 mode = invalid
+   Exception thrown for val = 1148 mode = invalid
+   Exception thrown for val = 23104 mode = invalid
+==============================
+ signed i tests:
+  Mode: lsb
+   val = -380931861 -> 0111000011101011 (hex: 0x70eb)
+   val = 910471840 -> 1011001010100000 (hex: 0xb2a0)
+   val = 1607627814 -> 0111010000100110 (hex: 0x7426)
+   val = 1317236646 -> 0110111110100110 (hex: 0x6fa6)
+   val = -566137813 -> 0110110000101011 (hex: 0x6c2b)
+  Mode: msb
+   val = -1834527368 -> 1111111111111111 (hex: 0xffff)
+   val = -902752129 -> 1111111111111111 (hex: 0xffff)
+   val = 1840463538 -> 0000000000000000 (hex: 0x0)
+   val = 30619629 -> 0000000000000000 (hex: 0x0)
+   val = 531677469 -> 0000000000000000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = 1031837900 mode = invalid
+   Exception thrown for val = -334729250 mode = invalid
+   Exception thrown for val = 2067596638 mode = invalid
+   Exception thrown for val = 608985991 mode = invalid
+   Exception thrown for val = -2006083484 mode = invalid
+==============================
+ unsigned j tests:
+  Mode: lsb
+   val = 3985249356 -> 0001010001001100 (hex: 0x144c)
+   val = 1075721358 -> 0011010010001110 (hex: 0x348e)
+   val = 1609619585 -> 1101100010000001 (hex: 0xd881)
+   val = 3534799615 -> 1100001011111111 (hex: 0xc2ff)
+   val = 659202521 -> 1010000111011001 (hex: 0xa1d9)
+  Mode: msb
+   val = 3809382147 -> 0000000000000000 (hex: 0x0)
+   val = 2231461219 -> 0000000000000000 (hex: 0x0)
+   val = 2856508518 -> 0000000000000000 (hex: 0x0)
+   val = 109505435 -> 0000000000000000 (hex: 0x0)
+   val = 3900050675 -> 0000000000000000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = 3866187875 mode = invalid
+   Exception thrown for val = 1535137533 mode = invalid
+   Exception thrown for val = 3488509442 mode = invalid
+   Exception thrown for val = 453502718 mode = invalid
+   Exception thrown for val = 1542963264 mode = invalid
+==============================
+ signed l tests:
+  Mode: lsb
+   val = 6974715935688155547 -> 1110000110011011 (hex: 0xe19b)
+   val = 358200861860785573 -> 0110110110100101 (hex: 0x6da5)
+   val = 3911012448044934849 -> 0110011011000001 (hex: 0x66c1)
+   val = 4193970594383990563 -> 0000111100100011 (hex: 0xf23)
+   val = -8737070155170176139 -> 0010001101110101 (hex: 0x2375)
+  Mode: msb
+   val = 564176511650255420 -> 0000011111010100 (hex: 0x7d4)
+   val = -3506007779372269292 -> 1100111101011000 (hex: 0xcf58)
+   val = 3601161471369346575 -> 0011000111111001 (hex: 0x31f9)
+   val = -4645698983392115927 -> 1011111110000111 (hex: 0xbf87)
+   val = 3668823460139921781 -> 0011001011101010 (hex: 0x32ea)
+  Mode: invalid
+   Exception thrown for val = -8792122253218270470 mode = invalid
+   Exception thrown for val = 5488263023853324759 mode = invalid
+   Exception thrown for val = 8136212062710855170 mode = invalid
+   Exception thrown for val = 1852451372798577725 mode = invalid
+   Exception thrown for val = 7045870427915043451 mode = invalid
+==============================
+ unsigned m tests:
+  Mode: lsb
+   val = 2692654279967661622 -> 0101111000110110 (hex: 0x5e36)
+   val = 12570149639367402089 -> 1010001001101001 (hex: 0xa269)
+   val = 13846976131030744698 -> 0111111001111010 (hex: 0x7e7a)
+   val = 8265111840910164229 -> 0100000100000101 (hex: 0x4105)
+   val = 18210379340792602748 -> 0010000001111100 (hex: 0x207c)
+  Mode: msb
+   val = 4786485799255665114 -> 0100001001101101 (hex: 0x426d)
+   val = 5998537964470840425 -> 0101001100111111 (hex: 0x533f)
+   val = 9053755085583495804 -> 0111110110100101 (hex: 0x7da5)
+   val = 3904182800824853559 -> 0011011000101110 (hex: 0x362e)
+   val = 10024813302540340171 -> 1000101100011111 (hex: 0x8b1f)
+  Mode: invalid
+   Exception thrown for val = 1608448107449184675 mode = invalid
+   Exception thrown for val = 988272213150208752 mode = invalid
+   Exception thrown for val = 16555818638808858657 mode = invalid
+   Exception thrown for val = 3794661778843675746 mode = invalid
+   Exception thrown for val = 5470939088612332951 mode = invalid
+
+==============================
+Testing WIDTH = 32 bits
+ bool tests:
+  bool 0 -> 00000000000000000000000000000000 (hex: 0x0)
+  bool 1 -> 00000000000000000000000000000001 (hex: 0x1)
+==============================
+ signed a tests:
+  Mode: lsb
+   val = 7 -> 00000000000000000000000000000111 (hex: 0x7)
+   val = -15 -> 11111111111111111111111111110001 (hex: 0xfffffff1)
+   val = -53 -> 11111111111111111111111111001011 (hex: 0xffffffcb)
+   val = -32 -> 11111111111111111111111111100000 (hex: 0xffffffe0)
+   val = -64 -> 11111111111111111111111111000000 (hex: 0xffffffc0)
+  Mode: msb
+   val = 77 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = -103 -> 11111111111111111111111111111111 (hex: 0xffffffff)
+   val = 11 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = -55 -> 11111111111111111111111111111111 (hex: 0xffffffff)
+   val = -63 -> 11111111111111111111111111111111 (hex: 0xffffffff)
+  Mode: invalid
+   Exception thrown for val = 58 mode = invalid
+   Exception thrown for val = 45 mode = invalid
+   Exception thrown for val = -51 mode = invalid
+   Exception thrown for val = -37 mode = invalid
+   Exception thrown for val = -108 mode = invalid
+==============================
+ unsigned h tests:
+  Mode: lsb
+   val = 138 -> 00000000000000000000000010001010 (hex: 0x8a)
+   val = 171 -> 00000000000000000000000010101011 (hex: 0xab)
+   val = 150 -> 00000000000000000000000010010110 (hex: 0x96)
+   val = 39 -> 00000000000000000000000000100111 (hex: 0x27)
+   val = 54 -> 00000000000000000000000000110110 (hex: 0x36)
+  Mode: msb
+   val = 149 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 211 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 77 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 190 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 64 -> 00000000000000000000000000000000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = 52 mode = invalid
+   Exception thrown for val = 50 mode = invalid
+   Exception thrown for val = 59 mode = invalid
+   Exception thrown for val = 149 mode = invalid
+   Exception thrown for val = 183 mode = invalid
+==============================
+ signed s tests:
+  Mode: lsb
+   val = -7952 -> 11111111111111111110000011110000 (hex: 0xffffe0f0)
+   val = -9269 -> 11111111111111111101101111001011 (hex: 0xffffdbcb)
+   val = 13154 -> 00000000000000000011001101100010 (hex: 0x3362)
+   val = 22048 -> 00000000000000000101011000100000 (hex: 0x5620)
+   val = -15394 -> 11111111111111111100001111011110 (hex: 0xffffc3de)
+  Mode: msb
+   val = -1684 -> 11111111111111111111111111111111 (hex: 0xffffffff)
+   val = 23168 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 2682 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 24698 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = -10254 -> 11111111111111111111111111111111 (hex: 0xffffffff)
+  Mode: invalid
+   Exception thrown for val = 6457 mode = invalid
+   Exception thrown for val = -3106 mode = invalid
+   Exception thrown for val = 16261 mode = invalid
+   Exception thrown for val = 27104 mode = invalid
+   Exception thrown for val = 6305 mode = invalid
+==============================
+ unsigned t tests:
+  Mode: lsb
+   val = 41943 -> 00000000000000001010001111010111 (hex: 0xa3d7)
+   val = 40984 -> 00000000000000001010000000011000 (hex: 0xa018)
+   val = 47224 -> 00000000000000001011100001111000 (hex: 0xb878)
+   val = 17363 -> 00000000000000000100001111010011 (hex: 0x43d3)
+   val = 51066 -> 00000000000000001100011101111010 (hex: 0xc77a)
+  Mode: msb
+   val = 26534 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 17484 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 20318 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 36772 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 38843 -> 00000000000000000000000000000000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = 5937 mode = invalid
+   Exception thrown for val = 37728 mode = invalid
+   Exception thrown for val = 54314 mode = invalid
+   Exception thrown for val = 44662 mode = invalid
+   Exception thrown for val = 44250 mode = invalid
+==============================
+ signed i tests:
+  Mode: lsb
+   val = 1776179725 -> 01101001110111100101101000001101 (hex: 0x69de5a0d)
+   val = 205431764 -> 00001100001111101010001111010100 (hex: 0xc3ea3d4)
+   val = 1730892772 -> 01100111001010110101001111100100 (hex: 0x672b53e4)
+   val = 553573915 -> 00100000111111101101111000011011 (hex: 0x20fede1b)
+   val = 1970422955 -> 01110101011100100100010010101011 (hex: 0x757244ab)
+  Mode: msb
+   val = -543508824 -> 11111111111111111111111111111111 (hex: 0xffffffff)
+   val = 348957948 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 1873791658 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 942696232 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 227686818 -> 00000000000000000000000000000000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = -1438961225 mode = invalid
+   Exception thrown for val = 1869375917 mode = invalid
+   Exception thrown for val = 1814876222 mode = invalid
+   Exception thrown for val = -1566275046 mode = invalid
+   Exception thrown for val = 2046300793 mode = invalid
+==============================
+ unsigned j tests:
+  Mode: lsb
+   val = 3484234732 -> 11001111101011010011001111101100 (hex: 0xcfad33ec)
+   val = 3040201339 -> 10110101001101011100101001111011 (hex: 0xb535ca7b)
+   val = 3899343492 -> 11101000011010110100001010000100 (hex: 0xe86b4284)
+   val = 4152149582 -> 11110111011111001100011001001110 (hex: 0xf77cc64e)
+   val = 2144162642 -> 01111111110011010101001101010010 (hex: 0x7fcd5352)
+  Mode: msb
+   val = 4067427160 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 693148097 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 2976506411 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 538426707 -> 00000000000000000000000000000000 (hex: 0x0)
+   val = 948684403 -> 00000000000000000000000000000000 (hex: 0x0)
+  Mode: invalid
+   Exception thrown for val = 962856436 mode = invalid
+   Exception thrown for val = 2615307308 mode = invalid
+   Exception thrown for val = 1182476144 mode = invalid
+   Exception thrown for val = 2251136488 mode = invalid
+   Exception thrown for val = 2815773683 mode = invalid
+==============================
+ signed l tests:
+  Mode: lsb
+   val = 535382509800316062 -> 01011011100110101101110010011110 (hex: 0x5b9adc9e)
+   val = 4092375242963056999 -> 11100100011010100111100101100111 (hex: 0xe46a7967)
+   val = -8684138361209165185 -> 11000111110010001110101001111111 (hex: 0xc7c8ea7f)
+   val = 3727369507559223514 -> 10010100101100001011000011011010 (hex: 0x94b0b0da)
+   val = -1385915222207063432 -> 11000011100010101001101001111000 (hex: 0xc38a9a78)
+  Mode: msb
+   val = -5383429719668268636 -> 10110101010010100011011100110001 (hex: 0xb54a3731)
+   val = 9103957029106517235 -> 01111110010101111100000010101110 (hex: 0x7e57c0ae)
+   val = -3106965544234821252 -> 11010100111000011101011101001100 (hex: 0xd4e1d74c)
+   val = 141205468763672308 -> 00000001111101011010100110100000 (hex: 0x1f5a9a0)
+   val = 6243100858145250635 -> 01010110101000111111001100100111 (hex: 0x56a3f327)
+  Mode: invalid
+   Exception thrown for val = 3150996657779900020 mode = invalid
+   Exception thrown for val = -2696100164070382021 mode = invalid
+   Exception thrown for val = 740383018833798727 mode = invalid
+   Exception thrown for val = -2816629915006750321 mode = invalid
+   Exception thrown for val = -1417484070602666988 mode = invalid
+==============================
+ unsigned m tests:
+  Mode: lsb
+   val = 11214873168953517751 -> 01101100100010001010011010110111 (hex: 0x6c88a6b7)
+   val = 1802650198364989863 -> 11110111110101010010100110100111 (hex: 0xf7d529a7)
+   val = 9818277795621618487 -> 10111010001000011100001100110111 (hex: 0xba21c337)
+   val = 6676230229226708765 -> 01110011110010000101111100011101 (hex: 0x73c85f1d)
+   val = 10697038403359458048 -> 10100100111100111100001100000000 (hex: 0xa4f3c300)
+  Mode: msb
+   val = 5584887544790830260 -> 01001101100000011000000110100001 (hex: 0x4d8181a1)
+   val = 1050896797989007152 -> 00001110100101011000100100010001 (hex: 0xe958911)
+   val = 225676616029752823 -> 00000011001000011100001110101111 (hex: 0x321c3af)
+   val = 16610265149946070231 -> 11100110100000111000010000100110 (hex: 0xe6838426)
+   val = 386735557244074317 -> 00000101010111011111010111110000 (hex: 0x55df5f0)
+  Mode: invalid
+   Exception thrown for val = 1350121972807175912 mode = invalid
+   Exception thrown for val = 5261925246633173640 mode = invalid
+   Exception thrown for val = 11725173179113880034 mode = invalid
+   Exception thrown for val = 13470984665667930453 mode = invalid
+   Exception thrown for val = 1117886508727018047 mode = invalid
+
+==============================
+Testing WIDTH = 64 bits
+ bool tests:
+  bool 0 -> 0000000000000000000000000000000000000000000000000000000000000000 (hex: 0x0)
+  bool 1 -> 0000000000000000000000000000000000000000000000000000000000000001 (hex: 0x1)
+==============================
+ signed a tests:
+  Mode: lsb
+   val = 65 -> 0000000000000000000000000000000000000000000000000000000001000001 (hex: 0x41)
+   val = 59 -> 0000000000000000000000000000000000000000000000000000000000111011 (hex: 0x3b)
+   val = 113 -> 0000000000000000000000000000000000000000000000000000000001110001 (hex: 0x71)
+   val = -26 -> 1111111111111111111111111111111111111111111111111111111111100110 (hex: 0xffffffe6)
+   val = 85 -> 0000000000000000000000000000000000000000000000000000000001010101 (hex: 0x55)
+  Mode: msb
+   val = -120 -> 1111111111111111111111111111111111111111111111111111111110001000 (hex: 0xffffff88)
+   val = 7 -> 0000000000000000000000000000000000000000000000000000000000000111 (hex: 0x7)
+   val = 67 -> 0000000000000000000000000000000000000000000000000000000001000011 (hex: 0x43)
+   val = 5 -> 0000000000000000000000000000000000000000000000000000000000000101 (hex: 0x5)
+   val = -85 -> 1111111111111111111111111111111111111111111111111111111110101011 (hex: 0xffffffab)
+  Mode: invalid
+   Exception thrown for val = 113 mode = invalid
+   Exception thrown for val = -89 mode = invalid
+   Exception thrown for val = -69 mode = invalid
+   Exception thrown for val = 33 mode = invalid
+   Exception thrown for val = 91 mode = invalid
+==============================
+ unsigned h tests:
+  Mode: lsb
+   val = 29 -> 0000000000000000000000000000000000000000000000000000000000011101 (hex: 0x1d)
+   val = 78 -> 0000000000000000000000000000000000000000000000000000000001001110 (hex: 0x4e)
+   val = 242 -> 0000000000000000000000000000000000000000000000000000000011110010 (hex: 0xf2)
+   val = 43 -> 0000000000000000000000000000000000000000000000000000000000101011 (hex: 0x2b)
+   val = 246 -> 0000000000000000000000000000000000000000000000000000000011110110 (hex: 0xf6)
+  Mode: msb
+   val = 156 -> 0000000000000000000000000000000000000000000000000000000010011100 (hex: 0x9c)
+   val = 222 -> 0000000000000000000000000000000000000000000000000000000011011110 (hex: 0xde)
+   val = 148 -> 0000000000000000000000000000000000000000000000000000000010010100 (hex: 0x94)
+   val = 178 -> 0000000000000000000000000000000000000000000000000000000010110010 (hex: 0xb2)
+   val = 5 -> 0000000000000000000000000000000000000000000000000000000000000101 (hex: 0x5)
+  Mode: invalid
+   Exception thrown for val = 188 mode = invalid
+   Exception thrown for val = 110 mode = invalid
+   Exception thrown for val = 80 mode = invalid
+   Exception thrown for val = 60 mode = invalid
+   Exception thrown for val = 114 mode = invalid
+==============================
+ signed s tests:
+  Mode: lsb
+   val = -804 -> 1111111111111111111111111111111111111111111111111111110011011100 (hex: 0xfffffcdc)
+   val = 25148 -> 0000000000000000000000000000000000000000000000000110001000111100 (hex: 0x623c)
+   val = 28844 -> 0000000000000000000000000000000000000000000000000111000010101100 (hex: 0x70ac)
+   val = 18271 -> 0000000000000000000000000000000000000000000000000100011101011111 (hex: 0x475f)
+   val = 5254 -> 0000000000000000000000000000000000000000000000000001010010000110 (hex: 0x1486)
+  Mode: msb
+   val = -29785 -> 1111111111111111111111111111111111111111111111111000101110100111 (hex: 0xffff8ba7)
+   val = -23948 -> 1111111111111111111111111111111111111111111111111010001001110100 (hex: 0xffffa274)
+   val = -4975 -> 1111111111111111111111111111111111111111111111111110110010010001 (hex: 0xffffec91)
+   val = -23375 -> 1111111111111111111111111111111111111111111111111010010010110001 (hex: 0xffffa4b1)
+   val = 16072 -> 0000000000000000000000000000000000000000000000000011111011001000 (hex: 0x3ec8)
+  Mode: invalid
+   Exception thrown for val = -13953 mode = invalid
+   Exception thrown for val = -14441 mode = invalid
+   Exception thrown for val = -3184 mode = invalid
+   Exception thrown for val = 9954 mode = invalid
+   Exception thrown for val = -31558 mode = invalid
+==============================
+ unsigned t tests:
+  Mode: lsb
+   val = 39284 -> 0000000000000000000000000000000000000000000000001001100101110100 (hex: 0x9974)
+   val = 62417 -> 0000000000000000000000000000000000000000000000001111001111010001 (hex: 0xf3d1)
+   val = 15396 -> 0000000000000000000000000000000000000000000000000011110000100100 (hex: 0x3c24)
+   val = 21384 -> 0000000000000000000000000000000000000000000000000101001110001000 (hex: 0x5388)
+   val = 1229 -> 0000000000000000000000000000000000000000000000000000010011001101 (hex: 0x4cd)
+  Mode: msb
+   val = 14820 -> 0000000000000000000000000000000000000000000000000011100111100100 (hex: 0x39e4)
+   val = 33025 -> 0000000000000000000000000000000000000000000000001000000100000001 (hex: 0x8101)
+   val = 5435 -> 0000000000000000000000000000000000000000000000000001010100111011 (hex: 0x153b)
+   val = 9436 -> 0000000000000000000000000000000000000000000000000010010011011100 (hex: 0x24dc)
+   val = 7816 -> 0000000000000000000000000000000000000000000000000001111010001000 (hex: 0x1e88)
+  Mode: invalid
+   Exception thrown for val = 36724 mode = invalid
+   Exception thrown for val = 21827 mode = invalid
+   Exception thrown for val = 47764 mode = invalid
+   Exception thrown for val = 14012 mode = invalid
+   Exception thrown for val = 1389 mode = invalid
+==============================
+ signed i tests:
+  Mode: lsb
+   val = -829377836 -> 1111111111111111111111111111111111001110100100001011001011010100 (hex: 0xce90b2d4)
+   val = 1251085130 -> 0000000000000000000000000000000001001010100100100000101101001010 (hex: 0x4a920b4a)
+   val = 1598517556 -> 0000000000000000000000000000000001011111010001110111000100110100 (hex: 0x5f477134)
+   val = 348539474 -> 0000000000000000000000000000000000010100110001100100101001010010 (hex: 0x14c64a52)
+   val = -1225560216 -> 1111111111111111111111111111111110110110111100110110111101101000 (hex: 0xb6f36f68)
+  Mode: msb
+   val = 1395273792 -> 0000000000000000000000000000000001010011001010100011000001000000 (hex: 0x532a3040)
+   val = 1160404672 -> 0000000000000000000000000000000001000101001010100101111011000000 (hex: 0x452a5ec0)
+   val = 774330839 -> 0000000000000000000000000000000000101110001001110101100111010111 (hex: 0x2e2759d7)
+   val = 1450311387 -> 0000000000000000000000000000000001010110011100011111111011011011 (hex: 0x5671fedb)
+   val = 1588099678 -> 0000000000000000000000000000000001011110101010000111101001011110 (hex: 0x5ea87a5e)
+  Mode: invalid
+   Exception thrown for val = 587093904 mode = invalid
+   Exception thrown for val = -415979766 mode = invalid
+   Exception thrown for val = -1575281521 mode = invalid
+   Exception thrown for val = -909728113 mode = invalid
+   Exception thrown for val = -1416456408 mode = invalid
+==============================
+ unsigned j tests:
+  Mode: lsb
+   val = 2136591928 -> 0000000000000000000000000000000001111111010110011100111000111000 (hex: 0x7f59ce38)
+   val = 3959936851 -> 0000000000000000000000000000000011101100000001111101011101010011 (hex: 0xec07d753)
+   val = 666859360 -> 0000000000000000000000000000000000100111101111110111011101100000 (hex: 0x27bf7760)
+   val = 2206224734 -> 0000000000000000000000000000000010000011100000000101000101011110 (hex: 0x8380515e)
+   val = 4255822478 -> 0000000000000000000000000000000011111101101010101011001010001110 (hex: 0xfdaab28e)
+  Mode: msb
+   val = 1597325942 -> 0000000000000000000000000000000001011111001101010100001001110110 (hex: 0x5f354276)
+   val = 776382624 -> 0000000000000000000000000000000000101110010001101010100010100000 (hex: 0x2e46a8a0)
+   val = 2134440411 -> 0000000000000000000000000000000001111111001110001111100111011011 (hex: 0x7f38f9db)
+   val = 1623556763 -> 0000000000000000000000000000000001100000110001011000001010011011 (hex: 0x60c5829b)
+   val = 2195851899 -> 0000000000000000000000000000000010000010111000100000101001111011 (hex: 0x82e20a7b)
+  Mode: invalid
+   Exception thrown for val = 1198797842 mode = invalid
+   Exception thrown for val = 990555386 mode = invalid
+   Exception thrown for val = 131940648 mode = invalid
+   Exception thrown for val = 1973618683 mode = invalid
+   Exception thrown for val = 1703848643 mode = invalid
+==============================
+ signed l tests:
+  Mode: lsb
+   val = 5714864184109744405 -> 0100111101001111010001101011001001100001011101101100000100010101 (hex: 0x6176c115)
+   val = 7046217546060299256 -> 0110000111001001001100011000011010010011000011000111101111111000 (hex: 0x930c7bf8)
+   val = 4220198703879461211 -> 0011101010010001001010000101110010010010010011001001100101011011 (hex: 0x924c995b)
+   val = -9109237555190496761 -> 1000000110010101011111001011010011010100001110010000001000000111 (hex: 0xd4390207)
+   val = 5626144216692091967 -> 0100111000010100000101000101101101000011000011001110110000111111 (hex: 0x430cec3f)
+  Mode: msb
+   val = -4319816683198884475 -> 1100010000001100111011011001110100101111000111111101010110000101 (hex: 0x2f1fd585)
+   val = -1989974490702956589 -> 1110010001100010001100001011111001111001100011111011011111010011 (hex: 0x798fb7d3)
+   val = 4729474532166489625 -> 0100000110100010011110000000011101111000000010100101011000011001 (hex: 0x780a5619)
+   val = -6071779361297035603 -> 1010101110111100101101001101011100101111010101111000111010101101 (hex: 0x2f578ead)
+   val = 4883935726553447880 -> 0100001111000111001110011010101011000111000011101011110111001000 (hex: 0xc70ebdc8)
+  Mode: invalid
+   Exception thrown for val = 4159443192817777419 mode = invalid
+   Exception thrown for val = 5415406193389899827 mode = invalid
+   Exception thrown for val = 6282930187342204624 mode = invalid
+   Exception thrown for val = 5972985691288073227 mode = invalid
+   Exception thrown for val = 4675358456826644675 mode = invalid
+==============================
+ unsigned m tests:
+  Mode: lsb
+   val = 4190861289980587937 -> 0011101000101000111011100010001110011100001110100110111110100001 (hex: 0x9c3a6fa1)
+   val = 14646239341073416896 -> 1100101101000001111001010001010011100100000010000100001011000000 (hex: 0xe40842c0)
+   val = 9353158721533028603 -> 1000000111001101000110000100110101010100110100101010100011111011 (hex: 0x54d2a8fb)
+   val = 1319493108498461248 -> 0001001001001111110001111111110110111111101000000111001001000000 (hex: 0xbfa07240)
+   val = 14878545838182376844 -> 1100111001111011001101101001110000100011001110100010010110001100 (hex: 0x233a258c)
+  Mode: msb
+   val = 13812337528854238354 -> 1011111110101111010001111100110100110101001001110101010010010010 (hex: 0x35275492)
+   val = 14960221346510493087 -> 1100111110011101011000100000110101001111111110010101010110011111 (hex: 0x4ff9559f)
+   val = 16607710877284162941 -> 1110011001111010011100010000110100101100111010011101110101111101 (hex: 0x2ce9dd7d)
+   val = 5149494902715858725 -> 0100011101110110101011100101010010110001000100000011111100100101 (hex: 0xb1103f25)
+   val = 14622934113033579860 -> 1100101011101111000110010001100110100101010011101110110101010100 (hex: 0xa54eed54)
+  Mode: invalid
+   Exception thrown for val = 14897724400803431847 mode = invalid
+   Exception thrown for val = 9026478848627899440 mode = invalid
+   Exception thrown for val = 1932405508513204229 mode = invalid
+   Exception thrown for val = 9781913576426622136 mode = invalid
+   Exception thrown for val = 1943655873521509256 mode = invalid
+

@@ -1,0 +1,21 @@
+[WARNING] sc_lv_cast: Binary string longer than WIDTH — truncating LSBs. @ 0 s (./include/sc_cast.hpp:172) in process: tb.run
+[WARNING] sc_lv_cast: Binary string longer than WIDTH — truncating LSBs. @ 0 s (./include/sc_cast.hpp:172) in process: tb.run
+[WARNING] sc_lv_cast: Whitespace found in input string — it was removed. @ 0 s (./include/sc_cast.hpp:145) in process: tb.run
+[ERROR] sc_lv_cast: Invalid characters in binary string. X signal issue. @ 0 s (./include/sc_cast.hpp:168) in process: tb.run
+[WARNING] sc_lv_cast: Whitespace found in input string — it was removed. @ 0 s (./include/sc_cast.hpp:145) in process: tb.run
+[ERROR] sc_lv_cast: Invalid characters in binary string. X signal issue. @ 0 s (./include/sc_cast.hpp:168) in process: tb.run
+[ERROR] sc_lv_cast: Address mode does not support signed decimal strings. @ 0 s (./include/sc_cast.hpp:287) in process: tb.run
+[ERROR] sc_lv_cast: Address mode does not support signed decimal strings. @ 0 s (./include/sc_cast.hpp:287) in process: tb.run
+[ERROR] sc_lv_cast: Address mode does not support signed decimal strings. @ 0 s (./include/sc_cast.hpp:287) in process: tb.run
+[ERROR] sc_lv_cast: Invalid characters in binary string. X signal issue. @ 0 s (./include/sc_cast.hpp:168) in process: tb.run
+[ERROR] sc_lv_cast: Invalid characters in binary string. X signal issue. @ 0 s (./include/sc_cast.hpp:168) in process: tb.run
+[ERROR] sc_lv_cast: Invalid string format for sc_lv conversion. @ 0 s (./include/sc_cast.hpp:307) in process: tb.run
+[ERROR] sc_lv_cast: Invalid string format for sc_lv conversion. @ 0 s (./include/sc_cast.hpp:307) in process: tb.run
+[ERROR] sc_lv_cast: Address mode does not support signed decimal strings. @ 0 s (./include/sc_cast.hpp:287) in process: tb.run
+[WARNING] sc_lv_cast: Decimal value overflows max for WIDTH @ 0 s (./include/sc_cast.hpp:301) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than 64 bits, may cause overflow @ 0 s (./include/sc_cast.hpp:71) in process: tb.run
+[WARNING] sc_lv_cast: Decimal value overflows max for WIDTH @ 0 s (./include/sc_cast.hpp:292) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than 64 bits, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:77) in process: tb.run
+[WARNING] sc_lv_cast: Decimal value overflows max for WIDTH @ 0 s (./include/sc_cast.hpp:301) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than 64 bits, may cause overflow @ 0 s (./include/sc_cast.hpp:71) in process: tb.run
+[INFO] /OSCI/SystemC: Simulation stopped by user. @ 0 s (../../../src/sysc/kernel/sc_simcontext.cpp:961) in process: 

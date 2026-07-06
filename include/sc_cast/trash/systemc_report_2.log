@@ -1,0 +1,299 @@
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause overflow @ 0 s (./include/sc_cast.hpp:72) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[WARNING] sc_lv_cast: Input type is larger than WIDTH, may cause unsigned overflow @ 0 s (./include/sc_cast.hpp:78) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[ERROR] sc_lv_cast: Invalid mode. Use "lsb" or "msb". @ 0 s (./include/sc_cast.hpp:93) in process: tb.run
+[INFO] /OSCI/SystemC: Simulation stopped by user. @ 0 s (../../../src/sysc/kernel/sc_simcontext.cpp:961) in process: 

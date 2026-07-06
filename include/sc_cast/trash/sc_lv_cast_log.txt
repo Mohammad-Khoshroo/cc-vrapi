@@ -1,0 +1,99 @@
+==== Input: "0Bx10z10x1z0" ====
+[Address] sc_lv<8> = 0Z10X1Z0
+[Data   ] sc_lv<8> = 0Z10X1Z0
+
+==== Input: "0b 34546yg343" ====
+[Address] Exception: Error: sc_lv_cast: Invalid characters in binary string. X signal issue.
+In file: ./include/sc_cast.hpp:168
+In process: tb.run @ 0 s
+[Address] sc_lv<8> = XXXXXXXX
+[Data   ] Exception: Error: sc_lv_cast: Invalid characters in binary string. X signal issue.
+In file: ./include/sc_cast.hpp:168
+In process: tb.run @ 0 s
+[Data   ] sc_lv<8> = XXXXXXXX
+
+==== Input: "0b10101010" ====
+[Address] sc_lv<8> = 10101010
+[Data   ] sc_lv<8> = 10101010
+
+==== Input: "0x1F" ====
+[Address] sc_lv<8> = 00011111
+[Data   ] sc_lv<8> = 00011111
+
+==== Input: "075" ====
+[Address] sc_lv<8> = 00111101
+[Data   ] sc_lv<8> = 11111101
+
+==== Input: "+42" ====
+[Address] Exception: Error: sc_lv_cast: Address mode does not support signed decimal strings.
+In file: ./include/sc_cast.hpp:287
+In process: tb.run @ 0 s
+[Address] sc_lv<8> = XXXXXXXX
+[Data   ] sc_lv<8> = 00101010
+
+==== Input: "-10" ====
+[Address] Exception: Error: sc_lv_cast: Address mode does not support signed decimal strings.
+In file: ./include/sc_cast.hpp:287
+In process: tb.run @ 0 s
+[Address] sc_lv<8> = XXXXXXXX
+[Data   ] sc_lv<8> = 11110110
+
+==== Input: "123" ====
+[Address] sc_lv<8> = 01111011
+[Data   ] sc_lv<8> = 01111011
+
+==== Input: "0XFF" ====
+[Address] sc_lv<8> = 11111111
+[Data   ] sc_lv<8> = 11111111
+
+==== Input: "0B1100" ====
+[Address] sc_lv<8> = 00001100
+[Data   ] sc_lv<8> = 11111100
+
+==== Input: "0" ====
+[Address] sc_lv<8> = 00000000
+[Data   ] sc_lv<8> = 00000000
+
+==== Input: "-0" ====
+[Address] Exception: Error: sc_lv_cast: Address mode does not support signed decimal strings.
+In file: ./include/sc_cast.hpp:287
+In process: tb.run @ 0 s
+[Address] sc_lv<8> = XXXXXXXX
+[Data   ] sc_lv<8> = 00000000
+
+==== Input: "0xZZ" ====
+[Address] sc_lv<8> = ZZZZZZZZ
+[Data   ] sc_lv<8> = ZZZZZZZZ
+
+==== Input: "0b102" ====
+[Address] Exception: Error: sc_lv_cast: Invalid characters in binary string. X signal issue.
+In file: ./include/sc_cast.hpp:168
+In process: tb.run @ 0 s
+[Address] sc_lv<8> = XXXXXXXX
+[Data   ] Exception: Error: sc_lv_cast: Invalid characters in binary string. X signal issue.
+In file: ./include/sc_cast.hpp:168
+In process: tb.run @ 0 s
+[Data   ] sc_lv<8> = XXXXXXXX
+
+==== Input: "abc" ====
+[Address] Exception: Error: sc_lv_cast: Invalid string format for sc_lv conversion.
+In file: ./include/sc_cast.hpp:307
+In process: tb.run @ 0 s
+[Address] sc_lv<8> = XXXXXXXX
+[Data   ] Exception: Error: sc_lv_cast: Invalid string format for sc_lv conversion.
+In file: ./include/sc_cast.hpp:307
+In process: tb.run @ 0 s
+[Data   ] sc_lv<8> = XXXXXXXX
+
+==== Input: "-300" ====
+[Address] Exception: Error: sc_lv_cast: Address mode does not support signed decimal strings.
+In file: ./include/sc_cast.hpp:287
+In process: tb.run @ 0 s
+[Address] sc_lv<8> = XXXXXXXX
+[Data   ] sc_lv<8> = 11010100
+
+==== Input: "300" ====
+[Address] sc_lv<8> = 00101100
+[Data   ] sc_lv<8> = 00101100
+
+=== End of Simulation ===
