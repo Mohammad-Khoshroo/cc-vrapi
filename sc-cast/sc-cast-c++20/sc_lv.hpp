@@ -130,6 +130,8 @@ namespace cc_vrwrapper
         std::string substr2 = (size > 2) ? std::string(str.substr(2)) : "";
         std::string substr1 = (size > 1) ? std::string(str.substr(1)) : "";
 
+
+        
         // Binary prefix
         if (size >= 3 && c0 == '0' && (c1 == 'b' || c1 == 'B')) {
             if (!std::regex_match(substr2, std::regex("^[01XZxz]+$"))) {
@@ -140,10 +142,6 @@ namespace cc_vrwrapper
             return detail::from_bitstr<LV>(substr2);
         }
 
-        if ((str.find_first_not_of("01xXzZ") == std::string::npos) && (base == 2)) {
-            str = detail::adjust_bitstr<LV>(std::move(str), WIDTH, is_data, "Binary");
-            return detail::from_bitstr<LV>(str);
-        }
 
         // Hex prefix
         if (size >= 3 && c0 == '0' && (c1 == 'x' || c1 == 'X')) {
@@ -165,6 +163,12 @@ namespace cc_vrwrapper
             }
             bitstr = detail::adjust_bitstr<LV>(std::move(bitstr), WIDTH, is_data, "Hex");
             return detail::from_bitstr<LV>(bitstr);
+        }
+
+        // Pure binary (no prefix, base==2) — AFTER prefix checks
+        if ((str.find_first_not_of("01xXzZ") == std::string::npos) && (base == 2)) {
+            str = detail::adjust_bitstr<LV>(std::move(str), WIDTH, is_data, "Binary");
+            return detail::from_bitstr<LV>(str);
         }
 
         // Octal prefix

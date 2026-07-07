@@ -93,11 +93,11 @@ Info: sc_cast: MSB mode: keeping upper bits of input value
   [PASS] sc_cast<sc_lv<8>>("0xFF").to_string() == 11111111
   [PASS] sc_cast<sc_lv<8>>("0xCA").to_string() == 11001010
   [PASS] sc_cast<sc_lv<16>>("0xCAFE").to_string() == 1100101011111110
-  [FAIL] sc_cast<sc_lv<8>>("0xX0").to_string() == "XXXX0000" | got: 00000XX0 | expected: XXXX0000 | line 195
-  [FAIL] sc_cast<sc_lv<8>>("0xZ0").to_string() == "ZZZZ0000" | got: 00000XZ0 | expected: ZZZZ0000 | line 196
-  [FAIL] sc_cast<sc_lv<12>>("0xX0").to_string() == "XXXXXXXX0000" | got: 000000000XX0 | expected: XXXXXXXX0000 | line 199
-  [FAIL] sc_cast<sc_lv<12>>("0xX0", "address").to_string() == "0000XXXX0000" | got: 000000000XX0 | expected: 0000XXXX0000 | line 201
-  [FAIL] sc_cast<sc_lv<8>>("0x1").to_string() == "00000001" | got: 000000X1 | expected: 00000001 | line 204
+  [PASS] sc_cast<sc_lv<8>>("0xX0").to_string() == XXXX0000
+  [PASS] sc_cast<sc_lv<8>>("0xZ0").to_string() == ZZZZ0000
+  [PASS] sc_cast<sc_lv<12>>("0xX0").to_string() == XXXXXXXX0000
+  [PASS] sc_cast<sc_lv<12>>("0xX0", "address").to_string() == 0000XXXX0000
+  [PASS] sc_cast<sc_lv<8>>("0x1").to_string() == 00000001
   [PASS] sc_cast<sc_lv<8>>("0xF").to_string() == 11111111
 
 === Section 9: string -> sc_lv (octal) ===
@@ -112,10 +112,10 @@ Info: sc_cast: MSB mode: keeping upper bits of input value
   [PASS] sc_cast<sc_lv<8>>("-1").to_string() == 11111111
 
 Warning: sc_cast: Decimal value overflows max for WIDTH
-In file: sc-cast-c++20/sc_lv.hpp:212
+In file: sc-cast-c++20/sc_lv.hpp:216
   [PASS] sc_cast<sc_lv<8>>("-128").to_string() == 
 Warning: sc_cast: Decimal value overflows max for WIDTH
-In file: sc-cast-c++20/sc_lv.hpp:212
+In file: sc-cast-c++20/sc_lv.hpp:216
 10000000
   [PASS] sc_cast<sc_lv<16>>("65535", "address").to_string() == 1111111111111111
 
@@ -159,14 +159,14 @@ In file: sc-cast-c++20/sc_lv.hpp:118
 === Section 13: sc_lv with X/Z -> integral (warning + return 0) ===
 
 Warning: sc_cast: Input contains unknown (X/Z) bits. Returning 0.
-In file: sc-cast-c++20/sc_lv.hpp:276
+In file: sc-cast-c++20/sc_lv.hpp:280
   [PASS] sc_cast<int>(lv) == 
 Warning: sc_cast: Input contains unknown (X/Z) bits. Returning 0.
-In file: sc-cast-c++20/sc_lv.hpp:276
+In file: sc-cast-c++20/sc_lv.hpp:280
 0
 
 Warning: sc_cast: Input contains unknown (X/Z) bits. Returning false.
-In file: sc-cast-c++20/sc_lv.hpp:265
+In file: sc-cast-c++20/sc_lv.hpp:269
   [PASS] (NOT) sc_cast<bool>(lv)
 
 === Section 14: sc_lv -> float/double (bit-reinterpret) ===
@@ -178,9 +178,555 @@ In file: sc-cast-c++20/sc_lv.hpp:265
   [PASS] sc_cast<sc_bv<8>>(42).to_string() == 00101010
   [PASS] sc_cast<sc_bv<8>>(255u).to_string() == 11111111
   [PASS] sc_cast<sc_bv<8>>("0b1010").to_string() == 11111010
+  [PASS] sc_cast<sc_bv<8>>("0xFF").to_string() == 11111111
+  [PASS] sc_cast<bool>(bv) == 1
+  [PASS] sc_cast<uint8_t>(bv) == U
 
-Warning: sc_cast: Target is sc_bv (no X/Z support); X/Z bits will be treated as 0.
-In file: sc-cast-c++20/sc_bv.hpp:114
+=== Section 16: sc_bv with X/Z input (warning + X/Z -> 0) ===
+  [PASS] sc_cast<sc_bv<4>>("0b1X0Z").to_string() == 1000
+  [PASS] sc_cast<sc_bv<8>>("0xX0").to_string() == 00000000
 
-Error: sc_cast: Invalid characters in octal string.
-In file: sc-cast-c++20/sc_bv.hpp:172
+Warning: sc_cast: sc_lv contains X/Z; converting to 0 in sc_bv.
+In file: sc-cast-c++20/sc_bv.hpp:248
+  [PASS] sc_cast<sc_bv<4>>(lv).to_string() == 
+Warning: sc_cast: sc_lv contains X/Z; converting to 0 in sc_bv.
+In file: sc-cast-c++20/sc_bv.hpp:248
+1000
+
+=== Section 17: sc_logic basic ===
+  [PASS] sc_cast<sc_logic>(true).to_char() == 1
+  [PASS] sc_cast<sc_logic>(false).to_char() == 0
+  [PASS] sc_cast<sc_logic>("0").to_char() == 0
+  [PASS] sc_cast<sc_logic>("1").to_char() == 1
+  [PASS] sc_cast<sc_logic>("X").to_char() == X
+  [PASS] sc_cast<sc_logic>("Z").to_char() == Z
+  [PASS] sc_cast<sc_logic>("0b1").to_char() == 1
+
+=== Section 18: sc_logic from integers (LSB) ===
+  [PASS] sc_cast<sc_logic>(0).to_char() == 0
+  [PASS] sc_cast<sc_logic>(1).to_char() == 1
+  [PASS] sc_cast<sc_logic>(2).to_char() == 0
+  [PASS] sc_cast<sc_logic>(3).to_char() == 1
+  [PASS] sc_cast<sc_logic>(-1).to_char() == 1
+  [PASS] sc_cast<sc_logic>(-2).to_char() == 0
+
+=== Section 19: sc_logic -> integers ===
+  [PASS] sc_cast<int>(sc_logic('1')) == 1
+  [PASS] sc_cast<int>(sc_logic('0')) == 0
+
+Warning: sc_cast: sc_logic is X/Z. Returning 0.
+In file: sc-cast-c++20/sc_logic.hpp:138
+  [PASS] sc_cast<int>(sc_logic('X')) == 
+Warning: sc_cast: sc_logic is X/Z. Returning 0.
+In file: sc-cast-c++20/sc_logic.hpp:138
+0
+
+Warning: sc_cast: sc_logic is X/Z. Returning 0.
+In file: sc-cast-c++20/sc_logic.hpp:138
+  [PASS] sc_cast<int>(sc_logic('Z')) == 
+Warning: sc_cast: sc_logic is X/Z. Returning 0.
+In file: sc-cast-c++20/sc_logic.hpp:138
+0
+  [PASS] sc_cast<bool>(sc_logic('1')) == 1
+  [PASS] sc_cast<bool>(sc_logic('0')) == 0
+
+Warning: sc_cast: sc_logic is X/Z. Returning false.
+In file: sc-cast-c++20/sc_logic.hpp:126
+  [PASS] sc_cast<bool>(sc_logic('X')) == 
+Warning: sc_cast: sc_logic is X/Z. Returning false.
+In file: sc-cast-c++20/sc_logic.hpp:126
+0
+
+=== Section 20: sc_lv <-> sc_bv cross conversion ===
+  [PASS] bv.to_string() == 10101010
+  [PASS] lv2.to_string() == 11001100
+
+Warning: sc_cast: sc_lv contains X/Z; converting to 0 in sc_bv.
+In file: sc-cast-c++20/sc_bv.hpp:248
+  [PASS] bvx.to_string() == 1000
+
+=== Section 21: sc_lv <-> sc_logic cross conversion ===
+  [PASS] l.to_char() == 1
+  [PASS] lv2.to_string() == 11111111
+  [PASS] lv3.to_string() == 0000
+  [PASS] sc_cast<sc_lv<4>>(l4).to_string() == XXXX
+  [PASS] sc_cast<sc_lv<4>>(l5).to_string() == ZZZZ
+
+=== Section 22: sc_bv <-> sc_logic cross conversion ===
+  [PASS] l.to_char() == 1
+  [PASS] bv1.to_string() == 1111
+
+Warning: sc_cast: sc_logic has X/Z; converting to 0 in sc_bv.
+In file: sc-cast-c++20/sc_bv.hpp:238
+  [PASS] bvx.to_string() == 0000
+
+=== Section 23: sc_int / sc_uint basic ===
+  [PASS] sc_cast<sc_int<8>>(42).to_int64() == 42
+  [PASS] sc_cast<sc_int<8>>(-1).to_int64() == -1
+  [PASS] sc_cast<sc_int<8>>(-128).to_int64() == -128
+  [PASS] sc_cast<sc_int<8>>(127).to_int64() == 127
+  [PASS] sc_cast<sc_uint<8>>(42).to_uint64() == 42
+  [PASS] sc_cast<sc_uint<8>>(255u).to_uint64() == 255
+  [PASS] sc_cast<sc_uint<8>>("0xFF").to_uint64() == 255
+  [PASS] sc_cast<sc_uint<8>>("0b1010").to_uint64() == 10
+
+=== Section 24: sc_lv -> sc_int family ===
+  [PASS] sc_cast<sc_uint<8>>(lv).to_uint64() == 85
+  [PASS] sc_cast<sc_int<8>>(lv).to_int64() == 85
+  [PASS] sc_cast<sc_int<8>>(lvneg).to_int64() == -1
+  [PASS] sc_cast<sc_uint<8>>(lvneg).to_uint64() == 255
+
+=== Section 25: sc_int family -> sc_lv ===
+  [PASS] sc_cast<sc_lv<8>>(si).to_string() == 11111111
+  [PASS] sc_cast<sc_lv<8>>(si2).to_string() == 10000000
+  [PASS] sc_cast<sc_lv<8>>(ui).to_string() == 11111111
+  [PASS] sc_cast<sc_lv<8>>(ui2).to_string() == 11001010
+
+=== Section 26: sc_int family string conversions ===
+  [PASS] sc_cast<sc_int<8>>("42").to_int64() == 42
+  [PASS] sc_cast<sc_int<8>>("-42").to_int64() == -42
+  [PASS] sc_cast<sc_int<16>>("0xCAFE").to_int64() == -13570
+  [PASS] sc_cast<sc_uint<16>>("0xCAFE").to_uint64() == 51966
+  [PASS] sc_cast<sc_int<8>>("0b1010").to_int64() == 10
+  [PASS] sc_cast<std::string>(si) == 42
+
+=== Section 27: sc_int family overflow / truncation ===
+  [PASS] sc_cast<sc_int<8>>(300).to_int64() == 44
+  [PASS] sc_cast<sc_uint<8>>(300u).to_uint64() == 44
+  [PASS] sc_cast<sc_int<8>>(-200).to_int64() == 56
+
+=== Section 28: sc_int family MSB mode ===
+  [PASS] sc_cast<sc_uint<8>>(v, "data", false).to_uint64() == 239
+
+Info: sc_cast: MSB mode: keeping upper bits of input value
+  [PASS] sc_cast<sc_uint<8>>(v, "data", true).to_uint64() == 
+Info: sc_cast: MSB mode: keeping upper bits of input value
+222
+
+=== Section 29: sc_bigint / sc_biguint (>64 bits) ===
+  [PASS] bu_str.size() > 0
+    [INFO] sc_biguint<128> of 0xFFF...F = 340282366920938463463374607431768211455
+
+Warning: sc_cast: Binary string longer than WIDTH — keeping LSBs.
+In file: sc-cast-c++20/utils.hpp:195
+  [PASS] lv_str.size() == 128
+    [INFO] sc_lv<128> = 11111111111111111111111111111111...
+  [PASS] bi_str == -1
+    [INFO] sc_bigint<128>(-1) = -1
+
+=== Section 30: string_cast generic ===
+  [PASS] string_cast<int>("42") == 42
+  [PASS] string_cast<int>("-42") == -42
+  [PASS] string_cast<unsigned>("0xFF", "data", 16) == 255
+  [PASS] string_cast<unsigned>("0b1010", "data", 2) == 10
+  [PASS] string_cast<unsigned>("0777", "data", 8) == 511
+  [PASS] string_cast<double>("3.14") == 3.14
+  [PASS] string_cast<float>("2.5") == 2.5
+
+Warning: string_cast: Empty string. Returning 0.
+In file: sc-cast-c++20/utils.hpp:261
+  [PASS] string_cast<int>("") == 
+Warning: string_cast: Empty string. Returning 0.
+In file: sc-cast-c++20/utils.hpp:261
+0
+  [PASS] string_cast<int>("XX") == 0
+
+=== Section 31: Round-trip conversions ===
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+
+Warning: sc_cast: Signed overflow in conversion from sc_lv to target type
+In file: sc-cast-c++20/sc_lv.hpp:286
+  [PASS] round-trip all int8 values (-128..127)
+  [PASS] round-trip select float values
+  [PASS] round-trip select double values
+  [PASS] round-trip sc_int<10> (-100..100)
+
+================================
+SUMMARY
+================================
+Sections : 31
+Passed   : 146
+Failed   : 0
+Total    : 146
+
+*** ALL TESTS PASSED ***

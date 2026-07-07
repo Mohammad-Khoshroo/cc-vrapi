@@ -110,13 +110,6 @@ namespace cc_vrwrapper
         if (WIDTH <= 0)
             SC_REPORT_FATAL("sc_cast", "Width must be positive");
 
-        if (str.find_first_of("xXzZ") != std::string::npos)
-            SC_REPORT_WARNING("sc_cast",
-                "Target is sc_bv (no X/Z support); X/Z bits will be treated as 0.");
-
-        for (char& c : str)
-            if (c == 'x' || c == 'X' || c == 'z' || c == 'Z') c = '0';
-
         if (std::ranges::any_of(str, detail::safe_isspace)) {
             SC_REPORT_WARNING("sc_cast", "Whitespace found in input string — it was removed.");
             std::erase_if(str, detail::safe_isspace);
@@ -134,51 +127,73 @@ namespace cc_vrwrapper
         std::string substr1 = (size > 1) ? std::string(str.substr(1)) : "";
         uint64_t umaxRange = (WIDTH >= 64) ? UINT64_MAX : (1ULL << WIDTH) - 1;
 
-        // Binary prefix
+        // Binary prefix "0b..."
         if (size >= 3 && c0 == '0' && (c1 == 'b' || c1 == 'B')) {
-            if (!std::regex_match(substr2, std::regex("^[01]+$"))) {
+            if (!std::regex_match(substr2, std::regex("^[01XZxz]+$"))) {
                 SC_REPORT_ERROR("sc_cast", "Invalid characters in binary string.");
                 return detail::make_unknown<BV>();
             }
-            substr2 = detail::adjust_bitstr<BV>(std::move(substr2), WIDTH, is_data, "Binary");
-            return detail::from_bitstr<BV>(substr2);
+            // Replace X/Z with '0' for sc_bv
+            std::string bitstr;
+            for (char ch : substr2) {
+                bitstr += (ch == '0' || ch == '1') ? ch : '0';
+            }
+            bitstr = detail::adjust_bitstr<BV>(std::move(bitstr), WIDTH, is_data, "Binary");
+            return detail::from_bitstr<BV>(bitstr);
         }
 
-        if ((str.find_first_not_of("01") == std::string::npos) && (base == 2)) {
-            str = detail::adjust_bitstr<BV>(std::move(str), WIDTH, is_data, "Binary");
-            return detail::from_bitstr<BV>(str);
-        }
-
-        // Hex prefix
+        // Hex prefix "0x..." — MUST be before pure binary check
         if (size >= 3 && c0 == '0' && (c1 == 'x' || c1 == 'X')) {
             std::string hex_str = substr2;
-            if (!std::regex_match(hex_str, std::regex("^[0-9a-fA-F]+$"))) {
+            if (!std::regex_match(hex_str, std::regex("^[0-9a-fA-FxzXZ]+$"))) {
                 SC_REPORT_ERROR("sc_cast", "Invalid characters in hex string.");
                 return detail::make_unknown<BV>();
             }
-            // Convert hex to binary string first, then adjust to WIDTH
+            // Convert hex to binary; X/Z → '0' for sc_bv
             std::string bitstr;
             for (char ch : hex_str) {
-                int val = detail::safe_isdigit(ch) ? ch - '0' : std::toupper(ch) - 'A' + 10;
-                bitstr += std::bitset<4>(val).to_string();
+                if (ch == 'x' || ch == 'X' || ch == 'z' || ch == 'Z') {
+                    bitstr += "0000";
+                } else {
+                    int val = detail::safe_isdigit(ch) ? ch - '0' : std::toupper(ch) - 'A' + 10;
+                    bitstr += std::bitset<4>(val).to_string();
+                }
             }
             bitstr = detail::adjust_bitstr<BV>(std::move(bitstr), WIDTH, is_data, "Hex");
             return detail::from_bitstr<BV>(bitstr);
         }
-        // Octal prefix
+
+        // Octal prefix "0NNN" — MUST be before pure binary check
         if (size >= 2 && c0 == '0' && detail::safe_isdigit(c1)) {
             std::string oct_str = substr1;
-            if (!std::regex_match(oct_str, std::regex("^[0-7]+$"))) {
+            if (!std::regex_match(oct_str, std::regex("^[0-7xzXZ]+$"))) {
                 SC_REPORT_ERROR("sc_cast", "Invalid characters in octal string.");
                 return detail::make_unknown<BV>();
             }
-            // Convert octal to binary string first, then adjust to WIDTH
+            // Convert octal to binary; X/Z → '0' for sc_bv
             std::string bitstr;
-            for (char ch : oct_str)
-                bitstr += std::bitset<3>(ch - '0').to_string();
+            for (char ch : oct_str) {
+                if (ch == 'x' || ch == 'X' || ch == 'z' || ch == 'Z') {
+                    bitstr += "000";
+                } else {
+                    bitstr += std::bitset<3>(ch - '0').to_string();
+                }
+            }
             bitstr = detail::adjust_bitstr<BV>(std::move(bitstr), WIDTH, is_data, "Octal");
             return detail::from_bitstr<BV>(bitstr);
         }
+
+        // Pure binary (no prefix, base==2) — AFTER prefix checks
+        if ((str.find_first_not_of("01xXzZ") == std::string::npos) && (base == 2)) {
+            // Replace X/Z with '0' for sc_bv
+            std::string bitstr;
+            for (char ch : str) {
+                bitstr += (ch == '0' || ch == '1') ? ch : '0';
+            }
+            bitstr = detail::adjust_bitstr<BV>(std::move(bitstr), WIDTH, is_data, "Binary");
+            return detail::from_bitstr<BV>(bitstr);
+        }
+
         // Decimal
         if (std::regex_match(str, std::regex("^[+-]?[0-9]+$"))) {
             if (is_address) {
