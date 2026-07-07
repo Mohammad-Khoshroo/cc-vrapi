@@ -22,7 +22,17 @@ namespace cc_vrwrapper {
 namespace trace {
 
 using namespace sc_core;
-using namespace sc_dt;
+using sc_dt::sc_logic;
+using sc_dt::sc_lv;
+using sc_dt::sc_bv;
+using sc_dt::sc_int;
+using sc_dt::sc_uint;
+using sc_dt::sc_bigint;
+using sc_dt::sc_biguint;
+using sc_dt::SC_LOGIC_0;
+using sc_dt::SC_LOGIC_1;
+using sc_dt::SC_LOGIC_X;
+using sc_dt::SC_LOGIC_Z;
 
 // ========================================================================
 // TYPE TRAITS — extract value type from signal/port
@@ -33,6 +43,10 @@ template <typename T> struct signal_value_type<sc_signal<T>> { using type = T; }
 template <typename T> struct signal_value_type<sc_in<T>>     { using type = T; };
 template <typename T> struct signal_value_type<sc_out<T>>    { using type = T; };
 
+// sc_clock inherits from sc_signal<bool> — treat it as a bool signal
+// so that TraceManager::trace() and JsonTrace::trace() accept it.
+template <> struct signal_value_type<sc_core::sc_clock> { using type = bool; };
+
 template <typename T>
 using signal_value_type_t = typename signal_value_type<T>::type;
 
@@ -41,6 +55,9 @@ using signal_value_type_t = typename signal_value_type<T>::type;
 // ----------------------------------------------------------------
 template <typename T> struct is_sc_signal     : std::false_type {};
 template <typename T> struct is_sc_signal<sc_signal<T>> : std::true_type {};
+
+// sc_clock is a subclass of sc_signal<bool>
+template <> struct is_sc_signal<sc_core::sc_clock> : std::true_type {};
 
 template <typename T> struct is_sc_in          : std::false_type {};
 template <typename T> struct is_sc_in<sc_in<T>>     : std::true_type {};
@@ -86,8 +103,12 @@ std::string value_to_string(const T& val)
         return std::to_string(val);
     } else {
         // For sc_lv, sc_bv, sc_int, sc_uint, etc.
-        // Use operator<< which all SystemC data types support
-        std::ostringstream ss;
+        // Use operator<< which all SystemC data types support.
+        // Reuse a thread_local ostringstream to avoid repeated
+        // construction/destruction overhead on every value change.
+        static thread_local std::ostringstream ss;
+        ss.str("");
+        ss.clear();
         ss << val;
         return ss.str();
     }

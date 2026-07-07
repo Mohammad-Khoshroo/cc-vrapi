@@ -25,11 +25,17 @@ namespace trace {
 
 class TraceManager {
 public:
+    // Non-copyable, non-movable — owns a raw sc_trace_file* handle
+    TraceManager(const TraceManager&) = delete;
+    TraceManager& operator=(const TraceManager&) = delete;
+    TraceManager(TraceManager&&) = delete;
+    TraceManager& operator=(TraceManager&&) = delete;
+
     explicit TraceManager(const std::string& filename)
-        : filename_(filename)
+        : tf_(sc_core::sc_create_vcd_trace_file(filename.c_str()))
+        , filename_(filename)
         , closed_(false)
     {
-        tf_ = sc_core::sc_create_vcd_trace_file(filename.c_str());
         if (!tf_) {
             std::cerr << "[TraceManager] Failed to create VCD file: "
                       << filename << "\n";

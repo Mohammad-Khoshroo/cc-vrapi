@@ -1,0 +1,38 @@
+{
+  "signals": [
+    {
+      "name": "clk",
+      "width": 1,
+      "changes": [
+        {"time": 0, "value": "0"},
+        {"time": 0, "value": "1"},
+        {"time": 2.5, "value": "0"},
+        {"time": 5, "value": "1"},
+        {"time": 7.5, "value": "0"},
+        {"time": 10, "value": "1"},
+        {"time": 12.5, "value": "0"},
+        {"time": 15, "value": "1"},
+        {"time": 17.5, "value": "0"},
+        {"time": 20, "value": "1"},
+        {"time": 22.5, "value": "0"},
+        {"time": 25, "value": "1"},
+        {"time": 27.5, "value": "0"},
+        {"time": 30, "value": "1"},
+        {"time": 32.5, "value": "0"},
+        {"time": 35, "value": "1"},
+        {"time": 37.5, "value": "0"},
+        {"time": 40, "value": "1"},
+        {"time": 42.5, "value": "0"},
+        {"time": 45, "value": "1"},
+        {"time": 47.5, "value": "0"}
+      ]
+    },
+    {
+      "name": "data",
+      "width": 8,
+      "changes": [
+        {"time": 0, "value": "XXXXXXXX"}
+      ]
+    }
+  ]
+}

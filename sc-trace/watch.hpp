@@ -12,6 +12,11 @@
 //   watch_value(sig, value, cb)       — signal equals specific value
 //   watch_transition(sig, from, to, cb) — specific from→to transition
 //
+// Callbacks may take either:
+//   - void(const value_type&)  — receives the new signal value
+//   - void()                   — receives nothing
+// Both forms are accepted by every watch_* function.
+//
 // IMPORTANT: All watch() calls MUST be made BEFORE sc_start().
 // SystemC does not allow creating modules (which watchers are) after
 // simulation starts.
@@ -24,6 +29,8 @@
 #include <vector>
 #include <memory>
 #include <mutex>
+#include <atomic>
+#include <type_traits>
 
 namespace cc_vrwrapper {
 namespace trace {
@@ -39,6 +46,30 @@ enum class WatchMode {
     VALUE_MATCH,    // signal equals a specific value
     TRANSITION      // specific from→to transition
 };
+
+// ========================================================================
+// supports_edge_detection — trait for types that support rising/falling
+// edge detection. Bus types (sc_lv, sc_bv) do NOT support edges.
+// ========================================================================
+
+template <typename T, typename = void>
+struct supports_edge_detection : std::false_type {};
+
+template <> struct supports_edge_detection<sc_logic> : std::true_type {};
+
+// C++ integral types (bool, int, unsigned, char, ...)
+template <typename T>
+struct supports_edge_detection<T, std::enable_if_t<std::is_integral_v<T>>>
+    : std::true_type {};
+
+// SystemC integer types
+template <int W> struct supports_edge_detection<sc_int<W>>     : std::true_type {};
+template <int W> struct supports_edge_detection<sc_uint<W>>    : std::true_type {};
+template <int W> struct supports_edge_detection<sc_bigint<W>>  : std::true_type {};
+template <int W> struct supports_edge_detection<sc_biguint<W>> : std::true_type {};
+
+template <typename T>
+inline constexpr bool supports_edge_detection_v = supports_edge_detection<T>::value;
 
 // ========================================================================
 // SignalWatcher — internal SC_MODULE that watches a signal
@@ -118,6 +149,9 @@ private:
     value_type last_value_;
 
     // Edge detection — works for bool, sc_logic, and integral types
+    // (including sc_int, sc_uint, sc_bigint, sc_biguint).
+    // The static_assert in watch_rising/watch_falling prevents this
+    // from being instantiated for unsupported types like sc_lv, sc_bv.
     bool is_rising_edge(const value_type& old, const value_type& cur)
     {
         if constexpr (std::is_same_v<value_type, bool>) {
@@ -161,8 +195,35 @@ inline std::mutex& registry_mutex()
 
 inline int next_watcher_id()
 {
-    static int counter = 0;
-    return counter++;
+    static std::atomic<int> counter{0};
+    return counter.fetch_add(1, std::memory_order_relaxed);
+}
+
+// --------------------------------------------------------------------
+// adapt_callback — wrap user callback (0-arg or 1-arg) into
+// std::function<void(const value_type&)>.
+//
+// Supports:
+//   - cb(const value_type&)  → wrapped directly
+//   - cb()                   → wrapped to ignore the value argument
+//
+// This is a compile-time decision via if constexpr — no runtime cost.
+// --------------------------------------------------------------------
+template <typename ValueType, typename Callback>
+std::function<void(const ValueType&)> adapt_callback(Callback cb)
+{
+    if constexpr (std::is_invocable_v<Callback, const ValueType&>) {
+        // 1-arg callback — direct conversion
+        return std::function<void(const ValueType&)>(std::move(cb));
+    } else if constexpr (std::is_invocable_v<Callback>) {
+        // 0-arg callback — wrap to ignore the value argument
+        auto moved_cb = std::move(cb);
+        return [moved_cb](const ValueType&) mutable { moved_cb(); };
+    } else {
+        static_assert(!sizeof(Callback),
+            "Callback must be invocable with no args or with const ValueType&");
+        return {};  // unreachable
+    }
 }
 
 } // namespace detail
@@ -193,13 +254,11 @@ void watch(Signal& sig, Callback cb)
 
     auto watcher = std::make_shared<SignalWatcher<Signal>>(
         name.c_str(), sig,
-        std::function<void(const value_type&)>(cb),
+        detail::adapt_callback<value_type>(std::move(cb)),
         WatchMode::ANY_CHANGE
     );
     detail::watcher_registry().push_back(
-        std::shared_ptr<sc_core::sc_module>(
-            watcher, watcher.get()
-        )
+        std::static_pointer_cast<sc_core::sc_module>(watcher)
     );
 }
 
@@ -222,6 +281,10 @@ void watch_rising(Signal& sig, Callback cb)
         "watch_rising(): Signal must be sc_signal<T>, sc_in<T>, or sc_out<T>");
 
     using value_type = signal_value_type_t<Signal>;
+    static_assert(supports_edge_detection_v<value_type>,
+        "watch_rising(): value type must support edge detection "
+        "(bool, sc_logic, integral, sc_int, sc_uint, sc_bigint, sc_biguint). "
+        "For bus types (sc_lv, sc_bv), use watch_value or watch_transition.");
 
     std::lock_guard<std::mutex> g(detail::registry_mutex());
     int id = detail::next_watcher_id();
@@ -229,13 +292,11 @@ void watch_rising(Signal& sig, Callback cb)
 
     auto watcher = std::make_shared<SignalWatcher<Signal>>(
         name.c_str(), sig,
-        std::function<void(const value_type&)>(cb),
+        detail::adapt_callback<value_type>(std::move(cb)),
         WatchMode::RISING_EDGE
     );
     detail::watcher_registry().push_back(
-        std::shared_ptr<sc_core::sc_module>(
-            watcher, watcher.get()
-        )
+        std::static_pointer_cast<sc_core::sc_module>(watcher)
     );
 }
 
@@ -253,6 +314,10 @@ void watch_falling(Signal& sig, Callback cb)
         "watch_falling(): Signal must be sc_signal<T>, sc_in<T>, or sc_out<T>");
 
     using value_type = signal_value_type_t<Signal>;
+    static_assert(supports_edge_detection_v<value_type>,
+        "watch_falling(): value type must support edge detection "
+        "(bool, sc_logic, integral, sc_int, sc_uint, sc_bigint, sc_biguint). "
+        "For bus types (sc_lv, sc_bv), use watch_value or watch_transition.");
 
     std::lock_guard<std::mutex> g(detail::registry_mutex());
     int id = detail::next_watcher_id();
@@ -260,13 +325,11 @@ void watch_falling(Signal& sig, Callback cb)
 
     auto watcher = std::make_shared<SignalWatcher<Signal>>(
         name.c_str(), sig,
-        std::function<void(const value_type&)>(cb),
+        detail::adapt_callback<value_type>(std::move(cb)),
         WatchMode::FALLING_EDGE
     );
     detail::watcher_registry().push_back(
-        std::shared_ptr<sc_core::sc_module>(
-            watcher, watcher.get()
-        )
+        std::static_pointer_cast<sc_core::sc_module>(watcher)
     );
 }
 
@@ -296,14 +359,12 @@ void watch_value(Signal& sig, const ValueType& value, Callback cb)
 
     auto watcher = std::make_shared<SignalWatcher<Signal>>(
         name.c_str(), sig,
-        std::function<void(const sig_value_type&)>(cb),
+        detail::adapt_callback<sig_value_type>(std::move(cb)),
         WatchMode::VALUE_MATCH,
         static_cast<sig_value_type>(value)
     );
     detail::watcher_registry().push_back(
-        std::shared_ptr<sc_core::sc_module>(
-            watcher, watcher.get()
-        )
+        std::static_pointer_cast<sc_core::sc_module>(watcher)
     );
 }
 
@@ -330,25 +391,30 @@ void watch_transition(Signal& sig, const ValueType& from,
 
     auto watcher = std::make_shared<SignalWatcher<Signal>>(
         name.c_str(), sig,
-        std::function<void(const sig_value_type&)>(cb),
+        detail::adapt_callback<sig_value_type>(std::move(cb)),
         WatchMode::TRANSITION,
         static_cast<sig_value_type>(to),     // match_value = "to"
         static_cast<sig_value_type>(from)    // from_value
     );
     detail::watcher_registry().push_back(
-        std::shared_ptr<sc_core::sc_module>(
-            watcher, watcher.get()
-        )
+        std::static_pointer_cast<sc_core::sc_module>(watcher)
     );
 }
 
 // --------------------------------------------------------------------
-// clear_watchers() — remove all watchers (for cleanup / reconfiguration)
+// clear_watchers() — destroy all watchers
 //
-// NOTE: This only removes the shared_ptr references. SystemC's internal
-// module registry still holds references. Watchers will not fire again
-// after this call (their callbacks are destroyed), but the modules
-// themselves persist until simulation ends.
+// WARNING: This destroys the watcher modules. SystemC does NOT support
+// destroying modules with registered processes while the kernel is
+// still running — calling this AFTER sc_start() may cause crashes
+// (dangling process pointers in the kernel scheduler).
+//
+// Only safe to call:
+//   - BEFORE sc_start() (during elaboration)
+//   - After sc_start() has fully returned (i.e., simulation is done)
+//
+// For typical use cases, you do NOT need to call this — watchers are
+// cleaned up automatically when the program exits.
 // --------------------------------------------------------------------
 inline void clear_watchers()
 {

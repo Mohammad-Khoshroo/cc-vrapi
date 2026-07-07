@@ -11,16 +11,6 @@ SC_MODULE(DUT)
     sc_in<sc_lv<8>> data;
 
     SC_CTOR(DUT) {
-        // Watch clock rising edges
-        tr::watch_rising(clk, []() {
-            std::cout << "clk↑ @ " << sc_time_stamp() << "\n";
-        });
-
-        // Watch data for value 0xFF
-        tr::watch_value(data, sc_lv<8>(0xFF), [](const sc_lv<8>&) {
-            std::cout << "data = 0xFF!\n";
-        });
-
         SC_THREAD(run);
         sensitive << clk.pos();
     }
@@ -38,12 +28,18 @@ int sc_main(int argc, char* argv[]) {
     dut.clk(clk);
     dut.data(data);
 
-    // VCD trace with filtering
+    tr::watch_rising(dut.clk, []() {
+        std::cout << "clk↑ @ " << sc_time_stamp() << "\n";
+    });
+    tr::watch_value(dut.data, sc_lv<8>(0xFF), [](const sc_lv<8>&) {
+        std::cout << "data = 0xFF!\n";
+    });
+
     auto tf = tr::create_trace_file("wave");
+    tf->set_time_unit(10.0, SC_PS);
     tf->trace(clk, "clk");
     tf->trace(data, "data");
 
-    // JSON trace
     auto jt = tr::create_json_trace("wave.json");
     jt->trace(clk, "clk");
     jt->trace(data, "data");
