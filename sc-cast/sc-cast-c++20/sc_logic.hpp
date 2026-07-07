@@ -42,8 +42,8 @@ namespace cc_vrwrapper
     }
 
     // string → sc_logic
-    template <ScLogic T>
-    T sc_cast(std::string_view input_str,
+    template <ScLogic T, StringLike S>
+    T sc_cast(S&& input_str,
               std::string_view mode_view = "data",
               int /*base*/ = 2)
     {

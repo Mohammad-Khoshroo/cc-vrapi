@@ -93,8 +93,9 @@ namespace cc_vrwrapper
         return BV(raw);
     }
 
-    template <ScBv BV>
-    BV sc_cast(std::string_view input_str,
+        // string → sc_bv
+    template <ScBv BV, StringLike S>
+    BV sc_cast(S&& input_str,
                std::string_view mode_view = "data",
                int base = 2)
     {
@@ -133,6 +134,7 @@ namespace cc_vrwrapper
         std::string substr1 = (size > 1) ? std::string(str.substr(1)) : "";
         uint64_t umaxRange = (WIDTH >= 64) ? UINT64_MAX : (1ULL << WIDTH) - 1;
 
+        // Binary prefix
         if (size >= 3 && c0 == '0' && (c1 == 'b' || c1 == 'B')) {
             if (!std::regex_match(substr2, std::regex("^[01]+$"))) {
                 SC_REPORT_ERROR("sc_cast", "Invalid characters in binary string.");
@@ -147,6 +149,7 @@ namespace cc_vrwrapper
             return detail::from_bitstr<BV>(str);
         }
 
+        // Hex prefix
         if (size >= 3 && c0 == '0' && (c1 == 'x' || c1 == 'X')) {
             std::string hex_str = substr2;
             if (!std::regex_match(hex_str, std::regex("^[0-9a-fA-F]+$"))) {
@@ -170,6 +173,7 @@ namespace cc_vrwrapper
             return detail::from_bitstr<BV>(bitstr);
         }
 
+        // Octal prefix
         if (size >= 2 && c0 == '0' && detail::safe_isdigit(c1)) {
             std::string oct_str = substr1;
             if (!std::regex_match(oct_str, std::regex("^[0-7]+$"))) {
@@ -191,6 +195,7 @@ namespace cc_vrwrapper
             return detail::from_bitstr<BV>(bitstr);
         }
 
+        // Decimal
         if (std::regex_match(str, std::regex("^[+-]?[0-9]+$"))) {
             if (is_address) {
                 if (str[0] == '+' || str[0] == '-') {

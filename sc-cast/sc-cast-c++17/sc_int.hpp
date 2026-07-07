@@ -84,9 +84,9 @@ namespace cc_vrwrapper
     }
 
     // string → sc_int family
-    template <typename INT>
-    std::enable_if_t<is_sc_intlike<INT>::value, INT>
-    sc_cast(std::string_view input_str,
+    template <typename INT, typename S>
+    std::enable_if_t<is_sc_intlike<INT>::value && is_string_like<S>::value, INT>
+    sc_cast(S&& input_str,
             std::string_view mode_view = "data",
             int base = 2)
     {
@@ -156,12 +156,31 @@ namespace cc_vrwrapper
                                       : static_cast<int64_t>(uValue);
             return INT(v);
         } else {
-            std::string signed_str = (sign == '-') ? ("-" + num_str) : num_str;
-            sc_numrep sn = SC_DEC;
-            if (detected_base == 2)       sn = SC_BIN;
-            else if (detected_base == 8)  sn = SC_OCT;
-            else if (detected_base == 16) sn = SC_HEX;
-            return INT(signed_str.c_str(), sn);
+            // sc_bigint/sc_biguint > 64 bits:
+            // SystemC parses the string by its prefix ("0x", "0b", "0NNN").
+            std::string prefix;
+            if (detected_base == 2)            prefix = "0b";
+            else if (detected_base == 8)       prefix = "0";
+            else if (detected_base == 16)      prefix = "0x";
+            // base 10: no prefix needed
+
+            std::string full_str = prefix + num_str;
+
+            if constexpr (is_sc_unsigned_int<INT>::value) {
+                if (sign == '-')
+                    SC_REPORT_WARNING("sc_cast",
+                        "Negative value assigned to unsigned sc_biguint; will wrap.");
+                return INT(full_str.c_str());
+            } else {
+                // For signed sc_bigint, handle sign explicitly
+                if (sign == '-') {
+                    // Construct positive then negate
+                    sc_bigint<WIDTH + 1> tmp(full_str.c_str());
+                    tmp = -tmp;
+                    return INT(tmp);
+                }
+                return INT(full_str.c_str());
+            }
         }
     }
 

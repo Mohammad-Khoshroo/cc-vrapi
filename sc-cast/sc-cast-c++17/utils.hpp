@@ -76,6 +76,17 @@ namespace cc_vrwrapper
     template <typename T> struct is_sc_biguint : std::false_type {};
     template <int W>      struct is_sc_biguint<sc_biguint<W>> : std::true_type {};
 
+    // String-like trait to prevent implicit conversions to bool/integral
+    template <typename T> struct is_string_like : std::false_type {};
+    template <>           struct is_string_like<const char*>       : std::true_type {};
+    template <>           struct is_string_like<char*>             : std::true_type {};
+    template <>           struct is_string_like<std::string>       : std::true_type {};
+    template <>           struct is_string_like<std::string_view>  : std::true_type {};
+    // Also handle const/ref-qualified versions
+    template <typename T> struct is_string_like<const T> : is_string_like<T> {};
+    template <typename T> struct is_string_like<T&>      : is_string_like<T> {};
+    template <typename T> struct is_string_like<const T&>: is_string_like<T> {};
+
     template <typename T>
     struct is_sc_logiclike : std::integral_constant<bool,
         is_sc_lv<T>::value || is_sc_bv<T>::value || is_sc_logic<T>::value> {};

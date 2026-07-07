@@ -131,6 +131,13 @@ namespace cc_vrwrapper
     template <typename T>
     concept ScUnsignedInt = is_sc_uint<T>::value || is_sc_biguint<T>::value;
 
+    // String-like concept to prevent implicit conversions to bool/integral
+    template <typename T>
+    concept StringLike = std::is_same_v<std::decay_t<T>, const char*>
+                      || std::is_same_v<std::decay_t<T>, char*>
+                      || std::is_same_v<std::decay_t<T>, std::string>
+                      || std::is_same_v<std::decay_t<T>, std::string_view>;
+
     // ========================================================================
     // DETAIL HELPERS
     // ========================================================================

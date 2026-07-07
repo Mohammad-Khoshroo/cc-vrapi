@@ -45,10 +45,10 @@ namespace cc_vrwrapper
         return T((value & 1) ? SC_LOGIC_1 : SC_LOGIC_0);
     }
 
-    // string → sc_logic
-    template <typename T>
-    std::enable_if_t<is_sc_logic<T>::value, T>
-    sc_cast(std::string_view input_str,
+        // string → sc_logic
+    template <typename T, typename S>
+    std::enable_if_t<is_sc_logic<T>::value && is_string_like<S>::value, T>
+    sc_cast(S&& input_str,
             std::string_view mode_view = "data",
             int /*base*/ = 2)
     {

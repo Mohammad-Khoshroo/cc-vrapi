@@ -475,10 +475,10 @@ void test_sc_bigint() {
     CHECK_EQ(lv_str.size(), 128u);
     std::cout << "    [INFO] sc_lv<128> = " << lv_str.substr(0, 32) << "...\n";
 
-    // Negative big int
+    // Negative big int — with our new sign-handling fix, "-1" should round-trip to "-1"
     sc_bigint<128> bi = sc_cast<sc_bigint<128>>("-1");
     std::string bi_str = sc_cast<std::string>(bi);
-    CHECK_TRUE(bi_str == "-1");
+    CHECK_EQ(bi_str, std::string("-1"));
     std::cout << "    [INFO] sc_bigint<128>(-1) = " << bi_str << "\n";
 }
 
