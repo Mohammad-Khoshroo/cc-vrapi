@@ -609,75 +609,75 @@ static void reset_all_state()
 //     rpt::handler::close_report_log();
 // }
 
-// // ---------------------------------------------------------------------------
-// // [ERROR-GENERATING] Test E4: Invalid string format
-// // ---------------------------------------------------------------------------
-// // Tests that invalid input to sc_cast triggers SC_REPORT_ERROR.
-// // Does NOT abort simulation, but the return value is "unknown".
-// // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// [ERROR-GENERATING] Test E4: Invalid string format
+// ---------------------------------------------------------------------------
+// Tests that invalid input to sc_cast triggers SC_REPORT_ERROR.
+// Does NOT abort simulation, but the return value is "unknown".
+// ---------------------------------------------------------------------------
 
-// void test_invalid_string_format()
-// {
-//     std::cout << "\n=== [ERROR] Test E4: Invalid string format ===\n";
+void test_invalid_string_format()
+{
+    std::cout << "\n=== [ERROR] Test E4: Invalid string format ===\n";
 
-//     reset_all_state();
-//     rpt::config::set_log_file_path("logs/test_invalid.log");
-//     rpt::handler::init_report_handler();
+    reset_all_state();
+    rpt::config::set_log_file_path("logs/test_invalid.log");
+    rpt::handler::init_report_handler();
 
-//     using namespace cc_vrwrapper;
-//     // "0b12" has invalid '2' character - should produce error + return X-filled lv
-//     sc_lv<8> lv = sc_cast<sc_lv<8>>("0b12");
-//     std::cout << "  Result (should be all X): " << lv.to_string() << "\n";
+    using namespace cc_vrwrapper;
+    // "0b12" has invalid '2' character - should produce error + return X-filled lv
+    sc_lv<8> lv = sc_cast<sc_lv<8>>("0b12");
+    std::cout << "  Result (should be all X): " << lv.to_string() << "\n";
 
-//     rpt::handler::close_report_log();
+    rpt::handler::close_report_log();
 
-//     auto& s = rpt::stats::get();
-//     CHECK_EQ(s.error.load(), 1u);
-// }
+    auto& s = rpt::stats::get();
+    CHECK_EQ(s.error.load(), 1u);
+}
 
-// // ---------------------------------------------------------------------------
-// // [ERROR-GENERATING] Test E5: Out-of-range decimal
-// // ---------------------------------------------------------------------------
-// void test_overflow_warning()
-// {
-//     std::cout << "\n=== [ERROR] Test E5: Overflow warning ===\n";
+// ---------------------------------------------------------------------------
+// [ERROR-GENERATING] Test E5: Out-of-range decimal
+// ---------------------------------------------------------------------------
+void test_overflow_warning()
+{
+    std::cout << "\n=== [ERROR] Test E5: Overflow warning ===\n";
 
-//     reset_all_state();
-//     rpt::config::set_log_file_path("logs/test_overflow.log");
-//     rpt::handler::init_report_handler();
+    reset_all_state();
+    rpt::config::set_log_file_path("logs/test_overflow.log");
+    rpt::handler::init_report_handler();
 
-//     using namespace cc_vrwrapper;
-//     // 300 doesn't fit in sc_int<8> (range -128..127) - produces warning
-//     sc_int<8> si = sc_cast<sc_int<8>>(300);
-//     std::cout << "  300 in sc_int<8> = " << si.to_int64() << " (wrapped to 44)\n";
+    using namespace cc_vrwrapper;
+    // 300 doesn't fit in sc_int<8> (range -128..127) - produces warning
+    sc_int<8> si = sc_cast<sc_int<8>>(300);
+    std::cout << "  300 in sc_int<8> = " << si.to_int64() << " (wrapped to 44)\n";
 
-//     rpt::handler::close_report_log();
+    rpt::handler::close_report_log();
 
-//     auto& s = rpt::stats::get();
-//     CHECK_EQ(s.warning.load(), 1u);
-// }
+    auto& s = rpt::stats::get();
+    CHECK_EQ(s.warning.load(), 1u);
+}
 
-// // ---------------------------------------------------------------------------
-// // [ERROR-GENERATING] Test E6: sc_bv with X/Z input
-// // ---------------------------------------------------------------------------
-// void test_bv_with_xz()
-// {
-//     std::cout << "\n=== [ERROR] Test E6: sc_bv with X/Z ===\n";
+// ---------------------------------------------------------------------------
+// [ERROR-GENERATING] Test E6: sc_bv with X/Z input
+// ---------------------------------------------------------------------------
+void test_bv_with_xz()
+{
+    std::cout << "\n=== [ERROR] Test E6: sc_bv with X/Z ===\n";
 
-//     reset_all_state();
-//     rpt::config::set_log_file_path("logs/test_bv_xz.log");
-//     rpt::handler::init_report_handler();
+    reset_all_state();
+    rpt::config::set_log_file_path("logs/test_bv_xz.log");
+    rpt::handler::init_report_handler();
 
-//     using namespace cc_vrwrapper;
-//     // sc_bv doesn't support X/Z - should produce warning and convert to 0
-//     sc_bv<4> bv = sc_cast<sc_bv<4>>("0b1X0Z");
-//     std::cout << "  Result (should be 1000): " << bv.to_string() << "\n";
+    using namespace cc_vrwrapper;
+    // sc_bv doesn't support X/Z - should produce warning and convert to 0
+    sc_bv<4> bv = sc_cast<sc_bv<4>>("0b1X0Z");
+    std::cout << "  Result (should be 1000): " << bv.to_string() << "\n";
 
-//     rpt::handler::close_report_log();
+    rpt::handler::close_report_log();
 
-//     auto& s = rpt::stats::get();
-//     CHECK_EQ(s.warning.load(), 1u);
-// }
+    auto& s = rpt::stats::get();
+    CHECK_EQ(s.warning.load(), 1u);
+}
 
 // // ---------------------------------------------------------------------------
 // // [ERROR-GENERATING] Test E7: Network sink connection failure
@@ -742,9 +742,9 @@ int sc_main(int argc, char* argv[])
     // test_fatal_error();           // E1: will abort()
     // test_throw_on_error();        // E2: will throw
     // test_sc_cast_fatal();         // E3: will abort()
-    // test_invalid_string_format(); // E4: produces error, continues
-    // test_overflow_warning();      // E5: produces warning, continues
-    // test_bv_with_xz();            // E6: produces warning, continues
+    test_invalid_string_format(); // E4: produces error, continues
+    test_overflow_warning();      // E5: produces warning, continues
+    test_bv_with_xz();            // E6: produces warning, continues
     // test_network_sink_failure();  // E7: fails silently, continues
 
     std::cout << "\n================================\n";
