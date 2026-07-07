@@ -28,19 +28,15 @@ int sc_main(int argc, char* argv[]) {
     dut.clk(clk);
     dut.data(data);
 
-    tr::watch_rising(dut.clk, []() {
-        std::cout << "clk↑ @ " << sc_time_stamp() << "\n";
-    });
-    tr::watch_value(dut.data, sc_lv<8>(0xFF), [](const sc_lv<8>&) {
-        std::cout << "data = 0xFF!\n";
-    });
-
+    // VCD
     auto tf = tr::create_trace_file("wave");
     tf->set_time_unit(10.0, SC_PS);
     tf->trace(clk, "clk");
     tf->trace(data, "data");
 
+    // JSON با TRIGGERED delta mode
     auto jt = tr::create_json_trace("wave.json");
+    jt->set_delta_trigger(clk);   // ← clk rising edge = cycle start
     jt->trace(clk, "clk");
     jt->trace(data, "data");
     jt->start();

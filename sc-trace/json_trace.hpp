@@ -9,44 +9,47 @@
 // as a JSON file. This format can be loaded by custom web-based waveform
 // viewers or analyzed with tools like jq, Python, etc.
 //
-// JSON format (delta_cycles OFF — default):
-//   {
-//     "signals": [
-//       {
-//         "name": "clk",
-//         "width": 1,
-//         "changes": [
-//           {"time": 0.0, "value": "0"},
-//           {"time": 5.0, "value": "1"},
-//           {"time": 10.0, "value": "0"}
-//         ]
-//       }
-//     ]
-//   }
+// Delta cycle recording modes (set via set_delta_mode / set_record_delta_cycles
+// / set_delta_trigger — MUST be configured BEFORE trace()):
 //
-// JSON format (delta_cycles ON — see set_record_delta_cycles):
-//   {
-//     "signals": [
-//       {
-//         "name": "data",
-//         "width": 8,
-//         "changes": [
-//           {"time": 0.0, "delta": 0, "value": "0x00"},
-//           {"time": 10.0, "delta": 5, "value": "0x01"},
-//           {"time": 10.0, "delta": 6, "value": "0x02"}
-//         ]
-//       }
-//     ]
-//   }
+//   OFF (default)
+//       No delta info. Minimal overhead.
+//       JSON: {"time": <ns>, "value": "<str>"}
 //
-// Time is in nanoseconds (double precision).
-// delta is the result of sc_core::sc_delta_count() at the moment of change.
-// Multiple changes at the same time but different delta values indicate
-// zero-time glitches — useful for debugging combinatorial loops and
-// settling behavior in SystemC designs.
+//   GLOBAL
+//       Record sc_delta_count() as-is (the global counter).
+//       JSON: {"time": <ns>, "delta": <n>, "value": "<str>"}
+//
+//   TRIGGERED
+//       Record cycle + local delta relative to a trigger signal's
+//       edge (e.g., clk rising edge). Useful for debugging
+//       within-clock-cycle behavior — multiple changes at the same
+//       simulation time but different delta cycles become visible
+//       as a per-cycle delta sequence.
+//
+//       Each rising edge of the trigger signal marks the start of a
+//       new "cycle". Changes before the first trigger are in cycle 0.
+//
+//       JSON output:
+//         {
+//           "triggers": [
+//             {"cycle": 1, "time": <ns>, "delta": <global_delta>},
+//             {"cycle": 2, "time": <ns>, "delta": <global_delta>},
+//             ...
+//           ],
+//           "signals": [
+//             {
+//               "name": "...", "width": N,
+//               "changes": [
+//                 {"time": <ns>, "cycle": <n>, "delta": <local>, "value": "<str>"}
+//               ]
+//             }
+//           ]
+//         }
 //
 // IMPORTANT: trace() calls MUST be made BEFORE sc_start().
-// write() should be called AFTER sc_start() completes.
+//            Delta mode MUST be set BEFORE trace().
+//            write() should be called AFTER sc_start() completes.
 // ============================================================================
 
 #include "utils.hpp"
@@ -59,6 +62,7 @@
 #include <atomic>
 #include <iomanip>
 #include <cstdio>
+#include <utility>
 
 namespace cc_vrwrapper {
 namespace trace {
@@ -69,17 +73,31 @@ namespace trace {
 
 class JsonTrace {
 public:
+    // ----------------------------------------------------------------
+    // DeltaMode — controls how delta cycle information is recorded
+    // ----------------------------------------------------------------
+    enum class DeltaMode {
+        OFF,         // no delta info (minimal overhead)
+        GLOBAL,      // record sc_delta_count() as-is
+        TRIGGERED    // record cycle + local delta relative to a trigger
+    };
+
     struct SignalChange {
-        double       time;        // in nanoseconds
-        std::string  value;
-        unsigned long delta;      // sc_delta_count() — only meaningful
-                                  // when record_delta_cycles_ == true
+        double        time;     // in nanoseconds
+        std::string   value;
+        unsigned long delta;    // global sc_delta_count() at change;
+                                // only meaningful when delta_mode_ != OFF
     };
 
     struct SignalInfo {
         std::string name;
         int width;
         std::vector<SignalChange> changes;
+    };
+
+    struct TriggerEvent {
+        double        time;     // in nanoseconds
+        unsigned long delta;    // global sc_delta_count() at trigger
     };
 
     // Non-copyable, non-movable — owns watcher modules and recorded data
@@ -92,7 +110,7 @@ public:
         : filename_(filename)
         , started_(false)
         , written_(false)
-        , record_delta_cycles_(false)
+        , delta_mode_(DeltaMode::OFF)
         , instance_id_(next_instance_id())
     {}
 
@@ -120,36 +138,78 @@ public:
     }
 
     // ----------------------------------------------------------------
-    // set_record_delta_cycles() — enable delta cycle visibility
+    // Delta cycle configuration — MUST be called BEFORE trace()
+    // ----------------------------------------------------------------
+
+    // Backward-compatible: enable=true → GLOBAL, enable=false → OFF
+    void set_record_delta_cycles(bool enable)
+    {
+        delta_mode_ = enable ? DeltaMode::GLOBAL : DeltaMode::OFF;
+    }
+
+    // Explicit mode setting
+    void set_delta_mode(DeltaMode mode)
+    {
+        delta_mode_ = mode;
+    }
+
+    DeltaMode delta_mode() const { return delta_mode_; }
+
+    // ----------------------------------------------------------------
+    // set_delta_trigger() — set the reference signal for TRIGGERED mode
     //
-    // When enabled, each recorded change also stores sc_delta_count().
-    // This allows distinguishing multiple changes that occur at the
-    // SAME simulation time but in DIFFERENT delta cycles — a common
-    // source of subtle bugs in SystemC designs (zero-time glitches,
-    // combinatorial settling, etc.).
+    // Each rising edge of sig marks the start of a new "cycle".
+    // In TRIGGERED mode, each recorded change is tagged with:
+    //   - cycle: which trigger interval it belongs to
+    //            (0 = before first trigger, 1 = after first trigger, ...)
+    //   - delta: local delta count relative to the start of the cycle
     //
-    // MUST be called BEFORE trace() — the flag is captured into the
-    // watcher callback closures at trace() time.
+    // MUST be called BEFORE trace(). Auto-enables TRIGGERED mode
+    // if delta_mode_ is currently OFF.
     //
-    // Overhead when enabled (accepted by the user):
-    //   - One sc_delta_count() call per change (~1-2 ns)
-    //   - 8 bytes extra storage per change
-    //   - Slightly larger JSON output
+    // The trigger signal itself may also be traced via trace() — the
+    // two watchers are independent and do not interfere.
     //
     // Example:
     //   JsonTrace jt("wave.json");
-    //   jt.set_record_delta_cycles(true);
+    //   jt.set_delta_trigger(clk);   // clk rising edge = cycle start
     //   jt.trace(clk, "clk");
     //   jt.trace(data, "data");
-    //   sc_start(100, SC_NS);
-    //   jt.write();
     // ----------------------------------------------------------------
-    void set_record_delta_cycles(bool enable)
+    template <typename Signal>
+    void set_delta_trigger(Signal& sig)
     {
-        record_delta_cycles_ = enable;
-    }
+        static_assert(is_sc_signal_or_port_v<Signal>,
+            "set_delta_trigger(): Signal must be sc_signal<T>, "
+            "sc_in<T>, or sc_out<T>");
 
-    bool record_delta_cycles() const { return record_delta_cycles_; }
+        using value_type = signal_value_type_t<Signal>;
+        static_assert(supports_edge_detection_v<value_type>,
+            "set_delta_trigger(): value type must support edge detection "
+            "(bool, sc_logic, integral, sc_int, sc_uint, sc_bigint, "
+            "sc_biguint). For bus types, use GLOBAL mode instead.");
+
+        std::string name = "vrjson_trig_"
+            + std::to_string(instance_id_);
+        auto watcher = std::make_shared<SignalWatcher<Signal>>(
+            name.c_str(),
+            sig,
+            [this](const value_type&) {
+                TriggerEvent ev;
+                ev.time  = sc_core::sc_time_stamp().to_seconds() * 1e9;
+                ev.delta = sc_core::sc_delta_count();
+                triggers_.push_back(ev);
+            },
+            WatchMode::RISING_EDGE
+        );
+        watchers_.push_back(watcher);
+
+        // Auto-enable TRIGGERED mode if currently OFF, so the user
+        // doesn't need to call set_delta_mode() separately.
+        if (delta_mode_ == DeltaMode::OFF) {
+            delta_mode_ = DeltaMode::TRIGGERED;
+        }
+    }
 
     // ----------------------------------------------------------------
     // trace() — register a signal for JSON tracing
@@ -159,14 +219,6 @@ public:
     //
     // Note: For sc_in<T>/sc_out<T>, the port MUST be bound to a
     // signal before calling trace(), otherwise sig.read() will fail.
-    //
-    // Example:
-    //   JsonTrace jt("wave.json");
-    //   jt.trace(clk, "clk");
-    //   jt.trace(data, "data");
-    //   jt.start();         // mark ready for simulation
-    //   sc_start(100, SC_NS);
-    //   jt.write();         // output JSON file
     // ----------------------------------------------------------------
     template <typename Signal>
     void trace(Signal& sig, const std::string& name)
@@ -187,9 +239,9 @@ public:
         // Pre-reserve to reduce reallocations during simulation.
         signals_[idx].changes.reserve(64);
 
-        // Capture the delta-cycle flag at trace() time so the
-        // watcher closure uses a stable decision.
-        const bool record_delta = record_delta_cycles_;
+        // Capture the delta-recording decision at trace() time so
+        // the watcher closure uses a stable branch.
+        const bool record_delta = (delta_mode_ != DeltaMode::OFF);
 
         // Record initial value at time 0 (delta = 0).
         signals_[idx].changes.push_back({
@@ -199,12 +251,7 @@ public:
         });
 
         // Watch for changes — the watcher records each change.
-        // Use a globally-unique name (instance_id + idx) to avoid
-        // collisions when multiple JsonTrace instances exist.
-        //
-        // NOTE: SystemC simulation is single-threaded — no mutex is
-        // needed. The watcher callback runs synchronously inside
-        // sc_start() on the same thread that called trace().
+        // SystemC is single-threaded — no mutex needed.
         std::string watcher_name = "vrjson_"
             + std::to_string(instance_id_) + "_"
             + std::to_string(idx);
@@ -242,6 +289,8 @@ public:
     // write() — write the JSON file
     //
     // Call AFTER sc_start() completes.
+    // In TRIGGERED mode, post-processing computes per-change
+    // (cycle, local_delta) from the recorded global delta counts.
     // ----------------------------------------------------------------
     void write()
     {
@@ -254,11 +303,26 @@ public:
             return;
         }
 
-        // Use high precision for time values to avoid losing
-        // sub-nanosecond resolution in long simulations.
+        // Use high precision for time values.
         f << std::setprecision(15);
 
         f << "{\n";
+
+        // In TRIGGERED mode, output the triggers array first so
+        // consumers can map cycle numbers to absolute times.
+        if (delta_mode_ == DeltaMode::TRIGGERED && !triggers_.empty()) {
+            f << "  \"triggers\": [\n";
+            for (size_t i = 0; i < triggers_.size(); ++i) {
+                const auto& tr = triggers_[i];
+                f << "    {\"cycle\": " << (i + 1)
+                  << ", \"time\": "  << tr.time
+                  << ", \"delta\": " << tr.delta << "}";
+                if (i + 1 < triggers_.size()) f << ",";
+                f << "\n";
+            }
+            f << "  ],\n";
+        }
+
         f << "  \"signals\": [\n";
 
         for (size_t i = 0; i < signals_.size(); ++i) {
@@ -271,9 +335,17 @@ public:
             for (size_t j = 0; j < sig.changes.size(); ++j) {
                 const auto& ch = sig.changes[j];
                 f << "        {\"time\": " << ch.time;
-                if (record_delta_cycles_) {
+
+                if (delta_mode_ == DeltaMode::GLOBAL) {
                     f << ", \"delta\": " << ch.delta;
+                } else if (delta_mode_ == DeltaMode::TRIGGERED) {
+                    // Post-process: compute (cycle, local_delta) from
+                    // the recorded global delta count.
+                    auto cd = compute_cycle_delta(ch.delta);
+                    f << ", \"cycle\": " << cd.first
+                      << ", \"delta\": " << cd.second;
                 }
+
                 f << ", \"value\": \"" << json_escape(ch.value) << "\"}";
                 if (j + 1 < sig.changes.size()) f << ",";
                 f << "\n";
@@ -297,6 +369,7 @@ public:
     // ----------------------------------------------------------------
     const std::string& filename() const { return filename_; }
     size_t signal_count() const { return signals_.size(); }
+    size_t trigger_count() const { return triggers_.size(); }
 
 private:
     // Generate a unique ID for each JsonTrace instance so that
@@ -305,6 +378,33 @@ private:
     {
         static std::atomic<int> counter{0};
         return counter.fetch_add(1, std::memory_order_relaxed);
+    }
+
+    // ----------------------------------------------------------------
+    // compute_cycle_delta() — post-process a change's global delta
+    // into (cycle, local_delta) using the recorded trigger events.
+    //
+    // Returns:
+    //   - cycle = 0 if no trigger has fired yet (initialization phase)
+    //   - cycle = i+1 if triggers_[i] is the latest trigger whose
+    //     global delta is <= change_delta
+    //   - local_delta = change_delta - trigger_delta (>= 0)
+    //
+    // Linear scan from the end — triggers_ is typically small
+    // (one entry per clock period), so this is effectively O(1)
+    // for the common case of changes near the latest trigger.
+    // ----------------------------------------------------------------
+    std::pair<int, unsigned long>
+    compute_cycle_delta(unsigned long change_delta) const
+    {
+        for (size_t i = triggers_.size(); i > 0; --i) {
+            if (triggers_[i - 1].delta <= change_delta) {
+                return { static_cast<int>(i),
+                         change_delta - triggers_[i - 1].delta };
+            }
+        }
+        // No trigger has fired yet — initialization phase.
+        return { 0, change_delta };
     }
 
     // Minimal JSON string escaping for names and values.
@@ -335,12 +435,13 @@ private:
     }
 
     std::string filename_;
-    std::vector<SignalInfo> signals_;
+    std::vector<SignalInfo>  signals_;
+    std::vector<TriggerEvent> triggers_;
     std::vector<std::shared_ptr<sc_core::sc_module>> watchers_;
     NameFilter filter_;
     bool started_;
     bool written_;
-    bool record_delta_cycles_;
+    DeltaMode delta_mode_;
     int  instance_id_;
 };
 

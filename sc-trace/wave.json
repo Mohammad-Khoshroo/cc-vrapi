@@ -1,37 +1,49 @@
 {
+  "triggers": [
+    {"cycle": 1, "time": 0, "delta": 1},
+    {"cycle": 2, "time": 5, "delta": 5},
+    {"cycle": 3, "time": 10, "delta": 9},
+    {"cycle": 4, "time": 15, "delta": 13},
+    {"cycle": 5, "time": 20, "delta": 17},
+    {"cycle": 6, "time": 25, "delta": 21},
+    {"cycle": 7, "time": 30, "delta": 25},
+    {"cycle": 8, "time": 35, "delta": 29},
+    {"cycle": 9, "time": 40, "delta": 33},
+    {"cycle": 10, "time": 45, "delta": 37}
+  ],
   "signals": [
     {
       "name": "clk",
       "width": 1,
       "changes": [
-        {"time": 0, "value": "0"},
-        {"time": 0, "value": "1"},
-        {"time": 2.5, "value": "0"},
-        {"time": 5, "value": "1"},
-        {"time": 7.5, "value": "0"},
-        {"time": 10, "value": "1"},
-        {"time": 12.5, "value": "0"},
-        {"time": 15, "value": "1"},
-        {"time": 17.5, "value": "0"},
-        {"time": 20, "value": "1"},
-        {"time": 22.5, "value": "0"},
-        {"time": 25, "value": "1"},
-        {"time": 27.5, "value": "0"},
-        {"time": 30, "value": "1"},
-        {"time": 32.5, "value": "0"},
-        {"time": 35, "value": "1"},
-        {"time": 37.5, "value": "0"},
-        {"time": 40, "value": "1"},
-        {"time": 42.5, "value": "0"},
-        {"time": 45, "value": "1"},
-        {"time": 47.5, "value": "0"}
+        {"time": 0, "cycle": 0, "delta": 0, "value": "0"},
+        {"time": 0, "cycle": 1, "delta": 0, "value": "1"},
+        {"time": 2.5, "cycle": 1, "delta": 2, "value": "0"},
+        {"time": 5, "cycle": 2, "delta": 0, "value": "1"},
+        {"time": 7.5, "cycle": 2, "delta": 2, "value": "0"},
+        {"time": 10, "cycle": 3, "delta": 0, "value": "1"},
+        {"time": 12.5, "cycle": 3, "delta": 2, "value": "0"},
+        {"time": 15, "cycle": 4, "delta": 0, "value": "1"},
+        {"time": 17.5, "cycle": 4, "delta": 2, "value": "0"},
+        {"time": 20, "cycle": 5, "delta": 0, "value": "1"},
+        {"time": 22.5, "cycle": 5, "delta": 2, "value": "0"},
+        {"time": 25, "cycle": 6, "delta": 0, "value": "1"},
+        {"time": 27.5, "cycle": 6, "delta": 2, "value": "0"},
+        {"time": 30, "cycle": 7, "delta": 0, "value": "1"},
+        {"time": 32.5, "cycle": 7, "delta": 2, "value": "0"},
+        {"time": 35, "cycle": 8, "delta": 0, "value": "1"},
+        {"time": 37.5, "cycle": 8, "delta": 2, "value": "0"},
+        {"time": 40, "cycle": 9, "delta": 0, "value": "1"},
+        {"time": 42.5, "cycle": 9, "delta": 2, "value": "0"},
+        {"time": 45, "cycle": 10, "delta": 0, "value": "1"},
+        {"time": 47.5, "cycle": 10, "delta": 2, "value": "0"}
       ]
     },
     {
       "name": "data",
       "width": 8,
       "changes": [
-        {"time": 0, "value": "XXXXXXXX"}
+        {"time": 0, "cycle": 0, "delta": 0, "value": "XXXXXXXX"}
       ]
     }
   ]
