@@ -1,0 +1,7 @@
+[INFO] test1: Hello from test 1 @ 0 s (test.cpp:69) in process: 
+[WARNING] test1: A warning message @ 0 s (test.cpp:70) in process: 
+[ERROR] test1: An error message @ 0 s (test.cpp:71) in process: 
+[ERROR] test1: An error message @ 0 s (test.cpp:71) in process: 
+[ERROR]
+[WARNING]
+[FETAL]
