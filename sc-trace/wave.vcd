@@ -1,5 +1,5 @@
 $date
-     Jul 08, 2026       02:52:44
+     Jul 08, 2026       03:07:07
 $end
 
 $version
@@ -12,7 +12,20 @@ $end
 
 $scope module SystemC $end
 $var wire    1  aaaaa  clk       $end
-$var wire    8  aaaab  data [7:0]  $end
+$var wire    1  aaaab  reset       $end
+$var wire    1  aaaac  enable       $end
+$var wire    8  aaaad  count [7:0]  $end
+$var wire    4  aaaae  state [3:0]  $end
+$var wire    1  aaaaf  overflow       $end
+$var wire    8  aaaag  data_int [7:0]  $end
+$var wire   16  aaaah  data_bigint [15:0]  $end
+$var wire    1  aaaai  data_logic       $end
+$scope module control $end
+$var wire    4  aaaak  state [3:0]  $end
+$upscope $end
+$scope module datapath $end
+$var wire    8  aaaaj  count [7:0]  $end
+$upscope $end
 $upscope $end
 $enddefinitions  $end
 
@@ -22,7 +35,16 @@ $end
 
 $dumpvars
 1aaaaa
-bXXXXXXXX aaaab
+1aaaab
+0aaaac
+b0 aaaad
+b0 aaaae
+0aaaaf
+b0 aaaag
+b0 aaaah
+1aaaai
+b0 aaaaj
+b0 aaaak
 $end
 
 #250
@@ -30,56 +52,696 @@ $end
 
 #500
 1aaaaa
+0aaaab
+1aaaac
+b1 aaaad
+b1 aaaae
+b1 aaaag
+b1100100 aaaah
+0aaaai
+b1 aaaaj
+b1 aaaak
 
 #750
 0aaaaa
 
 #1000
 1aaaaa
+b10 aaaad
+b10 aaaag
+b11001000 aaaah
+1aaaai
+b10 aaaaj
 
 #1250
 0aaaaa
 
 #1500
 1aaaaa
+b11 aaaad
+b11 aaaag
+b100101100 aaaah
+0aaaai
+b11 aaaaj
 
 #1750
 0aaaaa
 
 #2000
 1aaaaa
+b100 aaaad
+b100 aaaag
+b110010000 aaaah
+1aaaai
+b100 aaaaj
 
 #2250
 0aaaaa
 
 #2500
 1aaaaa
+b101 aaaad
+b101 aaaag
+b111110100 aaaah
+0aaaai
+b101 aaaaj
 
 #2750
 0aaaaa
 
 #3000
 1aaaaa
+b110 aaaad
+b110 aaaag
+b1001011000 aaaah
+1aaaai
+b110 aaaaj
 
 #3250
 0aaaaa
 
 #3500
 1aaaaa
+b111 aaaad
+b111 aaaag
+b1010111100 aaaah
+0aaaai
+b111 aaaaj
 
 #3750
 0aaaaa
 
 #4000
 1aaaaa
+b1000 aaaad
+b1000 aaaag
+b1100100000 aaaah
+1aaaai
+b1000 aaaaj
 
 #4250
 0aaaaa
 
 #4500
 1aaaaa
+b1001 aaaad
+b1001 aaaag
+b1110000100 aaaah
+0aaaai
+b1001 aaaaj
 
 #4750
 0aaaaa
 
 #5000
+1aaaaa
+b1010 aaaad
+b10 aaaae
+b1010 aaaag
+b1111101000 aaaah
+1aaaai
+b1010 aaaaj
+b10 aaaak
+
+#5250
+0aaaaa
+
+#5500
+1aaaaa
+b1011 aaaad
+b1011 aaaag
+b10001001100 aaaah
+0aaaai
+b1011 aaaaj
+
+#5750
+0aaaaa
+
+#6000
+1aaaaa
+b1100 aaaad
+b1100 aaaag
+b10010110000 aaaah
+1aaaai
+b1100 aaaaj
+
+#6250
+0aaaaa
+
+#6500
+1aaaaa
+b1101 aaaad
+b1101 aaaag
+b10100010100 aaaah
+0aaaai
+b1101 aaaaj
+
+#6750
+0aaaaa
+
+#7000
+1aaaaa
+b1110 aaaad
+b1110 aaaag
+b10101111000 aaaah
+1aaaai
+b1110 aaaaj
+
+#7250
+0aaaaa
+
+#7500
+1aaaaa
+b1111 aaaad
+b1111 aaaag
+b10111011100 aaaah
+0aaaai
+b1111 aaaaj
+
+#7750
+0aaaaa
+
+#8000
+1aaaaa
+b10000 aaaad
+b10000 aaaag
+b11001000000 aaaah
+1aaaai
+b10000 aaaaj
+
+#8250
+0aaaaa
+
+#8500
+1aaaaa
+b10001 aaaad
+b10001 aaaag
+b11010100100 aaaah
+0aaaai
+b10001 aaaaj
+
+#8750
+0aaaaa
+
+#9000
+1aaaaa
+b10010 aaaad
+b10010 aaaag
+b11100001000 aaaah
+1aaaai
+b10010 aaaaj
+
+#9250
+0aaaaa
+
+#9500
+1aaaaa
+b10011 aaaad
+b10011 aaaag
+b11101101100 aaaah
+0aaaai
+b10011 aaaaj
+
+#9750
+0aaaaa
+
+#10000
+1aaaaa
+b10100 aaaad
+b10100 aaaag
+b11111010000 aaaah
+1aaaai
+b10100 aaaaj
+
+#10250
+0aaaaa
+
+#10500
+1aaaaa
+b10101 aaaad
+b10101 aaaag
+b100000110100 aaaah
+0aaaai
+b10101 aaaaj
+
+#10750
+0aaaaa
+
+#11000
+1aaaaa
+b10110 aaaad
+b10110 aaaag
+b100010011000 aaaah
+1aaaai
+b10110 aaaaj
+
+#11250
+0aaaaa
+
+#11500
+1aaaaa
+b10111 aaaad
+b10111 aaaag
+b100011111100 aaaah
+0aaaai
+b10111 aaaaj
+
+#11750
+0aaaaa
+
+#12000
+1aaaaa
+b11000 aaaad
+b11000 aaaag
+b100101100000 aaaah
+1aaaai
+b11000 aaaaj
+
+#12250
+0aaaaa
+
+#12500
+1aaaaa
+b11001 aaaad
+b11001 aaaag
+b100111000100 aaaah
+0aaaai
+b11001 aaaaj
+
+#12750
+0aaaaa
+
+#13000
+1aaaaa
+b11010 aaaad
+b11010 aaaag
+b101000101000 aaaah
+1aaaai
+b11010 aaaaj
+
+#13250
+0aaaaa
+
+#13500
+1aaaaa
+b11011 aaaad
+b11011 aaaag
+b101010001100 aaaah
+0aaaai
+b11011 aaaaj
+
+#13750
+0aaaaa
+
+#14000
+1aaaaa
+b11100 aaaad
+b11100 aaaag
+b101011110000 aaaah
+1aaaai
+b11100 aaaaj
+
+#14250
+0aaaaa
+
+#14500
+1aaaaa
+b11101 aaaad
+b11101 aaaag
+b101101010100 aaaah
+0aaaai
+b11101 aaaaj
+
+#14750
+0aaaaa
+
+#15000
+1aaaaa
+b11110 aaaad
+b11110 aaaag
+b101110111000 aaaah
+1aaaai
+b11110 aaaaj
+
+#15250
+0aaaaa
+
+#15500
+1aaaaa
+b11111 aaaad
+b11111 aaaag
+b110000011100 aaaah
+0aaaai
+b11111 aaaaj
+
+#15750
+0aaaaa
+
+#16000
+1aaaaa
+b100000 aaaad
+b100000 aaaag
+b110010000000 aaaah
+1aaaai
+b100000 aaaaj
+
+#16250
+0aaaaa
+
+#16500
+1aaaaa
+b100001 aaaad
+b100001 aaaag
+b110011100100 aaaah
+0aaaai
+b100001 aaaaj
+
+#16750
+0aaaaa
+
+#17000
+1aaaaa
+b100010 aaaad
+b100010 aaaag
+b110101001000 aaaah
+1aaaai
+b100010 aaaaj
+
+#17250
+0aaaaa
+
+#17500
+1aaaaa
+b100011 aaaad
+b100011 aaaag
+b110110101100 aaaah
+0aaaai
+b100011 aaaaj
+
+#17750
+0aaaaa
+
+#18000
+1aaaaa
+b100100 aaaad
+b100100 aaaag
+b111000010000 aaaah
+1aaaai
+b100100 aaaaj
+
+#18250
+0aaaaa
+
+#18500
+1aaaaa
+b100101 aaaad
+b100101 aaaag
+b111001110100 aaaah
+0aaaai
+b100101 aaaaj
+
+#18750
+0aaaaa
+
+#19000
+1aaaaa
+b100110 aaaad
+b100110 aaaag
+b111011011000 aaaah
+1aaaai
+b100110 aaaaj
+
+#19250
+0aaaaa
+
+#19500
+1aaaaa
+b100111 aaaad
+b100111 aaaag
+b111100111100 aaaah
+0aaaai
+b100111 aaaaj
+
+#19750
+0aaaaa
+
+#20000
+1aaaaa
+b101000 aaaad
+b101000 aaaag
+b111110100000 aaaah
+1aaaai
+b101000 aaaaj
+
+#20250
+0aaaaa
+
+#20500
+1aaaaa
+b101001 aaaad
+b101001 aaaag
+b1000000000100 aaaah
+0aaaai
+b101001 aaaaj
+
+#20750
+0aaaaa
+
+#21000
+1aaaaa
+b101010 aaaad
+b101010 aaaag
+b1000001101000 aaaah
+1aaaai
+b101010 aaaaj
+
+#21250
+0aaaaa
+
+#21500
+1aaaaa
+b101011 aaaad
+b101011 aaaag
+b1000011001100 aaaah
+0aaaai
+b101011 aaaaj
+
+#21750
+0aaaaa
+
+#22000
+1aaaaa
+b101100 aaaad
+b101100 aaaag
+b1000100110000 aaaah
+1aaaai
+b101100 aaaaj
+
+#22250
+0aaaaa
+
+#22500
+1aaaaa
+b101101 aaaad
+b101101 aaaag
+b1000110010100 aaaah
+0aaaai
+b101101 aaaaj
+
+#22750
+0aaaaa
+
+#23000
+1aaaaa
+b101110 aaaad
+b101110 aaaag
+b1000111111000 aaaah
+1aaaai
+b101110 aaaaj
+
+#23250
+0aaaaa
+
+#23500
+1aaaaa
+b101111 aaaad
+b101111 aaaag
+b1001001011100 aaaah
+0aaaai
+b101111 aaaaj
+
+#23750
+0aaaaa
+
+#24000
+1aaaaa
+b110000 aaaad
+b110000 aaaag
+b1001011000000 aaaah
+1aaaai
+b110000 aaaaj
+
+#24250
+0aaaaa
+
+#24500
+1aaaaa
+b110001 aaaad
+b110001 aaaag
+b1001100100100 aaaah
+0aaaai
+b110001 aaaaj
+
+#24750
+0aaaaa
+
+#25000
+1aaaaa
+b110010 aaaad
+b110010 aaaag
+b1001110001000 aaaah
+1aaaai
+b110010 aaaaj
+
+#25250
+0aaaaa
+
+#25500
+1aaaaa
+b110011 aaaad
+b110011 aaaag
+b1001111101100 aaaah
+0aaaai
+b110011 aaaaj
+
+#25750
+0aaaaa
+
+#26000
+1aaaaa
+b110100 aaaad
+b110100 aaaag
+b1010001010000 aaaah
+1aaaai
+b110100 aaaaj
+
+#26250
+0aaaaa
+
+#26500
+1aaaaa
+b110101 aaaad
+b110101 aaaag
+b1010010110100 aaaah
+0aaaai
+b110101 aaaaj
+
+#26750
+0aaaaa
+
+#27000
+1aaaaa
+b110110 aaaad
+b110110 aaaag
+b1010100011000 aaaah
+1aaaai
+b110110 aaaaj
+
+#27250
+0aaaaa
+
+#27500
+1aaaaa
+b110111 aaaad
+b110111 aaaag
+b1010101111100 aaaah
+0aaaai
+b110111 aaaaj
+
+#27750
+0aaaaa
+
+#28000
+1aaaaa
+b111000 aaaad
+b111000 aaaag
+b1010111100000 aaaah
+1aaaai
+b111000 aaaaj
+
+#28250
+0aaaaa
+
+#28500
+1aaaaa
+b111001 aaaad
+b111001 aaaag
+b1011001000100 aaaah
+0aaaai
+b111001 aaaaj
+
+#28750
+0aaaaa
+
+#29000
+1aaaaa
+b111010 aaaad
+b111010 aaaag
+b1011010101000 aaaah
+1aaaai
+b111010 aaaaj
+
+#29250
+0aaaaa
+
+#29500
+1aaaaa
+b111011 aaaad
+b111011 aaaag
+b1011100001100 aaaah
+0aaaai
+b111011 aaaaj
+
+#29750
+0aaaaa
+
+#30000
+1aaaaa
+b111100 aaaad
+b111100 aaaag
+b1011101110000 aaaah
+1aaaai
+b111100 aaaaj
+
+#30250
+0aaaaa
+
+#30500
+1aaaaa
+0aaaac
+b111101 aaaag
+b1011111010100 aaaah
+0aaaai
+
+#30750
+0aaaaa
+
+#31000
+1aaaaa
+b111110 aaaag
+b1100000111000 aaaah
+1aaaai
+
+#31250
+0aaaaa
+
+#31500
+1aaaaa
+b111111 aaaag
+b1100010011100 aaaah
+0aaaai
+
+#31750
+0aaaaa
+
+#32000
