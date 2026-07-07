@@ -36,12 +36,3 @@
 #include <chrono>
 #include <thread>
 
-template <typename T>
-std::string type_name(const T& var)
-{
-    int status;
-    char* demangled = abi::__cxa_demangle(typeid(var).name(), 0, 0, &status);
-    std::string result = (status == 0 && demangled) ? demangled : typeid(var).name();
-    free(demangled);
-    return result;
-}

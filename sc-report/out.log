@@ -1,5 +1,0 @@
-In file included from sc-report.hpp:30,
-                 from test.cpp:14:
-utils.hpp:62:18: warning: unknown escape sequence: '\c'
-   62 |             case '\c': out += "\\f";  break;
-      |                  ^~~~

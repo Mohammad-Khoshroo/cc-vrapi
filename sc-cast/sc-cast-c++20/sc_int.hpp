@@ -47,6 +47,34 @@ namespace cc_vrwrapper
         }
 
         if (!MSB) {
+            // ====================================================================
+            // CHANGED: added overflow check (was silently wrapping before).
+            //
+            // Example: sc_cast<sc_int<8>>(300) — sc_int<8> range is [-128, 127].
+            // 300 is out of range, so we warn. SystemC's sc_int constructor
+            // will still wrap (300 mod 256 = 44), but at least the user is
+            // informed that data was lost.
+            // ====================================================================
+            int inputTypeBitSize = sizeof(T) * 8;
+            if (WIDTH < inputTypeBitSize) {
+                if constexpr (ScSignedInt<INT>) {
+                    int64_t maxRange = (WIDTH >= 64) ? INT64_MAX
+                                                     : (1LL << (WIDTH - 1)) - 1;
+                    int64_t minRange = (WIDTH >= 64) ? INT64_MIN
+                                                     : -(1LL << (WIDTH - 1));
+                    int64_t v = static_cast<int64_t>(value);
+                    if (v > maxRange || v < minRange)
+                        SC_REPORT_WARNING("sc_cast",
+                            "Input value overflows sc_int WIDTH — value will wrap.");
+                } else {
+                    uint64_t umaxRange = (WIDTH >= 64) ? UINT64_MAX
+                                                       : (1ULL << WIDTH) - 1;
+                    uint64_t uv = static_cast<uint64_t>(value);
+                    if (uv > umaxRange)
+                        SC_REPORT_WARNING("sc_cast",
+                            "Input value overflows sc_uint WIDTH — value will wrap.");
+                }
+            }
             return INT(static_cast<int64_t>(value));
         } else {
             int inputTypeBitSize = sizeof(T) * 8;

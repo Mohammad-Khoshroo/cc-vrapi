@@ -133,6 +133,10 @@ namespace cc_vrwrapper
                 SC_REPORT_ERROR("sc_cast", "Invalid characters in binary string.");
                 return detail::make_unknown<BV>();
             }
+            // CHANGED: warn if X/Z present (was silently converted to 0 before)
+            if (substr2.find_first_of("XZxz") != std::string::npos)
+                SC_REPORT_WARNING("sc_cast",
+                    "sc_bv does not support X/Z bits — converting to 0.");
             // Replace X/Z with '0' for sc_bv
             std::string bitstr;
             for (char ch : substr2) {
@@ -141,7 +145,7 @@ namespace cc_vrwrapper
             bitstr = detail::adjust_bitstr<BV>(std::move(bitstr), WIDTH, is_data, "Binary");
             return detail::from_bitstr<BV>(bitstr);
         }
-
+        
         // Hex prefix "0x..." — MUST be before pure binary check
         if (size >= 3 && c0 == '0' && (c1 == 'x' || c1 == 'X')) {
             std::string hex_str = substr2;
@@ -149,6 +153,10 @@ namespace cc_vrwrapper
                 SC_REPORT_ERROR("sc_cast", "Invalid characters in hex string.");
                 return detail::make_unknown<BV>();
             }
+            // CHANGED: warn if X/Z present (was silently converted to 0 before)
+            if (hex_str.find_first_of("XZxz") != std::string::npos)
+                SC_REPORT_WARNING("sc_cast",
+                    "sc_bv does not support X/Z bits — converting to 0.");
             // Convert hex to binary; X/Z → '0' for sc_bv
             std::string bitstr;
             for (char ch : hex_str) {
@@ -162,7 +170,7 @@ namespace cc_vrwrapper
             bitstr = detail::adjust_bitstr<BV>(std::move(bitstr), WIDTH, is_data, "Hex");
             return detail::from_bitstr<BV>(bitstr);
         }
-
+    
         // Octal prefix "0NNN" — MUST be before pure binary check
         if (size >= 2 && c0 == '0' && detail::safe_isdigit(c1)) {
             std::string oct_str = substr1;
@@ -170,6 +178,10 @@ namespace cc_vrwrapper
                 SC_REPORT_ERROR("sc_cast", "Invalid characters in octal string.");
                 return detail::make_unknown<BV>();
             }
+            // CHANGED: warn if X/Z present (was silently converted to 0 before)
+            if (oct_str.find_first_of("XZxz") != std::string::npos)
+                SC_REPORT_WARNING("sc_cast",
+                    "sc_bv does not support X/Z bits — converting to 0.");
             // Convert octal to binary; X/Z → '0' for sc_bv
             std::string bitstr;
             for (char ch : oct_str) {
@@ -185,6 +197,10 @@ namespace cc_vrwrapper
 
         // Pure binary (no prefix, base==2) — AFTER prefix checks
         if ((str.find_first_not_of("01xXzZ") == std::string::npos) && (base == 2)) {
+            // CHANGED: warn if X/Z present (was silently converted to 0 before)
+            if (str.find_first_of("XZxz") != std::string::npos)
+                SC_REPORT_WARNING("sc_cast",
+                    "sc_bv does not support X/Z bits — converting to 0.");
             // Replace X/Z with '0' for sc_bv
             std::string bitstr;
             for (char ch : str) {

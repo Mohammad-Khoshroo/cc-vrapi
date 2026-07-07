@@ -59,7 +59,6 @@ inline std::string json_escape(const std::string& s)
             case '\\': out += "\\\\"; break;
             case '\b': out += "\\b";  break;
             case '\f': out += "\\f";  break;
-            case '\c': out += "\\f";  break;
             case '\n': out += "\\n";  break;
             case '\r': out += "\\r";  break;
             case '\t': out += "\\t";  break;
