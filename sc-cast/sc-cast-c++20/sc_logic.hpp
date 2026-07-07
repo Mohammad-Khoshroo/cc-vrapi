@@ -1,128 +1,129 @@
-#ifndef SC_CAST_LOGIC_HPP
-#define SC_CAST_LOGIC_HPP
+#ifndef CC_VRWRAPPER_LOGIC_HPP
+#define CC_VRWRAPPER_LOGIC_HPP
 
 // ============================================================================
-// sc_cast :: sc_logic.hpp  (C++20)
-// Conversions to/from sc_logic (single-bit, supports 0/1/X/Z)
+// cc_vrwrapper :: sc_logic.hpp  (C++20)
+// Conversions TO sc_logic  (destination = sc_logic)
+// + FROM sc_logic to primitive types (bool/int/string)
 // ============================================================================
 
 #include "utils.hpp"
 
-namespace sc_cast
+namespace cc_vrwrapper
 {
-    // ========================================================================
-    // TO sc_logic
-    // ========================================================================
+    // ===== TO sc_logic =====
+    // All "TO sc_logic" functions are templated on <ScLogic T> so that
+    // sc_cast<sc_logic>(...) works with explicit template argument.
 
     // Identity
-    inline sc_logic sc_lv_cast(const sc_logic& lg) { return lg; }
+    template <ScLogic T>
+    T sc_cast(const T& lg) { return lg; }
 
     // bool → sc_logic
-    inline sc_logic sc_lv_cast(bool value)
+    template <ScLogic T>
+    T sc_cast(bool value)
     {
-        return value ? SC_LOGIC_1 : SC_LOGIC_0;
+        return T(value ? SC_LOGIC_1 : SC_LOGIC_0);
     }
 
     // integral (not bool) → sc_logic (keep LSB)
-    template <std::integral T>
-        requires (!std::same_as<T, bool>)
-    sc_logic sc_lv_cast(T value, std::string_view mode_view = "data", bool /*MSB*/ = false)
+    template <ScLogic T, std::integral I>
+        requires (!std::same_as<I, bool>)
+    T sc_cast(I value, std::string_view mode_view = "data", bool /*MSB*/ = false)
     {
         bool is_address, is_data;
         if (!detail::check_mode(mode_view, is_address, is_data)) {
-            SC_REPORT_ERROR("sc_lv_cast", "Invalid mode. Use \"data\" or \"address\".");
-            return SC_LOGIC_X;
+            SC_REPORT_ERROR("sc_cast", "Invalid mode. Use \"data\" or \"address\".");
+            return T(SC_LOGIC_X);
         }
         if (is_address && value < 0)
-            SC_REPORT_FATAL("sc_lv_cast", "Address mode can't be negative");
-        return (value & 1) ? SC_LOGIC_1 : SC_LOGIC_0;
+            SC_REPORT_FATAL("sc_cast", "Address mode can't be negative");
+        return T((value & 1) ? SC_LOGIC_1 : SC_LOGIC_0);
     }
 
     // string → sc_logic
-    inline sc_logic sc_lv_cast(std::string_view input_str,
-                               std::string_view mode_view = "data",
-                               int base = 2)
+    template <ScLogic T>
+    T sc_cast(std::string_view input_str,
+              std::string_view mode_view = "data",
+              int /*base*/ = 2)
     {
         bool is_address, is_data;
         if (!detail::check_mode(mode_view, is_address, is_data)) {
-            SC_REPORT_ERROR("sc_lv_cast", "Invalid mode. Use \"data\" or \"address\".");
-            return SC_LOGIC_X;
+            SC_REPORT_ERROR("sc_cast", "Invalid mode. Use \"data\" or \"address\".");
+            return T(SC_LOGIC_X);
         }
 
         std::string str(input_str);
-        // C++20: std::ranges::any_of + std::erase_if
         if (std::ranges::any_of(str, detail::safe_isspace)) {
-            SC_REPORT_WARNING("sc_lv_cast", "Whitespace found in input string — it was removed.");
+            SC_REPORT_WARNING("sc_cast", "Whitespace found in input string — it was removed.");
             std::erase_if(str, detail::safe_isspace);
         }
         if (str.empty()) {
-            SC_REPORT_ERROR("sc_lv_cast", "Empty string input. Returning X.");
-            return SC_LOGIC_X;
+            SC_REPORT_ERROR("sc_cast", "Empty string input. Returning X.");
+            return T(SC_LOGIC_X);
         }
-        // Decimal: take LSB
         if (std::regex_match(str, std::regex("^[+-]?[0-9]+$"))) {
             std::string num_part = (str[0]=='+'||str[0]=='-') ? str.substr(1) : str;
             auto v = detail::parse_u64(num_part, 10);
             if (!v) {
-                SC_REPORT_ERROR("sc_lv_cast", "Failed to parse decimal string for sc_logic.");
-                return SC_LOGIC_X;
+                SC_REPORT_ERROR("sc_cast", "Failed to parse decimal string for sc_logic.");
+                return T(SC_LOGIC_X);
             }
-            return (*v & 1) ? SC_LOGIC_1 : SC_LOGIC_0;
+            return T((*v & 1) ? SC_LOGIC_1 : SC_LOGIC_0);
         }
-        // Otherwise take last char
         char c = str.back();
-        if (c == '1') return SC_LOGIC_1;
-        if (c == '0') return SC_LOGIC_0;
-        if (c == 'Z' || c == 'z') return SC_LOGIC_Z;
-        if (c == 'X' || c == 'x') return SC_LOGIC_X;
-        SC_REPORT_ERROR("sc_lv_cast", "Invalid character for sc_logic.");
-        return SC_LOGIC_X;
+        if (c == '1')              return T(SC_LOGIC_1);
+        if (c == '0')              return T(SC_LOGIC_0);
+        if (c == 'Z' || c == 'z')  return T(SC_LOGIC_Z);
+        if (c == 'X' || c == 'x')  return T(SC_LOGIC_X);
+        SC_REPORT_ERROR("sc_cast", "Invalid character for sc_logic.");
+        return T(SC_LOGIC_X);
     }
 
     // sc_lv → sc_logic (LSB)
-    template <int W>
-    sc_logic sc_lv_cast(const sc_lv<W>& lv)
+    template <ScLogic T, int W>
+    T sc_cast(const sc_lv<W>& lv)
     {
-        return lv.get_bit(0) ? SC_LOGIC_1 : SC_LOGIC_0;
+        return T(lv.get_bit(0) ? SC_LOGIC_1 : SC_LOGIC_0);
     }
 
     // sc_bv → sc_logic (LSB)
-    template <int W>
-    sc_logic sc_lv_cast(const sc_bv<W>& bv)
+    template <ScLogic T, int W>
+    T sc_cast(const sc_bv<W>& bv)
     {
-        return bv.get_bit(0) ? SC_LOGIC_1 : SC_LOGIC_0;
+        return T(bv.get_bit(0) ? SC_LOGIC_1 : SC_LOGIC_0);
     }
 
     // sc_int family → sc_logic (LSB)
-    template <ScIntLike INT>
-    sc_logic sc_lv_cast(const INT& val)
+    template <ScLogic T, ScIntLike INT>
+    T sc_cast(const INT& val)
     {
-        return (val.to_uint64() & 1ULL) ? SC_LOGIC_1 : SC_LOGIC_0;
+        return T((val.to_uint64() & 1ULL) ? SC_LOGIC_1 : SC_LOGIC_0);
     }
 
     // float/double → sc_logic: not meaningful (error)
-    inline sc_logic sc_lv_cast(float)
+    template <ScLogic T>
+    T sc_cast(float)
     {
-        SC_REPORT_ERROR("sc_lv_cast", "Cannot convert float to sc_logic (needs 32 bits).");
-        return SC_LOGIC_X;
+        SC_REPORT_ERROR("sc_cast", "Cannot convert float to sc_logic (needs 32 bits).");
+        return T(SC_LOGIC_X);
     }
-    inline sc_logic sc_lv_cast(double)
+    template <ScLogic T>
+    T sc_cast(double)
     {
-        SC_REPORT_ERROR("sc_lv_cast", "Cannot convert double to sc_logic (needs 64 bits).");
-        return SC_LOGIC_X;
+        SC_REPORT_ERROR("sc_cast", "Cannot convert double to sc_logic (needs 64 bits).");
+        return T(SC_LOGIC_X);
     }
 
-    // ========================================================================
-    // FROM sc_logic
-    // ========================================================================
+    // ===== FROM sc_logic (to primitive types only; cross-type conversions live in destination files) =====
 
     // sc_logic → bool
     template <typename T = bool>
         requires std::same_as<T, bool>
-    T sc_lv_cast(const sc_logic& lg)
+    T sc_cast(const sc_logic& lg)
     {
         if (!lg.is_01()) {
-            SC_REPORT_WARNING("sc_lv_cast", "sc_logic is X/Z. Returning false.");
+            SC_REPORT_WARNING("sc_cast", "sc_logic is X/Z. Returning false.");
             return false;
         }
         return lg.to_bool();
@@ -131,10 +132,10 @@ namespace sc_cast
     // sc_logic → integral (not bool)
     template <std::integral T>
         requires (!std::same_as<T, bool>)
-    T sc_lv_cast(const sc_logic& lg)
+    T sc_cast(const sc_logic& lg)
     {
         if (!lg.is_01()) {
-            SC_REPORT_WARNING("sc_lv_cast", "sc_logic is X/Z. Returning 0.");
+            SC_REPORT_WARNING("sc_cast", "sc_logic is X/Z. Returning 0.");
             return 0;
         }
         return lg.to_bool() ? static_cast<T>(1) : static_cast<T>(0);
@@ -143,54 +144,20 @@ namespace sc_cast
     // sc_logic → string (single char)
     template <typename T = std::string>
         requires std::same_as<T, std::string>
-    T sc_lv_cast(const sc_logic& lg)
+    T sc_cast(const sc_logic& lg)
     {
         return std::string(1, lg.to_char());
     }
 
-    // sc_logic → sc_lv
-    template <ScLv T>
-    T sc_lv_cast(const sc_logic& lg)
-    {
-        constexpr int WIDTH = sc_lv_traits<T>::width;
-        char c = lg.to_char();
-        return T(std::string(WIDTH, c).c_str());
-    }
-
-    // sc_logic → sc_bv
-    template <ScBv T>
-    T sc_lv_cast(const sc_logic& lg)
-    {
-        constexpr int WIDTH = sc_lv_traits<T>::width;
-        if (lg.is_01())
-            return lg.to_bool() ? T(std::string(WIDTH, '1').c_str())
-                                : T(std::string(WIDTH, '0').c_str());
-        SC_REPORT_WARNING("sc_lv_cast", "sc_logic has X/Z; converting to 0 in sc_bv.");
-        return T(std::string(WIDTH, '0').c_str());
-    }
-
-    // sc_logic → sc_int family
-    template <ScIntLike T>
-    T sc_lv_cast(const sc_logic& lg)
-    {
-        if (!lg.is_01()) {
-            SC_REPORT_WARNING("sc_lv_cast", "sc_logic is X/Z. Returning 0.");
-            return T(0);
-        }
-        return T(lg.to_bool() ? 1 : 0);
-    }
-
-    // ========================================================================
-    // string_cast specialization for sc_logic
-    // ========================================================================
+    // ===== string_cast specialization =====
     template <ScLogic T>
     T string_cast(std::string_view str,
                   std::string_view mode = "data",
                   int base = 2)
     {
-        return sc_lv_cast<T>(str, mode, base);
+        return sc_cast<T>(str, mode, base);
     }
 
-} // namespace sc_cast
+} // namespace cc_vrwrapper
 
-#endif // SC_CAST_LOGIC_HPP
+#endif // CC_VRWRAPPER_LOGIC_HPP

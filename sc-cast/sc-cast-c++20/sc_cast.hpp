@@ -1,8 +1,8 @@
-#ifndef SC_CAST_HPP
-#define SC_CAST_HPP
+#ifndef CC_VRWRAPPER_CAST_HPP
+#define CC_VRWRAPPER_CAST_HPP
 
 // ============================================================================
-// sc_cast :: master header  (C++20)
+// cc_vrwrapper :: master header  (C++20)
 // Includes all conversion modules.
 // Compile with: -std=c++20  (or /std:c++20 on MSVC)
 // ============================================================================
@@ -14,29 +14,23 @@
 #include "sc_int.hpp"
 
 // ----------------------------------------------------------------------------
-// Summary of available conversions
+// Summary
 // ----------------------------------------------------------------------------
 //
-//  sc_lv_cast<DestType>(source, ...)
-//  string_cast<DestType>(str, mode, base)
+//  cc_vrwrapper::sc_cast<DestType>(source, ...)
+//  cc_vrwrapper::string_cast<DestType>(str, mode, base)
 //
-//  Supported target types (concepts):
-//    - ScLv        : sc_lv<W>         (logic vector: 0/1/X/Z)
-//    - ScBv        : sc_bv<W>         (bit vector: 0/1 only)
-//    - ScLogic     : sc_logic         (single bit: 0/1/X/Z)
-//    - ScInt       : sc_int<W>        (signed fixed-width integer)
-//    - ScUint      : sc_uint<W>       (unsigned fixed-width integer)
-//    - ScBigInt    : sc_bigint<W>     (signed arbitrary-precision integer)
-//    - ScBigUint   : sc_biguint<W>    (unsigned arbitrary-precision integer)
-//    - bool / char / short / int / long / long long (and unsigned variants)
-//    - float / double
-//    - std::string
+//  Usage:
+//    using namespace cc_vrwrapper;
+//    sc_lv<8> lv = sc_cast<sc_lv<8>>(42);
+//    int v       = sc_cast<int>(lv);
+//    sc_int<8> i = sc_cast<sc_int<8>>(-5);
+//    sc_bv<16> b = sc_cast<sc_bv<16>>("0xCAFE");
 //
-//  Source types:
-//    - Any of the above SystemC types
-//    - bool and all C++ integral types
-//    - float / double
-//    - std::string / std::string_view  (modes: "data" or "address")
+//  Supported types (concepts):
+//    - ScLv, ScBv, ScLogic
+//    - ScInt, ScUint, ScBigInt, ScBigUint
+//    - bool, integral types, float, double, std::string
 //
 //  C++20 features used:
 //    - Concepts (replaces enable_if)
@@ -47,4 +41,4 @@
 //
 // ----------------------------------------------------------------------------
 
-#endif // SC_CAST_HPP
+#endif // CC_VRWRAPPER_CAST_HPP

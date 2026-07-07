@@ -1,10 +1,10 @@
-#ifndef SC_CAST_HPP
-#define SC_CAST_HPP
+#ifndef CC_VRWRAPPER_CAST_HPP
+#define CC_VRWRAPPER_CAST_HPP
 
 // ============================================================================
-// sc_cast :: master header
+// cc_vrwrapper :: master header  (C++17)
 // Includes all conversion modules.
-// Include this single file in your project to get all sc_cast utilities.
+// Compile with: -std=c++17
 // ============================================================================
 
 #include "utils.hpp"
@@ -14,33 +14,22 @@
 #include "sc_int.hpp"
 
 // ----------------------------------------------------------------------------
-// Summary of available conversions
+// Summary
 // ----------------------------------------------------------------------------
 //
-//  sc_lv_cast<DestType>(source, ...)
+//  cc_vrwrapper::sc_cast<DestType>(source, ...)
+//  cc_vrwrapper::string_cast<DestType>(str, mode, base)
 //
-//  Supported target types:
-//    - sc_lv<W>         (logic vector: 0/1/X/Z)
-//    - sc_bv<W>         (bit vector: 0/1 only)
-//    - sc_logic         (single bit: 0/1/X/Z)
-//    - sc_int<W>        (signed fixed-width integer)
-//    - sc_uint<W>       (unsigned fixed-width integer)
-//    - sc_bigint<W>     (signed arbitrary-precision integer)
-//    - sc_biguint<W>    (unsigned arbitrary-precision integer)
-//    - bool, char, short, int, long, long long
-//    - unsigned char, unsigned short, unsigned int, ...
-//    - float, double
-//    - std::string
+//  Usage:
+//    using namespace cc_vrwrapper;
+//    sc_lv<8> lv = sc_cast<sc_lv<8>>(42);
+//    int v       = sc_cast<int>(lv);
 //
-//  Source types:
-//    - Any of the above SystemC types
-//    - bool and all C++ integral types
-//    - float / double
-//    - std::string / std::string_view  (modes: "data" or "address")
-//
-//  Generic helper:
-//    string_cast<T>(str, mode, base)   — string → any T
+//  Supported types:
+//    - sc_lv<W>, sc_bv<W>, sc_logic
+//    - sc_int<W>, sc_uint<W>, sc_bigint<W>, sc_biguint<W>
+//    - bool, integral types, float, double, std::string
 //
 // ----------------------------------------------------------------------------
 
-#endif // SC_CAST_HPP
+#endif // CC_VRWRAPPER_CAST_HPP
