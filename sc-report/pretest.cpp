@@ -11,7 +11,7 @@ int sc_main(int argc, char* argv[])
 
     r::config::set_log_file_path("log/sim_run.log");
     // r::config::set_log_as_json(true);
-    r::config::set_min_severity(sc_core::SC_WARNING);   // suppress INFO
+    r::config::set_min_severity(sc_core::SC_INFO);   // suppress INFO
     r::config::set_force_no_color(false);                // auto-detect TTY
     r::config::set_log_to_terminal(true);
     r::config::set_log_to_file(true);

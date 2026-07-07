@@ -2,6 +2,7 @@
 #define CC_VRWRAPPER_REPORT_COLORS_HPP
 
 #include <string>
+#include <atomic>
 #include <systemc>
 
 namespace cc_vrwrapper::report::colors
@@ -27,10 +28,11 @@ inline constexpr const char* RED_BG  = "\033[41m";
 // ------------------------------------------------------------------------
 enum class Theme { Dark, Light };
 
-inline Theme current_theme = Theme::Dark;
+// CHANGED: made atomic — set_theme() and scheme_for() may be called from
+// different threads (e.g. config thread vs. report handler thread).
+inline std::atomic<Theme> current_theme{Theme::Dark};
 
-
-inline void set_theme(Theme t) { current_theme = t; }
+inline void set_theme(Theme t) { current_theme.store(t); }
 
 struct ColorScheme {
     const char* color;
@@ -40,7 +42,8 @@ struct ColorScheme {
 
 inline ColorScheme scheme_for(sc_core::sc_severity s)
 {
-    if (current_theme == Theme::Dark) {
+    // CHANGED: use .load() for explicit atomic read
+    if (current_theme.load() == Theme::Dark) {
         switch (s) {
             case sc_core::SC_INFO:    return { GREEN,   nullptr, false };
             case sc_core::SC_WARNING: return { YELLOW,  nullptr, true  };

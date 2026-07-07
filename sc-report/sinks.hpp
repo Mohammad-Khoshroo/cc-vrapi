@@ -12,6 +12,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <cstdint>
+#include <algorithm>   // ADDED: for std::remove (used in SinkManager::remove)
+#include <filesystem>
 #include <systemc>
 
 #if defined(__unix__)
@@ -20,6 +22,8 @@
 #  include <arpa/inet.h>
 #  include <netdb.h>
 #  include <unistd.h>
+#  include <sys/wait.h>   // ADDED: for waitpid
+#  include <fcntl.h>      // ADDED: for open/creat in gzip_file
 #  define VR_HAS_NETWORK 1
 #else
 #  define VR_HAS_NETWORK 0
@@ -43,6 +47,48 @@ struct Sink {
 };
 
 // ------------------------------------------------------------------------
+// ADDED: Helper — gzip a file WITHOUT invoking a shell (POSIX only).
+//
+// Previously the code used std::system("gzip -f \"path\"") which was
+// vulnerable to shell injection if the log path contained shell
+// metacharacters (e.g.  logs/"; rm -rf /; ").
+//
+// This implementation uses fork() + execlp() so the path is passed as a
+// proper argv element, never interpreted by a shell.
+//
+// Creates `src + ".gz"` and removes the original on success.
+// Returns true on success, false on any failure.
+// ------------------------------------------------------------------------
+inline bool gzip_file(const std::string& src)
+{
+#if defined(__unix__)
+    std::string dst = src + ".gz";
+    pid_t pid = ::fork();
+    if (pid < 0) return false;
+    if (pid == 0) {
+        // Child: redirect stdout → dst file, then exec gzip -c src
+        int fd = ::open(dst.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (fd < 0) ::_exit(127);
+        ::dup2(fd, STDOUT_FILENO);
+        ::close(fd);
+        ::execlp("gzip", "gzip", "-c", src.c_str(), (char*)nullptr);
+        ::_exit(127);  // only reached if execlp failed
+    }
+    // Parent: wait for child
+    int status = 0;
+    ::waitpid(pid, &status, 0);
+    if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
+        std::remove(src.c_str());  // remove uncompressed original
+        return true;
+    }
+    return false;
+#else
+    (void)src;
+    return false;  // non-POSIX: compression not supported
+#endif
+}
+
+// ------------------------------------------------------------------------
 // Terminal sink — writes to stderr with colors (if TTY)
 // ------------------------------------------------------------------------
 class TerminalSink : public Sink {
@@ -52,6 +98,8 @@ public:
         auto c = config::get_config();
         bool use_color = !c.force_no_color && utils::stderr_is_tty();
 
+        // Terminal always uses human-readable text format (not JSON/logfmt)
+        // for readability. If you need structured output, use FileSink.
         std::string line = formatter::format_text(info);
         if (use_color) {
             std::cerr << colors::ansi_prefix(info.severity)
@@ -104,16 +152,24 @@ public:
         file.close();
         std::remove(backup.c_str());
         if (std::rename(path.c_str(), backup.c_str()) != 0) {
-            // rotation failed; reopen original in append mode and keep going
+            // Rotation failed — reopen original in append mode and sync
+            // current_size to the actual file size on disk.
+            //
+            // CHANGED: previously current_size was NOT recalculated here,
+            // so every subsequent write would retry (and fail) rotation
+            // in an infinite loop. Now we query the real file size so the
+            // next rotation attempt only happens when genuinely needed.
             file.open(path, std::ios::out | std::ios::app);
+            std::error_code ec;
+            auto sz = std::filesystem::file_size(path, ec);
+            current_size = ec ? 0 : static_cast<std::size_t>(sz);
             return;
         }
 
         if (c.compress_rotated) {
-            // Compress the rotated file via external gzip (POSIX)
-            std::string cmd = "gzip -f \"" + backup + "\" 2>/dev/null";
-            int rc = std::system(cmd.c_str());
-            (void)rc; // ignore failures
+            // CHANGED: use gzip_file() instead of std::system() to avoid
+            // shell injection via crafted file paths.
+            gzip_file(backup);  // creates backup.gz, removes backup
         }
 
         file.open(path, std::ios::out | std::ios::trunc);
@@ -178,24 +234,42 @@ public:
     int         port;
     std::mutex  net_mutex;
 
-    NetworkSink(const std::string& h, int p) : host(h), port(p)
+    // CHANGED: replaced gethostbyname (thread-unsafe, deprecated) with
+    // getaddrinfo (thread-safe, modern). Also added reconnect() so a
+    // dropped connection can be re-established on the next write.
+    void reconnect()
     {
-        sock_fd = ::socket(AF_INET, SOCK_STREAM, 0);
-        if (sock_fd < 0) return;
-
-        hostent* he = ::gethostbyname(h.c_str());
-        if (!he) { ::close(sock_fd); sock_fd = -1; return; }
-
-        sockaddr_in addr{};
-        addr.sin_family = AF_INET;
-        addr.sin_port   = htons(static_cast<std::uint16_t>(p));
-        std::memcpy(&addr.sin_addr, he->h_addr,
-                    static_cast<std::size_t>(he->h_length));
-
-        if (::connect(sock_fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0) {
+        if (sock_fd >= 0) {
             ::close(sock_fd);
             sock_fd = -1;
         }
+
+        addrinfo hints{};
+        hints.ai_family   = AF_INET;
+        hints.ai_socktype = SOCK_STREAM;
+
+        addrinfo* res = nullptr;
+        std::string port_str = std::to_string(port);
+        if (::getaddrinfo(host.c_str(), port_str.c_str(), &hints, &res) != 0) {
+            return;
+        }
+
+        // Try each resolved address until one connects
+        for (addrinfo* rp = res; rp; rp = rp->ai_next) {
+            sock_fd = ::socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+            if (sock_fd < 0) continue;
+            if (::connect(sock_fd, rp->ai_addr, rp->ai_addrlen) == 0) {
+                break;  // success
+            }
+            ::close(sock_fd);
+            sock_fd = -1;
+        }
+        ::freeaddrinfo(res);
+    }
+
+    NetworkSink(const std::string& h, int p) : host(h), port(p)
+    {
+        reconnect();
     }
 
     ~NetworkSink() override {
@@ -204,10 +278,17 @@ public:
 
     void write(const formatter::ReportInfo& info) override
     {
-        if (sock_fd < 0) return;
         std::string line = formatter::format_json(info) + "\n";
 
         std::lock_guard<std::mutex> g(net_mutex);
+
+        // CHANGED: reconnect logic moved inside the lock to prevent
+        // two threads from reconnecting simultaneously.
+        if (sock_fd < 0) {
+            reconnect();
+            if (sock_fd < 0) return;
+        }
+
         std::size_t sent = 0;
         while (sent < line.size()) {
             ssize_t n = ::send(sock_fd, line.data() + sent, line.size() - sent,
@@ -217,7 +298,9 @@ public:
                                0
 #endif
             );
-            if (n <= 0) {           // connection broken — give up, disable sink
+            if (n <= 0) {
+                // Connection broken — close and give up on this write.
+                // Next write() will attempt reconnect().
                 ::close(sock_fd);
                 sock_fd = -1;
                 return;
@@ -244,6 +327,16 @@ public:
     void add(std::shared_ptr<Sink> s) {
         std::lock_guard<std::mutex> g(sinks_mutex);
         sinks.push_back(std::move(s));
+    }
+
+    // ADDED: remove a specific sink by pointer identity.
+    // Previously only clear() existed — no way to remove individual sinks.
+    void remove(std::shared_ptr<Sink> s) {
+        std::lock_guard<std::mutex> g(sinks_mutex);
+        sinks.erase(
+            std::remove(sinks.begin(), sinks.end(), s),
+            sinks.end()
+        );
     }
 
     void clear() {

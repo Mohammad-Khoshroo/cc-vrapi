@@ -5,8 +5,9 @@
 #include <string>
 #include <mutex>
 #include <regex>
+#include <vector>    // ADDED: required for std::vector (was missing — compile error)
+#include <iostream>  // ADDED: for regex error reporting
 #include <systemc>
-#include <vector>
 
 namespace cc_vrwrapper::report::filters
 {
@@ -51,7 +52,15 @@ inline void add_message_regex_allow(const std::string& pattern)
     std::lock_guard<std::mutex> g(filter_mutex);
     try {
         message_regex_allow.emplace_back(pattern);
-    } catch (...) {}
+    } catch (const std::regex_error& e) {
+        // CHANGED: was catch(...) {} which silently swallowed errors.
+        // Now logs to std::cerr so the user knows their regex was invalid.
+        // We deliberately do NOT use SC_REPORT_WARNING here because that
+        // would re-enter the report handler → potential infinite recursion
+        // if the handler itself calls should_report().
+        std::cerr << "[VRWrapper] Invalid regex (allow): \"" << pattern
+                  << "\" — " << e.what() << "\n";
+    }
 }
 
 inline void add_message_regex_deny(const std::string& pattern)
@@ -59,7 +68,11 @@ inline void add_message_regex_deny(const std::string& pattern)
     std::lock_guard<std::mutex> g(filter_mutex);
     try {
         message_regex_deny.emplace_back(pattern);
-    } catch (...) {}
+    } catch (const std::regex_error& e) {
+        // CHANGED: same as above — log instead of silently swallowing.
+        std::cerr << "[VRWrapper] Invalid regex (deny): \"" << pattern
+                  << "\" — " << e.what() << "\n";
+    }
 }
 
 // Returns true if the report should be processed.

@@ -4,6 +4,8 @@
 #include <string>
 #include <cstdio>
 #include <filesystem>
+#include <sstream>
+#include <thread>
 #include <systemc>
 #include <unistd.h>
 
@@ -57,6 +59,7 @@ inline std::string json_escape(const std::string& s)
             case '\\': out += "\\\\"; break;
             case '\b': out += "\\b";  break;
             case '\f': out += "\\f";  break;
+            case '\c': out += "\\f";  break;
             case '\n': out += "\\n";  break;
             case '\r': out += "\\r";  break;
             case '\t': out += "\\t";  break;
@@ -127,26 +130,67 @@ struct source_loc {
 // ------------------------------------------------------------------------
 // Module hierarchy — walks up the SystemC hierarchy
 // ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// Module hierarchy — walks up the SystemC hierarchy
+// CHANGED: improved to detect process type and fall back to thread ID
+// when called from outside a SystemC process (e.g. from std::thread).
+//
+// Output format:
+//   - Inside SC_CTHREAD : "module.proc [CTHREAD]"
+//   - Inside SC_THREAD  : "module.proc [THREAD]"
+//   - Inside SC_METHOD  : "module.proc [METHOD]"
+//   - From std::thread  : "thread:0x7f... [extern]"
+//   - From sc_main      : "sc_main [extern]"
+//   - Unknown           : "? [unknown]"
 // ------------------------------------------------------------------------
 inline std::string get_module_hierarchy()
 {
     try {
+        // First, check if we're inside a SystemC process
         auto h = sc_core::sc_get_current_process_handle();
-        // Check if handle is valid (i.e., we're inside an executing process)
+
         if (h.valid()) {
             const char* n = h.name();
-            if (n && *n) return n;
+            std::string name = (n && *n) ? std::string(n) : std::string("?");
+
+            // Determine process kind
+            // sc_core::sc_process_b has proc_kind() method
+            const char* kind_str = "[unknown]";
+            try {
+                // sc_process_b::proc_kind() returns sc_core::sc_curr_proc_kind
+                // which is one of SC_NO_PROCESS_, SC_METHOD_, SC_THREAD_, SC_CTHREAD_
+                auto* pb = sc_core::sc_get_current_process_b();
+                if (pb) {
+                    auto kind = pb->proc_kind();
+                    switch (kind) {
+                        case sc_core::SC_METHOD_PROC_:   kind_str = "[METHOD]";  break;
+                        case sc_core::SC_THREAD_PROC_:   kind_str = "[THREAD]";  break;
+                        case sc_core::SC_CTHREAD_PROC_:  kind_str = "[CTHREAD]"; break;
+                        default:                    kind_str = "[PROC]";    break;
+                    }
+                }
+            } catch (...) {
+                // keep "[unknown]"
+            }
+
+            return name + " " + kind_str;
         }
-        // If simulation hasn't started yet, we're in sc_main
+
+        // Not inside a SystemC process — check if simulation is running
         if (!sc_core::sc_is_running()) {
-            return "sc_main";
+            return "sc_main [extern]";
         }
-        // Simulation running but no current process (rare edge case)
-        return "<unknown>";
+
+        // Simulation running but no current process.
+        // This typically happens when called from a std::thread or
+        // from native C++ code outside SystemC's kernel.
+        // Fall back to thread ID for identification.
+        std::ostringstream ss;
+        ss << "thread:0x" << std::hex
+           << std::hash<std::thread::id>{}(std::this_thread::get_id())
+           << " [extern]";
+        return ss.str();
+
     } catch (...) {
-        return "<unknown>";
+        return "? [unknown]";
     }
 }
 

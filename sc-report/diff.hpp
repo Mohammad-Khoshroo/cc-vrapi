@@ -45,6 +45,14 @@ struct DiffResult {
     bool identical = true;
 };
 
+// ------------------------------------------------------------------------
+// NOTE: This is a simple line-by-line positional diff.
+// If a line is inserted or removed in the MIDDLE of the log, ALL subsequent
+// lines will appear as changed (added+removed). For a smarter diff
+// (LCS / Myers algorithm), replace this implementation. This is sufficient
+// for detecting additions/removals at the END, which is the common case
+// for log regression testing.
+// ------------------------------------------------------------------------
 inline DiffResult compare(const std::string& baseline_path,
                           const std::string& current_path,
                           std::ostream& os = std::cerr)
