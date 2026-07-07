@@ -1,0 +1,1 @@
+[ERROR] sc_cast: Invalid characters in binary string. X signal issue. @ 0 s (sc-cast/sc-cast-c++20/sc_lv.hpp:138) in process: sc_main [extern]

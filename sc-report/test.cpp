@@ -12,6 +12,7 @@
 
 #include <systemc>
 #include "sc-report.hpp"
+#include "sc-cast/sc-cast-c++20/sc_cast.hpp"
 #include <iostream>
 #include <fstream>
 #include <thread>
@@ -588,25 +589,25 @@ static void reset_all_state()
 // }
 
 
-// ---------------------------------------------------------------------------
-// [ERROR-GENERATING] Test E3: Address mode with negative value (from sc_cast)
-// ---------------------------------------------------------------------------
-// Tests integration with sc_cast: triggers SC_REPORT_FATAL.
-// ---------------------------------------------------------------------------
-void test_sc_cast_fatal()
-{
-    std::cout << "\n=== [ERROR] Test E3: sc_cast FATAL ===\n";
+// // ---------------------------------------------------------------------------
+// // [ERROR-GENERATING] Test E3: Address mode with negative value (from sc_cast)
+// // ---------------------------------------------------------------------------
+// // Tests integration with sc_cast: triggers SC_REPORT_FATAL.
+// // ---------------------------------------------------------------------------
+// void test_sc_cast_fatal()
+// {
+//     std::cout << "\n=== [ERROR] Test E3: sc_cast FATAL ===\n";
 
-    reset_all_state();
-    rpt::config::set_log_file_path("logs/test_cast_fatal.log");
-    rpt::handler::init_report_handler();
+//     reset_all_state();
+//     rpt::config::set_log_file_path("logs/test_cast_fatal.log");
+//     rpt::handler::init_report_handler();
 
-    using namespace cc_vrwrapper;
-    sc_lv<8> bad = sc_cast<sc_lv<8>>(-1, "address");  // FATAL: address can't be negative
+//     using namespace cc_vrwrapper;
+//     sc_lv<8> bad = sc_cast<sc_lv<8>>(-1, "address");  // FATAL: address can't be negative
 
-    // Code below will NOT execute
-    rpt::handler::close_report_log();
-}
+//     // Code below will NOT execute
+//     rpt::handler::close_report_log();
+// }
 
 // ---------------------------------------------------------------------------
 // [ERROR-GENERATING] Test E4: Invalid string format
@@ -614,7 +615,7 @@ void test_sc_cast_fatal()
 // Tests that invalid input to sc_cast triggers SC_REPORT_ERROR.
 // Does NOT abort simulation, but the return value is "unknown".
 // ---------------------------------------------------------------------------
-/*
+
 void test_invalid_string_format()
 {
     std::cout << "\n=== [ERROR] Test E4: Invalid string format ===\n";
@@ -633,12 +634,10 @@ void test_invalid_string_format()
     auto& s = rpt::stats::get();
     CHECK_EQ(s.error.load(), 1u);
 }
-*/
 
 // ---------------------------------------------------------------------------
 // [ERROR-GENERATING] Test E5: Out-of-range decimal
 // ---------------------------------------------------------------------------
-/*
 void test_overflow_warning()
 {
     std::cout << "\n=== [ERROR] Test E5: Overflow warning ===\n";
@@ -657,12 +656,10 @@ void test_overflow_warning()
     auto& s = rpt::stats::get();
     CHECK_EQ(s.warning.load(), 1u);
 }
-*/
 
 // ---------------------------------------------------------------------------
 // [ERROR-GENERATING] Test E6: sc_bv with X/Z input
 // ---------------------------------------------------------------------------
-/*
 void test_bv_with_xz()
 {
     std::cout << "\n=== [ERROR] Test E6: sc_bv with X/Z ===\n";
@@ -681,14 +678,12 @@ void test_bv_with_xz()
     auto& s = rpt::stats::get();
     CHECK_EQ(s.warning.load(), 1u);
 }
-*/
 
 // ---------------------------------------------------------------------------
 // [ERROR-GENERATING] Test E7: Network sink connection failure
 // ---------------------------------------------------------------------------
 // Tries to connect to a non-existent server. Should NOT crash, just fail silently.
 // ---------------------------------------------------------------------------
-/*
 void test_network_sink_failure()
 {
     std::cout << "\n=== [ERROR] Test E7: Network sink failure ===\n";
@@ -708,7 +703,6 @@ void test_network_sink_failure()
     CHECK_EQ(s.info.load(), 1u);
     INFO_MSG("Network sink failure handled gracefully");
 }
-*/
 
 // ==========================================================================
 // === [END OF ERROR-GENERATING TESTS] ======================================
@@ -747,11 +741,11 @@ int sc_main(int argc, char* argv[])
     // === UNCOMMENT TO TEST ERROR PATHS ===
     // test_fatal_error();           // E1: will abort()
     // test_throw_on_error();        // E2: will throw
-    test_sc_cast_fatal();         // E3: will abort()
-    // test_invalid_string_format(); // E4: produces error, continues
-    // test_overflow_warning();      // E5: produces warning, continues
-    // test_bv_with_xz();            // E6: produces warning, continues
-    // test_network_sink_failure();  // E7: fails silently, continues
+    // test_sc_cast_fatal();         // E3: will abort()
+    test_invalid_string_format(); // E4: produces error, continues
+    test_overflow_warning();      // E5: produces warning, continues
+    test_bv_with_xz();            // E6: produces warning, continues
+    test_network_sink_failure();  // E7: fails silently, continues
 
     std::cout << "\n================================\n";
     std::cout << "SUMMARY\n";
