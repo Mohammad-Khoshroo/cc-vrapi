@@ -167,15 +167,20 @@ void test_double_to_lv() {
 void test_string_to_lv_binary() {
     SECTION("string -> sc_lv (binary)");
 
-    CHECK_EQ(sc_cast<sc_lv<8>>("0b1010").to_string(),    "00001010");
+    // "0b1010" in sc_lv<8> data mode: MSB='1' -> sign-extend with '1' -> "11111010"
+    CHECK_EQ(sc_cast<sc_lv<8>>("0b1010").to_string(),    "11111010");
     CHECK_EQ(sc_cast<sc_lv<8>>("0b11111111").to_string(),"11111111");
     CHECK_EQ(sc_cast<sc_lv<4>>("0b1010").to_string(),    "1010");
 
-    // Pure binary (no prefix, base==2)
-    CHECK_EQ(sc_cast<sc_lv<8>>("1010", "data", 2).to_string(), "00001010");
+    // Pure binary "1010" in sc_lv<8>, data mode: sign-extend with '1'
+    CHECK_EQ(sc_cast<sc_lv<8>>("1010", "data", 2).to_string(), "11111010");
+    // In address mode: zero-extend
+    CHECK_EQ(sc_cast<sc_lv<8>>("1010", "address", 2).to_string(), "00001010");
 
-    // With X
-    CHECK_EQ(sc_cast<sc_lv<4>>("0b1X01").to_string(), "1X01");
+    // With X as MSB -> sign-extend with 'X'
+    CHECK_EQ(sc_cast<sc_lv<8>>("0bX101").to_string(), "XXXXX101");
+    // With Z as MSB -> sign-extend with 'Z'
+    CHECK_EQ(sc_cast<sc_lv<8>>("0bZ101").to_string(), "ZZZZZ101");
     CHECK_EQ(sc_cast<sc_lv<4>>("0b1Z01").to_string(), "1Z01");
 }
 
@@ -186,9 +191,19 @@ void test_string_to_lv_hex() {
     CHECK_EQ(sc_cast<sc_lv<8>>("0xCA").to_string(),  "11001010");
     CHECK_EQ(sc_cast<sc_lv<16>>("0xCAFE").to_string(),"1100101011111110");
 
-    // With X
+    // "0xX0" -> binary "XXXX0000", WIDTH=8, no padding needed
     CHECK_EQ(sc_cast<sc_lv<8>>("0xX0").to_string(), "XXXX0000");
     CHECK_EQ(sc_cast<sc_lv<8>>("0xZ0").to_string(), "ZZZZ0000");
+
+    // "0xX0" in sc_lv<12> data mode: binary "XXXX0000", MSB='X' -> sign-extend with 'X'
+    CHECK_EQ(sc_cast<sc_lv<12>>("0xX0").to_string(), "XXXXXXXX0000");
+    // "0xX0" in sc_lv<12> address mode: zero-extend
+    CHECK_EQ(sc_cast<sc_lv<12>>("0xX0", "address").to_string(), "0000XXXX0000");
+
+    // "0x1" in sc_lv<8> data mode: binary "0001", MSB='0' -> sign-extend with '0'
+    CHECK_EQ(sc_cast<sc_lv<8>>("0x1").to_string(), "00000001");
+    // "0xF" in sc_lv<8> data mode: binary "1111", MSB='1' -> sign-extend with '1'
+    CHECK_EQ(sc_cast<sc_lv<8>>("0xF").to_string(), "11111111");
 }
 
 void test_string_to_lv_octal() {
@@ -196,18 +211,21 @@ void test_string_to_lv_octal() {
 
     // 0777 = 0x1FF = 0b111111111 (9 bits)
     CHECK_EQ(sc_cast<sc_lv<9>>("0777").to_string(),  "111111111");
-    // 0o5 = 0b101
-    CHECK_EQ(sc_cast<sc_lv<4>>("05").to_string(),    "0101");
 
-    // With X
-    CHECK_EQ(sc_cast<sc_lv<6>>("0X5").to_string(), "XXX101");
+    // "05" in sc_lv<4> data mode: binary "101", MSB='1' -> sign-extend -> "1101"
+    CHECK_EQ(sc_cast<sc_lv<4>>("05").to_string(),    "1101");
+    // "05" in sc_lv<4> address mode: zero-extend -> "0101"
+    CHECK_EQ(sc_cast<sc_lv<4>>("05", "address").to_string(), "0101");
+
+    // "0X5" is hex (0X prefix), value 0x5 = 0b0101, MSB='0' -> sign-extend with '0'
+    CHECK_EQ(sc_cast<sc_lv<6>>("0X5").to_string(), "000101");
 }
 
 void test_string_to_lv_decimal() {
     SECTION("string -> sc_lv (decimal)");
 
     CHECK_EQ(sc_cast<sc_lv<8>>("0").to_string(),   "00000000");
-    CHECK_EQ(sc_cast<sc_lv<8>>("255").to_string(), "11111111");
+    CHECK_EQ(sc_cast<sc_lv<8>>("255", "address").to_string(), "11111111");
     CHECK_EQ(sc_cast<sc_lv<8>>("-1").to_string(),  "11111111");
     CHECK_EQ(sc_cast<sc_lv<8>>("-128").to_string(),"10000000");
 
@@ -218,10 +236,15 @@ void test_string_to_lv_decimal() {
 void test_string_to_lv_whitespace() {
     SECTION("string -> sc_lv (whitespace handling)");
 
-    // Whitespace is removed
-    CHECK_EQ(sc_cast<sc_lv<8>>("0b 1010").to_string(), "00001010");
+    // "0b 1010" -> "0b1010" -> binary "1010" -> sign-extend with '1' -> "11111010"
+    CHECK_EQ(sc_cast<sc_lv<8>>("0b 1010").to_string(), "11111010");
+    // " 0xFF " -> "0xFF" -> binary "11111111" -> no padding -> "11111111"
     CHECK_EQ(sc_cast<sc_lv<8>>(" 0xFF ").to_string(),  "11111111");
-    CHECK_EQ(sc_cast<sc_lv<8>>("0b1_0101").to_string(),"00010101");
+    // "0b101 010" -> "0b101010" -> binary "101010" -> sign-extend with '1' -> "11101010"
+    CHECK_EQ(sc_cast<sc_lv<8>>("0b101 010").to_string(), "11101010");
+
+    // In address mode: zero-extension
+    CHECK_EQ(sc_cast<sc_lv<8>>("0b 1010", "address").to_string(), "00001010");
 }
 
 void test_lv_from_lv() {
@@ -266,7 +289,9 @@ void test_bv_basic() {
 
     CHECK_EQ(sc_cast<sc_bv<8>>(42).to_string(),    "00101010");
     CHECK_EQ(sc_cast<sc_bv<8>>(255u).to_string(),  "11111111");
-    CHECK_EQ(sc_cast<sc_bv<8>>("0b1010").to_string(), "00001010");
+
+    // sc_bv: "0b1010" in sc_bv<8> data mode: sign-extend with '1' (MSB)
+    CHECK_EQ(sc_cast<sc_bv<8>>("0b1010").to_string(), "11111010");
     CHECK_EQ(sc_cast<sc_bv<8>>("0xFF").to_string(),   "11111111");
 
     // bool from bv
@@ -278,8 +303,9 @@ void test_bv_basic() {
 void test_bv_xz_handling() {
     SECTION("sc_bv with X/Z input (warning + X/Z -> 0)");
 
-    // X/Z in string -> converted to 0
+    // "0b1X0Z" -> X/Z replaced with 0 -> "0b1000" -> MSB='1' -> sign-extend with '1' -> "1000"
     CHECK_EQ(sc_cast<sc_bv<4>>("0b1X0Z").to_string(), "1000");
+    // "0xX0" -> X replaced with 0 -> "0x00" -> binary "00000000" -> "00000000"
     CHECK_EQ(sc_cast<sc_bv<8>>("0xX0").to_string(),   "00000000");
 
     // sc_lv with X -> sc_bv: X -> 0

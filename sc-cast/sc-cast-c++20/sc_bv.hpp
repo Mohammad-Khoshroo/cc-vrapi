@@ -156,23 +156,15 @@ namespace cc_vrwrapper
                 SC_REPORT_ERROR("sc_cast", "Invalid characters in hex string.");
                 return detail::make_unknown<BV>();
             }
-            int bitsNum = static_cast<int>(hex_str.size()) * 4;
-            if (bitsNum > WIDTH) {
-                SC_REPORT_WARNING("sc_cast", "Hex string longer than WIDTH — keeping LSBs.");
-                int drop_digits = (bitsNum - WIDTH + 3) / 4;
-                hex_str = hex_str.substr(drop_digits);
-            } else if (bitsNum < WIDTH) {
-                int padDigits = static_cast<int>(std::ceil((WIDTH - bitsNum) / 4.0));
-                hex_str = std::string(padDigits, '0') + hex_str;
-            }
+            // Convert hex to binary string first, then adjust to WIDTH
             std::string bitstr;
             for (char ch : hex_str) {
                 int val = detail::safe_isdigit(ch) ? ch - '0' : std::toupper(ch) - 'A' + 10;
                 bitstr += std::bitset<4>(val).to_string();
             }
+            bitstr = detail::adjust_bitstr<BV>(std::move(bitstr), WIDTH, is_data, "Hex");
             return detail::from_bitstr<BV>(bitstr);
         }
-
         // Octal prefix
         if (size >= 2 && c0 == '0' && detail::safe_isdigit(c1)) {
             std::string oct_str = substr1;
@@ -180,21 +172,13 @@ namespace cc_vrwrapper
                 SC_REPORT_ERROR("sc_cast", "Invalid characters in octal string.");
                 return detail::make_unknown<BV>();
             }
-            int bitsNum = static_cast<int>(oct_str.size()) * 3;
-            if (bitsNum > WIDTH) {
-                SC_REPORT_WARNING("sc_cast", "Octal string longer than WIDTH — keeping LSBs.");
-                int drop_digits = (bitsNum - WIDTH + 2) / 3;
-                oct_str = oct_str.substr(drop_digits);
-            } else if (bitsNum < WIDTH) {
-                int padDigits = static_cast<int>(std::ceil((WIDTH - bitsNum) / 3.0));
-                oct_str = std::string(padDigits, '0') + oct_str;
-            }
+            // Convert octal to binary string first, then adjust to WIDTH
             std::string bitstr;
             for (char ch : oct_str)
                 bitstr += std::bitset<3>(ch - '0').to_string();
+            bitstr = detail::adjust_bitstr<BV>(std::move(bitstr), WIDTH, is_data, "Octal");
             return detail::from_bitstr<BV>(bitstr);
         }
-
         // Decimal
         if (std::regex_match(str, std::regex("^[+-]?[0-9]+$"))) {
             if (is_address) {

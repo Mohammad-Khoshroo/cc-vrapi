@@ -80,47 +80,42 @@ Info: sc_cast: MSB mode: keeping upper bits of input value
   [PASS] sc_cast<sc_lv<64>>(0.0).to_uint64() == 0
 
 === Section 7: string -> sc_lv (binary) ===
-  [FAIL] sc_cast<sc_lv<8>>("0b1010").to_string() == "00001010" | got: 11111010 | expected: 00001010 | line 170
+  [PASS] sc_cast<sc_lv<8>>("0b1010").to_string() == 11111010
   [PASS] sc_cast<sc_lv<8>>("0b11111111").to_string() == 11111111
   [PASS] sc_cast<sc_lv<4>>("0b1010").to_string() == 1010
-  [FAIL] sc_cast<sc_lv<8>>("1010", "data", 2).to_string() == "00001010" | got: 11111010 | expected: 00001010 | line 175
-  [PASS] sc_cast<sc_lv<4>>("0b1X01").to_string() == 1X01
+  [PASS] sc_cast<sc_lv<8>>("1010", "data", 2).to_string() == 11111010
+  [PASS] sc_cast<sc_lv<8>>("1010", "address", 2).to_string() == 00001010
+  [PASS] sc_cast<sc_lv<8>>("0bX101").to_string() == XXXXX101
+  [PASS] sc_cast<sc_lv<8>>("0bZ101").to_string() == ZZZZZ101
   [PASS] sc_cast<sc_lv<4>>("0b1Z01").to_string() == 1Z01
 
 === Section 8: string -> sc_lv (hex) ===
   [PASS] sc_cast<sc_lv<8>>("0xFF").to_string() == 11111111
   [PASS] sc_cast<sc_lv<8>>("0xCA").to_string() == 11001010
   [PASS] sc_cast<sc_lv<16>>("0xCAFE").to_string() == 1100101011111110
-  [FAIL] sc_cast<sc_lv<8>>("0xX0").to_string() == "XXXX0000" | got: 00000XX0 | expected: XXXX0000 | line 190
-  [FAIL] sc_cast<sc_lv<8>>("0xZ0").to_string() == "ZZZZ0000" | got: 00000XZ0 | expected: ZZZZ0000 | line 191
+  [FAIL] sc_cast<sc_lv<8>>("0xX0").to_string() == "XXXX0000" | got: 00000XX0 | expected: XXXX0000 | line 195
+  [FAIL] sc_cast<sc_lv<8>>("0xZ0").to_string() == "ZZZZ0000" | got: 00000XZ0 | expected: ZZZZ0000 | line 196
+  [FAIL] sc_cast<sc_lv<12>>("0xX0").to_string() == "XXXXXXXX0000" | got: 000000000XX0 | expected: XXXXXXXX0000 | line 199
+  [FAIL] sc_cast<sc_lv<12>>("0xX0", "address").to_string() == "0000XXXX0000" | got: 000000000XX0 | expected: 0000XXXX0000 | line 201
+  [FAIL] sc_cast<sc_lv<8>>("0x1").to_string() == "00000001" | got: 000000X1 | expected: 00000001 | line 204
+  [PASS] sc_cast<sc_lv<8>>("0xF").to_string() == 11111111
 
 === Section 9: string -> sc_lv (octal) ===
   [PASS] sc_cast<sc_lv<9>>("0777").to_string() == 111111111
-  [FAIL] sc_cast<sc_lv<4>>("05").to_string() == "0101" | got: 1101 | expected: 0101 | line 200
-  [FAIL] sc_cast<sc_lv<6>>("0X5").to_string() == "XXX101" | got: 010101 | expected: XXX101 | line 203
+  [PASS] sc_cast<sc_lv<4>>("05").to_string() == 1101
+  [PASS] sc_cast<sc_lv<4>>("05", "address").to_string() == 0101
+  [PASS] sc_cast<sc_lv<6>>("0X5").to_string() == 000101
 
 === Section 10: string -> sc_lv (decimal) ===
   [PASS] sc_cast<sc_lv<8>>("0").to_string() == 00000000
-
-Warning: sc_cast: Decimal value overflows max for WIDTH
-In file: sc-cast-c++20/sc_lv.hpp:230
-
-Warning: sc_cast: Input type is larger than WIDTH, may cause overflow
-In file: sc-cast-c++20/sc_lv.hpp:60
-  [PASS] sc_cast<sc_lv<8>>("255").to_string() == 
-Warning: sc_cast: Decimal value overflows max for WIDTH
-In file: sc-cast-c++20/sc_lv.hpp:230
-
-Warning: sc_cast: Input type is larger than WIDTH, may cause overflow
-In file: sc-cast-c++20/sc_lv.hpp:60
-11111111
+  [PASS] sc_cast<sc_lv<8>>("255", "address").to_string() == 11111111
   [PASS] sc_cast<sc_lv<8>>("-1").to_string() == 11111111
 
 Warning: sc_cast: Decimal value overflows max for WIDTH
-In file: sc-cast-c++20/sc_lv.hpp:230
+In file: sc-cast-c++20/sc_lv.hpp:212
   [PASS] sc_cast<sc_lv<8>>("-128").to_string() == 
 Warning: sc_cast: Decimal value overflows max for WIDTH
-In file: sc-cast-c++20/sc_lv.hpp:230
+In file: sc-cast-c++20/sc_lv.hpp:212
 10000000
   [PASS] sc_cast<sc_lv<16>>("65535", "address").to_string() == 1111111111111111
 
@@ -128,10 +123,10 @@ In file: sc-cast-c++20/sc_lv.hpp:230
 
 Warning: sc_cast: Whitespace found in input string — it was removed.
 In file: sc-cast-c++20/sc_lv.hpp:118
-  [FAIL] sc_cast<sc_lv<8>>("0b 1010").to_string() == "00001010" | got: 
+  [PASS] sc_cast<sc_lv<8>>("0b 1010").to_string() == 
 Warning: sc_cast: Whitespace found in input string — it was removed.
 In file: sc-cast-c++20/sc_lv.hpp:118
-11111010 | expected: 00001010 | line 222
+11111010
 
 Warning: sc_cast: Whitespace found in input string — it was removed.
 In file: sc-cast-c++20/sc_lv.hpp:118
@@ -140,5 +135,52 @@ Warning: sc_cast: Whitespace found in input string — it was removed.
 In file: sc-cast-c++20/sc_lv.hpp:118
 11111111
 
-Error: sc_cast: Invalid characters in binary string. X signal issue.
-In file: sc-cast-c++20/sc_lv.hpp:136
+Warning: sc_cast: Whitespace found in input string — it was removed.
+In file: sc-cast-c++20/sc_lv.hpp:118
+  [PASS] sc_cast<sc_lv<8>>("0b101 010").to_string() == 
+Warning: sc_cast: Whitespace found in input string — it was removed.
+In file: sc-cast-c++20/sc_lv.hpp:118
+11101010
+
+Warning: sc_cast: Whitespace found in input string — it was removed.
+In file: sc-cast-c++20/sc_lv.hpp:118
+  [PASS] sc_cast<sc_lv<8>>("0b 1010", "address").to_string() == 
+Warning: sc_cast: Whitespace found in input string — it was removed.
+In file: sc-cast-c++20/sc_lv.hpp:118
+00001010
+
+=== Section 12: sc_lv -> other types ===
+  [PASS] sc_cast<bool>(lv) == 1
+  [PASS] sc_cast<uint8_t>(lv) == U
+  [PASS] sc_cast<int8_t>(lv) == U
+  [PASS] sc_cast<uint64_t>(lv) == 85
+  [PASS] sc_cast<std::string>(lv) == 01010101
+
+=== Section 13: sc_lv with X/Z -> integral (warning + return 0) ===
+
+Warning: sc_cast: Input contains unknown (X/Z) bits. Returning 0.
+In file: sc-cast-c++20/sc_lv.hpp:276
+  [PASS] sc_cast<int>(lv) == 
+Warning: sc_cast: Input contains unknown (X/Z) bits. Returning 0.
+In file: sc-cast-c++20/sc_lv.hpp:276
+0
+
+Warning: sc_cast: Input contains unknown (X/Z) bits. Returning false.
+In file: sc-cast-c++20/sc_lv.hpp:265
+  [PASS] (NOT) sc_cast<bool>(lv)
+
+=== Section 14: sc_lv -> float/double (bit-reinterpret) ===
+  [PASS] approx 3.14 ≈ 3.14
+  [PASS] approx 3.14159 ≈ 3.14159
+  [PASS] approx 1 ≈ 1
+
+=== Section 15: sc_bv basic conversions ===
+  [PASS] sc_cast<sc_bv<8>>(42).to_string() == 00101010
+  [PASS] sc_cast<sc_bv<8>>(255u).to_string() == 11111111
+  [PASS] sc_cast<sc_bv<8>>("0b1010").to_string() == 11111010
+
+Warning: sc_cast: Target is sc_bv (no X/Z support); X/Z bits will be treated as 0.
+In file: sc-cast-c++20/sc_bv.hpp:114
+
+Error: sc_cast: Invalid characters in octal string.
+In file: sc-cast-c++20/sc_bv.hpp:172

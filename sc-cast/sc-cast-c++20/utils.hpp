@@ -198,6 +198,8 @@ namespace cc_vrwrapper
             }
             else if (sz < WIDTH)
             {
+                // Sign extension in "data" mode (preserves X/Z/0/1 from MSB)
+                // Zero extension in "address" mode (addresses are unsigned)
                 char pad = bitstr.empty() ? '0' : bitstr[0];
                 bitstr = is_data ? (std::string(WIDTH - sz, pad) + bitstr)
                                  : (std::string(WIDTH - sz, '0') + bitstr);
@@ -205,6 +207,8 @@ namespace cc_vrwrapper
             return bitstr;
         }
 
+        // Convert a finalized bit-string to the target LV type.
+        // Uses set_bit() to avoid SystemC string constructor quirks with X/Z.
         template <ScLogicLike LV>
         LV from_bitstr(const std::string& bitstr)
         {
@@ -218,9 +222,26 @@ namespace cc_vrwrapper
             }
             else
             {
-                return LV(bitstr.c_str());
+                // Construct bit-by-bit to avoid sc_lv string constructor issues.
+                // bitstr is MSB-first (leftmost = highest bit index).
+                LV result;
+                int sz = static_cast<int>(bitstr.size());
+                constexpr int WIDTH = sc_lv_traits<LV>::width;
+                for (int i = 0; i < WIDTH; ++i) {
+                    int bit_idx = WIDTH - 1 - i;
+                    char c = (i < sz) ? bitstr[i] : '0';
+                    sc_logic_value_t val;
+                    if      (c == '1')              val = Log_1;
+                    else if (c == '0')              val = Log_0;
+                    else if (c == 'X' || c == 'x')  val = Log_X;
+                    else if (c == 'Z' || c == 'z')  val = Log_Z;
+                    else                            val = Log_0;
+                    result.set_bit(bit_idx, val);
+                }
+                return result;
             }
         }
+        
     } // namespace detail
 
     // ========================================================================
