@@ -1,0 +1,3 @@
+[INFO] test: hello @ 100 ns (file.cpp:1) in process: top
+[WARNING] test: warn @ 200 ns (file.cpp:2) in process: top
+[ERROR] test: err @ 300 ns (file.cpp:3) in process: top

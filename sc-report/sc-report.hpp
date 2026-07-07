@@ -1,8 +1,8 @@
-#ifndef CC_VRWRAPPER_REPORT_PERSONALIZED_HPP
-#define CC_VRWRAPPER_REPORT_PERSONALIZED_HPP
+#ifndef CC_VRWRAPPER_REPORT_HPP
+#define CC_VRWRAPPER_REPORT_HPP
 
 // ============================================================================
-// cc_vrwrapper :: sc_report_personalized
+// cc_vrwrapper :: sc_report
 // Custom SystemC report handler with:
 //   - File logging (text / JSON / logfmt, NEVER with ANSI colors)
 //   - Terminal logging (with ANSI colors, only if stderr is a TTY)

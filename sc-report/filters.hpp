@@ -6,6 +6,7 @@
 #include <mutex>
 #include <regex>
 #include <systemc>
+#include <vector>
 
 namespace cc_vrwrapper::report::filters
 {

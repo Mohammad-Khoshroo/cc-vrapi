@@ -127,14 +127,24 @@ struct source_loc {
 // ------------------------------------------------------------------------
 // Module hierarchy — walks up the SystemC hierarchy
 // ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
+// Module hierarchy — walks up the SystemC hierarchy
+// ------------------------------------------------------------------------
 inline std::string get_module_hierarchy()
 {
     try {
         auto h = sc_core::sc_get_current_process_handle();
-        std::string result;
-        const char* n = h.name();
-        if (n && *n) result = n;
-        return result;
+        // Check if handle is valid (i.e., we're inside an executing process)
+        if (h.valid()) {
+            const char* n = h.name();
+            if (n && *n) return n;
+        }
+        // If simulation hasn't started yet, we're in sc_main
+        if (!sc_core::sc_is_running()) {
+            return "sc_main";
+        }
+        // Simulation running but no current process (rare edge case)
+        return "<unknown>";
     } catch (...) {
         return "<unknown>";
     }

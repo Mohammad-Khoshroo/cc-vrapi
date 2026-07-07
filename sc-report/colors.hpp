@@ -29,6 +29,7 @@ enum class Theme { Dark, Light };
 
 inline Theme current_theme = Theme::Dark;
 
+
 inline void set_theme(Theme t) { current_theme = t; }
 
 struct ColorScheme {

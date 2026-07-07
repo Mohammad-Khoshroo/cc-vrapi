@@ -56,7 +56,7 @@ void test_basic_text_logging()
     rpt::config::set_log_to_terminal(true);
     rpt::config::set_log_to_file(true);
     rpt::config::set_log_file_path("logs/test_basic.log");
-    rpt::config::set_max_severity(SC_FATAL);
+    rpt::config::set_min_severity(SC_FATAL);
     rpt::config::set_force_no_color(true);  // disable colors for clean test output
     rpt::filters::enabled_severities = { SC_INFO, SC_WARNING, SC_ERROR, SC_FATAL };
     rpt::filters::suppressed_msg_types.clear();
@@ -148,7 +148,7 @@ void test_severity_filtering()
     std::cout << "\n=== Test 4: Severity filtering ===\n";
 
     rpt::config::set_log_file_path("logs/test_severity.log");
-    rpt::config::set_max_severity(SC_WARNING);  // suppress INFO
+    rpt::config::set_min_severity(SC_WARNING);  // suppress INFO
     rpt::stats::reset();
     rpt::handler::init_report_handler();
 
@@ -163,7 +163,7 @@ void test_severity_filtering()
     CHECK_EQ(s.warning.load(), 1u);
     CHECK_EQ(s.error.load(), 1u);
 
-    rpt::config::set_max_severity(SC_FATAL);  // reset
+    rpt::config::set_min_severity(SC_FATAL);  // reset
 }
 
 // ============================================================================
@@ -264,8 +264,8 @@ void test_callback_sink()
         callback_count++;
         last_msg = info.message;
         std::cout << "  [CALLBACK FIRED] severity=" << info.severity
-                  << " msg=" << info.message << "\n";
-    });
+            << " msg=" << info.message << "\n";
+        });
 
     SC_REPORT_INFO("cb", "First callback test");
     SC_REPORT_WARNING("cb", "Second callback test");
@@ -371,7 +371,7 @@ SC_MODULE(TestModule)
     {
         SC_CTHREAD(proc, clk.pos());
     }
-    
+
     void proc() {
         SC_REPORT_INFO("hierarchy", "Report from inside module");
     }
@@ -395,7 +395,7 @@ void test_hierarchy_capture()
     // Verify file contains process name
     std::ifstream f("logs/test_hierarchy.log");
     std::string content((std::istreambuf_iterator<char>(f)),
-                         std::istreambuf_iterator<char>());
+        std::istreambuf_iterator<char>());
     CHECK(content.find("test_mod") != std::string::npos);
 }
 
@@ -410,15 +410,15 @@ void test_log_diff()
     {
         std::ofstream b("logs/baseline.log");
         b << "[INFO] test: hello @ 10 ns (file.cpp:1) in process: top\n"
-          << "[WARNING] test: warn @ 20 ns (file.cpp:2) in process: top\n"
-          << "[ERROR] test: err @ 30 ns (file.cpp:3) in process: top\n";
+            << "[WARNING] test: warn @ 20 ns (file.cpp:2) in process: top\n"
+            << "[ERROR] test: err @ 30 ns (file.cpp:3) in process: top\n";
     }
     // Create current file (same content, different timestamps)
     {
         std::ofstream c("logs/current.log");
         c << "[INFO] test: hello @ 100 ns (file.cpp:1) in process: top\n"
-          << "[WARNING] test: warn @ 200 ns (file.cpp:2) in process: top\n"
-          << "[ERROR] test: err @ 300 ns (file.cpp:3) in process: top\n";
+            << "[WARNING] test: warn @ 200 ns (file.cpp:2) in process: top\n"
+            << "[ERROR] test: err @ 300 ns (file.cpp:3) in process: top\n";
     }
 
     auto result = rpt::diff::compare("logs/baseline.log", "logs/current.log");
@@ -440,9 +440,9 @@ void test_thread_safety()
     auto worker = [](int id) {
         for (int i = 0; i < 50; ++i) {
             SC_REPORT_INFO("thread", ("Worker " + std::to_string(id) +
-                                       " message " + std::to_string(i)).c_str());
+                " message " + std::to_string(i)).c_str());
         }
-    };
+        };
 
     std::vector<std::thread> threads;
     for (int i = 0; i < 4; ++i) threads.emplace_back(worker, i);
@@ -725,7 +725,8 @@ int sc_main(int argc, char* argv[])
     if (g_fail == 0) {
         std::cout << "\n*** ALL TESTS PASSED ***\n";
         return 0;
-    } else {
+    }
+    else {
         std::cout << "\n*** " << g_fail << " TEST(S) FAILED ***\n";
         return 1;
     }
