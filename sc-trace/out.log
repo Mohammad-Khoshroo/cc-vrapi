@@ -1,0 +1,118 @@
+In file included from sc_trace.hpp:31,
+                 from pretest.cpp:2:
+watch.hpp: In instantiation of ‘void cc_vrwrapper::trace::watch_rising(Signal&, Callback) [with Signal = sc_core::sc_in<bool>; Callback = DUT::DUT(sc_core::sc_module_name)::<lambda()>]’:
+pretest.cpp:15:25:   required from here
+watch.hpp:232:14: error: no matching function for call to ‘std::function<void(const bool&)>::function(DUT::DUT(sc_core::sc_module_name)::<lambda()>&)’
+  232 |         std::function<void(const value_type&)>(cb),
+      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/13/functional:59,
+                 from /usr/local/systemc/include/sysc/kernel/sc_dynamic_processes.h:38,
+                 from /usr/local/systemc/include/systemc:72,
+                 from pretest.cpp:1:
+/usr/include/c++/13/bits/std_function.h:435:9: note: candidate: ‘template<class _Functor, class _Constraints> std::function<_Res(_ArgTypes ...)>::function(_Functor&&) [with _Constraints = _Functor; _Res = void; _ArgTypes = {const bool&}]’
+  435 |         function(_Functor&& __f)
+      |         ^~~~~~~~
+/usr/include/c++/13/bits/std_function.h:435:9: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/13/bits/stl_pair.h:60,
+                 from /usr/include/c++/13/bits/stl_algobase.h:64,
+                 from /usr/include/c++/13/vector:62,
+                 from /usr/local/systemc/include/sysc/kernel/sc_cmnhdr.h:138,
+                 from /usr/local/systemc/include/systemc:70:
+/usr/include/c++/13/type_traits: In substitution of ‘template<bool _Cond, class _Tp> using std::__enable_if_t = typename std::enable_if::type [with bool _Cond = false; _Tp = void]’:
+/usr/include/c++/13/bits/std_function.h:353:8:   required by substitution of ‘template<class _Res, class ... _ArgTypes> template<class _Cond, class _Tp> using std::function<_Res(_ArgTypes ...)>::_Requires = std::__enable_if_t<_Cond::value, _Tp> [with _Cond = std::function<void(const bool&)>::_Callable<DUT::DUT(sc_core::sc_module_name)::<lambda()>&, DUT::DUT(sc_core::sc_module_name)::<lambda()>, std::__invoke_result<DUT::DUT(sc_core::sc_module_name)::<lambda()>&, const bool&> >; _Tp = void; _Res = void; _ArgTypes = {const bool&}]’
+/usr/include/c++/13/bits/std_function.h:434:9:   required from ‘void cc_vrwrapper::trace::watch_rising(Signal&, Callback) [with Signal = sc_core::sc_in<bool>; Callback = DUT::DUT(sc_core::sc_module_name)::<lambda()>]’
+pretest.cpp:15:25:   required from here
+/usr/include/c++/13/type_traits:116:11: error: no type named ‘type’ in ‘struct std::enable_if<false, void>’
+  116 |     using __enable_if_t = typename enable_if<_Cond, _Tp>::type;
+      |           ^~~~~~~~~~~~~
+watch.hpp: In instantiation of ‘void cc_vrwrapper::trace::watch_rising(Signal&, Callback) [with Signal = sc_core::sc_in<bool>; Callback = DUT::DUT(sc_core::sc_module_name)::<lambda()>]’:
+pretest.cpp:15:25:   required from here
+/usr/include/c++/13/bits/std_function.h:404:7: note: candidate: ‘std::function<_Res(_ArgTypes ...)>::function(std::function<_Res(_ArgTypes ...)>&&) [with _Res = void; _ArgTypes = {const bool&}]’
+  404 |       function(function&& __x) noexcept
+      |       ^~~~~~~~
+/usr/include/c++/13/bits/std_function.h:404:27: note:   no known conversion for argument 1 from ‘DUT::DUT(sc_core::sc_module_name)::<lambda()>’ to ‘std::function<void(const bool&)>&&’
+  404 |       function(function&& __x) noexcept
+      |                ~~~~~~~~~~~^~~
+/usr/include/c++/13/bits/std_function.h:386:7: note: candidate: ‘std::function<_Res(_ArgTypes ...)>::function(const std::function<_Res(_ArgTypes ...)>&) [with _Res = void; _ArgTypes = {const bool&}]’
+  386 |       function(const function& __x)
+      |       ^~~~~~~~
+/usr/include/c++/13/bits/std_function.h:386:32: note:   no known conversion for argument 1 from ‘DUT::DUT(sc_core::sc_module_name)::<lambda()>’ to ‘const std::function<void(const bool&)>&’
+  386 |       function(const function& __x)
+      |                ~~~~~~~~~~~~~~~~^~~
+/usr/include/c++/13/bits/std_function.h:375:7: note: candidate: ‘std::function<_Res(_ArgTypes ...)>::function(std::nullptr_t) [with _Res = void; _ArgTypes = {const bool&}; std::nullptr_t = std::nullptr_t]’
+  375 |       function(nullptr_t) noexcept
+      |       ^~~~~~~~
+/usr/include/c++/13/bits/std_function.h:375:16: note:   no known conversion for argument 1 from ‘DUT::DUT(sc_core::sc_module_name)::<lambda()>’ to ‘std::nullptr_t’
+  375 |       function(nullptr_t) noexcept
+      |                ^~~~~~~~~
+/usr/include/c++/13/bits/std_function.h:368:7: note: candidate: ‘std::function<_Res(_ArgTypes ...)>::function() [with _Res = void; _ArgTypes = {const bool&}]’
+  368 |       function() noexcept
+      |       ^~~~~~~~
+/usr/include/c++/13/bits/std_function.h:368:7: note:   candidate expects 0 arguments, 1 provided
+In file included from sc_trace.hpp:32:
+trace.hpp: In instantiation of ‘void cc_vrwrapper::trace::TraceManager::trace(Signal&, const std::string&) [with Signal = sc_core::sc_clock; std::string = std::__cxx11::basic_string<char>]’:
+pretest.cpp:43:14:   required from here
+trace.hpp:77:23: error: static assertion failed: TraceManager::trace(): Signal must be sc_signal<T>, sc_in<T>, or sc_out<T>
+   77 |         static_assert(is_sc_signal_or_port_v<Signal>,
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+trace.hpp:77:23: note: ‘cc_vrwrapper::trace::is_sc_signal_or_port_v<sc_core::sc_clock>’ evaluates to false
+In file included from sc_trace.hpp:33:
+json_trace.hpp: In instantiation of ‘void cc_vrwrapper::trace::JsonTrace::trace(Signal&, const std::string&) [with Signal = sc_core::sc_clock; std::string = std::__cxx11::basic_string<char>]’:
+pretest.cpp:48:14:   required from here
+json_trace.hpp:106:23: error: static assertion failed: JsonTrace::trace(): Signal must be sc_signal<T>, sc_in<T>, or sc_out<T>
+  106 |         static_assert(is_sc_signal_or_port_v<Signal>,
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+json_trace.hpp:106:23: note: ‘cc_vrwrapper::trace::is_sc_signal_or_port_v<sc_core::sc_clock>’ evaluates to false
+json_trace.hpp:124:44: error: no matching function for call to ‘value_to_string<value_type>(const bool&)’
+  124 |                 value_to_string<value_type>(sig.read())
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+In file included from sc_trace.hpp:30:
+utils.hpp:79:13: note: candidate: ‘template<class T> std::string cc_vrwrapper::trace::value_to_string(const T&)’
+   79 | std::string value_to_string(const T& val)
+      |             ^~~~~~~~~~~~~~~
+utils.hpp:79:13: note:   template argument deduction/substitution failed:
+utils.hpp: In substitution of ‘template<class T> std::string cc_vrwrapper::trace::value_to_string(const T&) [with T = void]’:
+json_trace.hpp:124:44:   required from ‘void cc_vrwrapper::trace::JsonTrace::trace(Signal&, const std::string&) [with Signal = sc_core::sc_clock; std::string = std::__cxx11::basic_string<char>]’
+pretest.cpp:48:14:   required from here
+utils.hpp:79:13: error: forming reference to void
+json_trace.hpp: In instantiation of ‘void cc_vrwrapper::trace::JsonTrace::trace(Signal&, const std::string&) [with Signal = sc_core::sc_clock; std::string = std::__cxx11::basic_string<char>]’:
+pretest.cpp:48:14:   required from here
+json_trace.hpp:122:44: error: no matching function for call to ‘std::vector<cc_vrwrapper::trace::JsonTrace::SignalChange>::push_back(<brace-enclosed initializer list>)’
+  122 |             signals_[idx].changes.push_back({
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+  123 |                 0.0,
+      |                 ~~~~                        
+  124 |                 value_to_string<value_type>(sig.read())
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  125 |             });
+      |             ~~                              
+In file included from /usr/include/c++/13/vector:66:
+/usr/include/c++/13/bits/stl_vector.h:1281:7: note: candidate: ‘constexpr void std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = cc_vrwrapper::trace::JsonTrace::SignalChange; _Alloc = std::allocator<cc_vrwrapper::trace::JsonTrace::SignalChange>; value_type = cc_vrwrapper::trace::JsonTrace::SignalChange]’
+ 1281 |       push_back(const value_type& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/13/bits/stl_vector.h:1281:35: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘const std::vector<cc_vrwrapper::trace::JsonTrace::SignalChange>::value_type&’ {aka ‘const cc_vrwrapper::trace::JsonTrace::SignalChange&’}
+ 1281 |       push_back(const value_type& __x)
+      |                 ~~~~~~~~~~~~~~~~~~^~~
+/usr/include/c++/13/bits/stl_vector.h:1298:7: note: candidate: ‘constexpr void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = cc_vrwrapper::trace::JsonTrace::SignalChange; _Alloc = std::allocator<cc_vrwrapper::trace::JsonTrace::SignalChange>; value_type = cc_vrwrapper::trace::JsonTrace::SignalChange]’
+ 1298 |       push_back(value_type&& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/13/bits/stl_vector.h:1298:30: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘std::vector<cc_vrwrapper::trace::JsonTrace::SignalChange>::value_type&&’ {aka ‘cc_vrwrapper::trace::JsonTrace::SignalChange&&’}
+ 1298 |       push_back(value_type&& __x)
+      |                 ~~~~~~~~~~~~~^~~
+json_trace.hpp:132:13: error: forming reference to void
+  132 |             [this, idx](const value_type& val) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  133 |                 std::lock_guard<std::mutex> g(mutex_);
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  134 |                 double t = sc_core::sc_time_stamp().to_seconds() * 1e9;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  135 |                 signals_[idx].changes.push_back({
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  136 |                     t,
+      |                     ~~
+  137 |                     value_to_string<value_type>(val)
+      |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  138 |                 });
+      |                 ~~~
+  139 |             },
+      |             ~
