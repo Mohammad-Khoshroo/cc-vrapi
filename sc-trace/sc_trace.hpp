@@ -12,15 +12,15 @@
 //   - watch_value(sig, val, cb)        — callback when signal equals val
 //   - watch_transition(sig, from, to, cb) — callback on specific transition
 //   - TraceManager                     — VCD tracing with regex filtering
-//   - JsonTrace                        — JSON waveform for browser viewing
+//   - JsonTrace                        — JSON waveform with delta cycle info
 //
-// Supported signal types: sc_signal<T>, sc_in<T>, sc_out<T>
+// Supported signal types: sc_signal<T>, sc_in<T>, sc_out<T>, sc_clock
 //   where T = bool, sc_logic, sc_lv<W>, sc_bv<W>,
 //            sc_int<W>, sc_uint<W>, sc_bigint<W>, sc_biguint<W>
 //
-// IMPORTANT: All watch() and trace() calls MUST be made BEFORE sc_start().
-// SystemC does not allow creating modules or registering processes
-// after simulation starts.
+// IMPORTANT: All watch() and trace() calls MUST be made:
+//   - AFTER all ports have been bound to their signals
+//   - BEFORE sc_start() is called
 //
 // Namespace: cc_vrwrapper::trace
 //

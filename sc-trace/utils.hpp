@@ -44,7 +44,6 @@ template <typename T> struct signal_value_type<sc_in<T>>     { using type = T; }
 template <typename T> struct signal_value_type<sc_out<T>>    { using type = T; };
 
 // sc_clock inherits from sc_signal<bool> — treat it as a bool signal
-// so that TraceManager::trace() and JsonTrace::trace() accept it.
 template <> struct signal_value_type<sc_core::sc_clock> { using type = bool; };
 
 template <typename T>
@@ -55,8 +54,6 @@ using signal_value_type_t = typename signal_value_type<T>::type;
 // ----------------------------------------------------------------
 template <typename T> struct is_sc_signal     : std::false_type {};
 template <typename T> struct is_sc_signal<sc_signal<T>> : std::true_type {};
-
-// sc_clock is a subclass of sc_signal<bool>
 template <> struct is_sc_signal<sc_core::sc_clock> : std::true_type {};
 
 template <typename T> struct is_sc_in          : std::false_type {};
@@ -143,7 +140,6 @@ struct NameFilter {
 
     bool matches(const std::string& name) const
     {
-        // If include patterns exist, name must match at least one
         if (!include_patterns.empty()) {
             bool found = false;
             for (const auto& re : include_patterns) {
@@ -155,7 +151,6 @@ struct NameFilter {
             if (!found) return false;
         }
 
-        // If exclude patterns exist, name must not match any
         for (const auto& re : exclude_patterns) {
             if (std::regex_search(name, re)) {
                 return false;
@@ -191,6 +186,93 @@ struct NameFilter {
         exclude_patterns.clear();
     }
 };
+
+// ========================================================================
+// TYPE-ERASED SIGNAL TRACING
+//
+// Because C++ templates produce distinct types for each width
+// (sc_lv<8> != sc_lv<16>), runtime dispatch must know which types to
+// try. We use a registration model:
+//   1. Common types (bool, sc_logic) are pre-registered.
+//   2. User calls register_signal_type<T>() for additional types.
+//   3. trace_all() iterates the registry and tries each via dynamic_cast.
+// ========================================================================
+
+namespace detail {
+
+using TracerFn = bool(*)(sc_core::sc_trace_file*,
+                         sc_core::sc_object*,
+                         const std::string&);
+
+template <typename T>
+bool trace_typed(sc_core::sc_trace_file* tf,
+                 sc_core::sc_object* obj,
+                 const std::string& name)
+{
+    auto* p = dynamic_cast<sc_core::sc_signal<T>*>(obj);
+    if (!p) return false;
+    sc_core::sc_trace(tf, *p, name);
+    return true;
+}
+
+inline std::vector<TracerFn>& tracer_registry()
+{
+    static std::vector<TracerFn> v = {
+        &trace_typed<bool>,
+        &trace_typed<sc_dt::sc_logic>
+    };
+    return v;
+}
+
+} // namespace detail
+
+// --------------------------------------------------------------------
+// register_signal_type<T>() — register an additional value type for
+// runtime dispatch in trace_all().
+//
+// Must be called BEFORE trace_all(). Safe to call multiple times for
+// the same type — duplicate registration is ignored.
+//
+// Example:
+//   tr::register_signal_type<sc_dt::sc_lv<8>>();
+//   tr::register_signal_type<sc_dt::sc_int<32>>();
+//   tf->trace_all(dut, true);
+// --------------------------------------------------------------------
+template <typename T>
+void register_signal_type()
+{
+    static bool registered = false;
+    if (registered) return;
+    registered = true;
+    detail::tracer_registry().push_back(&detail::trace_typed<T>);
+}
+
+// --------------------------------------------------------------------
+// Convenience macro — register all common SystemC signal types at once.
+// --------------------------------------------------------------------
+#define CC_VRWRAPPER_REGISTER_COMMON_TYPES()                              \
+    do {                                                                  \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_lv<8>>();   \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_lv<16>>();  \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_lv<32>>();  \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_lv<64>>();  \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_bv<8>>();   \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_bv<16>>();  \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_bv<32>>();  \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_bv<64>>();  \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_int<8>>();  \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_int<16>>(); \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_int<32>>(); \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_int<64>>(); \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_uint<8>>(); \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_uint<16>>();\
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_uint<32>>();\
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_uint<64>>();\
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_bigint<64>>();  \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_bigint<128>>(); \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_biguint<64>>(); \
+        ::cc_vrwrapper::trace::register_signal_type<sc_dt::sc_biguint<128>>();\
+    } while(0)
 
 } // namespace trace
 } // namespace cc_vrwrapper
