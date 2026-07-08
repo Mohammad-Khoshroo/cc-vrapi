@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>sc-trace Waveform Viewer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+    background: #1e1e2e; color: #cdd6f4;
+    height: 100vh; display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  /* Toolbar */
+  #toolbar {
+    background: #181825; padding: 8px 12px;
+    display: flex; gap: 12px; align-items: center;
+    border-bottom: 1px solid #313244;
+    flex-shrink: 0;
+  }
+  #toolbar button, #toolbar label {
+    background: #313244; color: #cdd6f4; border: none;
+    padding: 6px 12px; border-radius: 6px; cursor: pointer;
+    font-size: 13px; transition: background 0.15s;
+  }
+  #toolbar button:hover, #toolbar label:hover { background: #45475a; }
+  #toolbar button:disabled { opacity: 0.4; cursor: default; }
+  #toolbar .info { color: #6c7086; font-size: 12px; margin-left: auto; }
+  #fileInput { display: none; }
+
+  /* Signal list (left pane) */
+  #main {
+    flex: 1; display: flex; overflow: hidden;
+  }
+  #signalList {
+    width: 200px; background: #181825; overflow-y: auto;
+    border-right: 1px solid #313244; flex-shrink: 0;
+  }
+  .signal-row {
+    padding: 0 12px; display: flex; align-items: center;
+    border-bottom: 1px solid #313244; height: 48px;
+    font-size: 13px; cursor: pointer;
+  }
+  .signal-row:hover { background: #313244; }
+  .signal-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .signal-width { color: #6c7086; font-size: 11px; margin-left: 8px; }
+
+  /* Waveform canvas (right pane) */
+  #waveContainer {
+    flex: 1; overflow: auto; position: relative; background: #1e1e2e;
+  }
+  #waveCanvas { display: block; }
+
+  /* Status bar */
+  #status {
+    background: #181825; padding: 6px 12px;
+    border-top: 1px solid #313244;
+    font-size: 12px; color: #a6adc8;
+    display: flex; gap: 24px; flex-shrink: 0;
+  }
+  #status span b { color: #cdd6f4; }
+  #status .delta-info { color: #f9e2af; }
+  #status .cycle-info { color: #a6e3a1; }
+
+  /* Drop zone overlay */
+  #dropOverlay {
+    position: fixed; inset: 0; background: rgba(30,30,46,0.9);
+    display: none; align-items: center; justify-content: center;
+    z-index: 100; border: 3px dashed #89b4fa; font-size: 24px;
+    color: #89b4fa; pointer-events: none;
+  }
+  #dropOverlay.active { display: flex; }
+
+  /* Initial empty state */
+  #emptyState {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: #6c7086; font-size: 16px; gap: 12px;
+  }
+  #emptyState .big { font-size: 48px; opacity: 0.3; }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <label for="fileInput">Open wave.json</label>
+  <input type="file" id="fileInput" accept=".json,application/json">
+  <button id="zoomIn">+ Zoom In</button>
+  <button id="zoomOut">- Zoom Out</button>
+  <button id="zoomFit">Fit</button>
+  <span class="info" id="fileInfo"></span>
+</div>
+
+<div id="main">
+  <div id="signalList"></div>
+  <div id="waveContainer">
+    <canvas id="waveCanvas"></canvas>
+    <div id="emptyState">
+      <div class="big">~</div>
+      <div>Drop a <b>wave.json</b> here or click <b>Open</b></div>
+    </div>
+  </div>
+</div>
+
+<div id="status">
+  <span>Time: <b id="stTime">-</b></span>
+  <span class="cycle-info">Cycle: <b id="stCycle">-</b></span>
+  <span class="delta-info">Delta: <b id="stDelta">-</b></span>
+  <span>Signal: <b id="stSignal">-</b></span>
+  <span>Value: <b id="stValue">-</b></span>
+</div>
+
+<div id="dropOverlay">Drop wave.json here</div>
+
+<script>
+'use strict';
+
+// ============================================================================
+// State
+// ============================================================================
+let data = null;
+let canvas, ctx;
+let timeStart = 0, timeEnd = 100;
+let pxPerNs = 5;
+const LEFT_PAD = 60;
+const ROW_H = 48;
+const ROW_PAD = 8;
+let cursorTime = null;
+let hoverRow = -1;
+
+// ============================================================================
+// File loading
+// ============================================================================
+const fileInput = document.getElementById('fileInput');
+const dropOverlay = document.getElementById('dropOverlay');
+
+fileInput.addEventListener('change', e => {
+  if (e.target.files[0]) loadFile(e.target.files[0]);
+});
+
+window.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropOverlay.classList.add('active');
+});
+window.addEventListener('dragleave', e => {
+  if (e.target === dropOverlay) dropOverlay.classList.remove('active');
+});
+window.addEventListener('drop', e => {
+  e.preventDefault();
+  dropOverlay.classList.remove('active');
+  if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
+});
+
+function loadFile(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      data = JSON.parse(e.target.result);
+      onLoaded(file.name);
+    } catch (err) {
+      alert('Failed to parse JSON: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function onLoaded(filename) {
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('fileInfo').textContent =
+    filename + ' - ' + data.signals.length + ' signals, ' +
+    (data.triggers ? data.triggers.length + ' triggers, ' : '') +
+    data.signals.reduce((s,x)=>s+x.changes.length,0) + ' changes';
+
+  let tMax = 0;
+  for (const sig of data.signals) {
+    for (const ch of sig.changes) {
+      if (ch.time > tMax) tMax = ch.time;
+    }
+  }
+  if (data.triggers) {
+    for (const tr of data.triggers) {
+      if (tr.time > tMax) tMax = tr.time;
+    }
+  }
+  timeEnd = tMax * 1.05;
+  timeStart = -tMax * 0.02;
+  zoomFit();
+  renderSignalList();
+  render();
+}
+
+// ============================================================================
+// Signal list (left pane)
+// ============================================================================
+function renderSignalList() {
+  const list = document.getElementById('signalList');
+  list.innerHTML = '';
+  data.signals.forEach((sig, i) => {
+    const row = document.createElement('div');
+    row.className = 'signal-row';
+    row.innerHTML = '<span class="signal-name">' + esc(sig.name) + '</span>' +
+                    '<span class="signal-width">' + sig.width + 'b</span>';
+    row.addEventListener('mouseenter', () => { hoverRow = i; render(); });
+    row.addEventListener('mouseleave', () => { hoverRow = -1; render(); });
+    list.appendChild(row);
+  });
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+// ============================================================================
+// Zoom & pan
+// ============================================================================
+function zoomFit() {
+  const container = document.getElementById('waveContainer');
+  const w = container.clientWidth - LEFT_PAD - 20;
+  pxPerNs = w / (timeEnd - timeStart);
+  render();
+}
+
+document.getElementById('zoomIn').onclick = () => { pxPerNs *= 1.5; render(); };
+document.getElementById('zoomOut').onclick = () => { pxPerNs /= 1.5; render(); };
+document.getElementById('zoomFit').onclick = zoomFit;
+
+document.getElementById('waveContainer').addEventListener('wheel', e => {
+  if (!data) return;
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left - LEFT_PAD;
+  const tAtCursor = timeStart + x / pxPerNs;
+  const factor = e.deltaY < 0 ? 1.2 : 1/1.2;
+  pxPerNs *= factor;
+  timeStart = tAtCursor - x / pxPerNs;
+  render();
+}, { passive: false });
+
+let dragging = false, dragStartX = 0, dragStartT = 0;
+canvas = document.getElementById('waveCanvas');
+ctx = canvas.getContext('2d');
+
+canvas.addEventListener('mousedown', e => {
+  dragging = true;
+  dragStartX = e.clientX;
+  dragStartT = timeStart;
+  canvas.style.cursor = 'grabbing';
+});
+window.addEventListener('mouseup', e => {
+  if (dragging) {
+    if (Math.abs(e.clientX - dragStartX) < 3) {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left - LEFT_PAD;
+      if (x >= 0) {
+        cursorTime = timeStart + x / pxPerNs;
+        updateStatus();
+        render();
+      }
+    }
+  }
+  dragging = false;
+  canvas.style.cursor = 'crosshair';
+});
+window.addEventListener('mousemove', e => {
+  if (dragging) {
+    const dx = e.clientX - dragStartX;
+    timeStart = dragStartT - dx / pxPerNs;
+    render();
+  }
+});
+
+// ============================================================================
+// Rendering
+// ============================================================================
+function render() {
+  if (!data) return;
+  const container = document.getElementById('waveContainer');
+  const w = Math.max(container.clientWidth, LEFT_PAD + (timeEnd - timeStart) * pxPerNs + 20);
+  const h = data.signals.length * ROW_H + 40;
+  canvas.width = w;
+  canvas.height = h;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+
+  ctx.fillStyle = '#1e1e2e';
+  ctx.fillRect(0, 0, w, h);
+
+  // Trigger markers
+  if (data.triggers) {
+    for (const tr of data.triggers) {
+      const x = LEFT_PAD + (tr.time - timeStart) * pxPerNs;
+      if (x < LEFT_PAD || x > w) continue;
+      ctx.strokeStyle = 'rgba(166,227,161,0.25)';
+      ctx.setLineDash([3, 5]);
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, h);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#a6e3a1';
+      ctx.font = '10px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('c' + tr.cycle, x, 12);
+    }
+  }
+
+  if (hoverRow >= 0 && hoverRow < data.signals.length) {
+    ctx.fillStyle = 'rgba(69,71,90,0.4)';
+    ctx.fillRect(0, hoverRow * ROW_H, w, ROW_H);
+  }
+
+  data.signals.forEach((sig, i) => {
+    const y = i * ROW_H;
+    drawSignal(sig, y, w);
+  });
+
+  if (cursorTime !== null) {
+    const x = LEFT_PAD + (cursorTime - timeStart) * pxPerNs;
+    if (x >= 0 && x <= w) {
+      ctx.strokeStyle = '#f5e0dc';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, h);
+      ctx.stroke();
+    }
+  }
+}
+
+function drawSignal(sig, y, w) {
+  const midY = y + ROW_H / 2;
+  const lowY = y + ROW_H - ROW_PAD;
+  const highY = y + ROW_PAD;
+
+  ctx.strokeStyle = '#313244';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, y + ROW_H);
+  ctx.lineTo(w, y + ROW_H);
+  ctx.stroke();
+
+  if (sig.changes.length === 0) return;
+
+  const hasDelta = sig.changes.some(c => c.delta !== undefined);
+
+  for (let i = 0; i < sig.changes.length; i++) {
+    const ch = sig.changes[i];
+    const next = sig.changes[i + 1];
+    const x1 = LEFT_PAD + (ch.time - timeStart) * pxPerNs;
+    const x2 = next
+      ? LEFT_PAD + (next.time - timeStart) * pxPerNs
+      : LEFT_PAD + (timeEnd - timeStart) * pxPerNs;
+    if (x2 < LEFT_PAD || x1 > w) continue;
+
+    const val = ch.value;
+
+    if (sig.width === 1 && (val === '0' || val === '1')) {
+      const lineY = val === '1' ? highY : lowY;
+      ctx.strokeStyle = '#89b4fa';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      if (i > 0) {
+        const prevVal = sig.changes[i-1].value;
+        const prevLineY = prevVal === '1' ? highY : lowY;
+        ctx.moveTo(x1, prevLineY);
+        ctx.lineTo(x1, lineY);
+      }
+      ctx.lineTo(x2, lineY);
+      ctx.stroke();
+
+      if (x2 - x1 > 20) {
+        ctx.fillStyle = '#cdd6f4';
+        ctx.font = '11px monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText(val, x1 + 4, lineY - 4);
+      }
+    } else if (sig.width === 1 && (val === 'X' || val === 'Z')) {
+      ctx.fillStyle = val === 'X' ? 'rgba(249,226,175,0.3)' : 'rgba(245,194,231,0.3)';
+      ctx.fillRect(x1, highY, x2 - x1, lowY - highY);
+      ctx.strokeStyle = val === 'X' ? '#f9e2af' : '#f5c2e7';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let hx = x1; hx < x2; hx += 6) {
+        ctx.moveTo(hx, highY);
+        ctx.lineTo(hx + 6, lowY);
+      }
+      ctx.stroke();
+      if (x2 - x1 > 14) {
+        ctx.fillStyle = val === 'X' ? '#f9e2af' : '#f5c2e7';
+        ctx.font = '10px monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText(val, x1 + 3, midY + 3);
+      }
+    } else {
+      const hexVal = toHex(val, sig.width);
+      ctx.fillStyle = 'rgba(137,180,250,0.15)';
+      ctx.fillRect(x1 + 1, highY, Math.max(0, x2 - x1 - 2), lowY - highY);
+      ctx.strokeStyle = '#89b4fa';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x1 + 1, highY, Math.max(0, x2 - x1 - 2), lowY - highY);
+
+      if (i > 0) {
+        ctx.strokeStyle = '#89b4fa';
+        ctx.beginPath();
+        ctx.moveTo(x1, highY);
+        ctx.lineTo(x1, lowY);
+        ctx.stroke();
+      }
+      if (x2 - x1 > 24) {
+        ctx.fillStyle = '#cdd6f4';
+        ctx.font = '11px monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText(hexVal, x1 + 5, midY + 4);
+      }
+    }
+
+    if (hasDelta && next && Math.abs(next.time - ch.time) < 0.001) {
+      ctx.fillStyle = '#f9e2af';
+      ctx.font = '9px monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText('d' + ch.delta + '->' + next.delta, x1 + 2, highY - 2);
+    }
+  }
+}
+
+function toHex(binStr, width) {
+  if (/^[01]+$/.test(binStr)) {
+    const n = parseInt(binStr, 2);
+    const hexDigits = Math.ceil(width / 4);
+    return '0x' + n.toString(16).toUpperCase().padStart(hexDigits, '0');
+  }
+  return binStr;
+}
+
+// ============================================================================
+// Status bar
+// ============================================================================
+function updateStatus() {
+  if (!data || cursorTime === null) return;
+  document.getElementById('stTime').textContent = cursorTime.toFixed(3) + ' ns';
+
+  let cycle = '-';
+  if (data.triggers) {
+    let found = null;
+    for (const tr of data.triggers) {
+      if (tr.time <= cursorTime) found = tr;
+      else break;
+    }
+    cycle = found ? 'c' + found.cycle : '0 (pre-trig)';
+  }
+  document.getElementById('stCycle').textContent = cycle;
+
+  let anySignal = '', anyValue = '';
+  for (const sig of data.signals) {
+    let v = sig.changes[0].value;
+    for (const ch of sig.changes) {
+      if (ch.time <= cursorTime) v = ch.value;
+      else break;
+    }
+    if (sig.width === 1) {
+      anySignal = sig.name; anyValue = v;
+    }
+  }
+
+  let deltaAtCursor = '-';
+  for (const sig of data.signals) {
+    for (const ch of sig.changes) {
+      if (Math.abs(ch.time - cursorTime) < 0.01 && ch.delta !== undefined) {
+        deltaAtCursor = ch.delta;
+        anySignal = sig.name;
+        anyValue = ch.value;
+        break;
+      }
+    }
+  }
+  document.getElementById('stDelta').textContent = deltaAtCursor;
+  document.getElementById('stSignal').textContent = anySignal;
+  document.getElementById('stValue').textContent = anyValue;
+}
+
+window.addEventListener('resize', () => { if (data) render(); });
+canvas.style.cursor = 'crosshair';
+</script>
+</body>
+</html>

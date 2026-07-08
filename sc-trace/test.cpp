@@ -319,7 +319,7 @@ int sc_main(int argc, char* argv[]) {
     jt->snapshot();
     jt_global->snapshot();
     sc_start(100, SC_NS);
-
+viewer.html
     std::cout << "=== Phase 3: Paused (10 ns = 2 cycles) ===\n";
     enable.write(false);
     jt->snapshot();
