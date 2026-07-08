@@ -123,12 +123,19 @@ namespace cc_vrwrapper
     // ========================================================================
     // CONCEPTS  [C++20]
     // ========================================================================
-
+    
+    template<typename T>
+    concept ScPortOrSignal = is_sc_signal_or_port<T>::value;
+    
     template <typename T>
     concept ScLogicLike = is_sc_lv<T>::value || is_sc_bv<T>::value || is_sc_logic<T>::value;
-
+    
     template <typename T>
     concept ScVector = is_sc_lv<T>::value || is_sc_bv<T>::value;
+    
+    template<typename T>
+    concept AddressIntegral =
+        std::integral<T> && !std::same_as<T, bool>;
 
     template <typename T> concept ScLv      = is_sc_lv<T>::value;
     template <typename T> concept ScBv      = is_sc_bv<T>::value;
