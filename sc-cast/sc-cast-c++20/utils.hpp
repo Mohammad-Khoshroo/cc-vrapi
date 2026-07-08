@@ -48,7 +48,8 @@ std::string type_name(const T& var)
 
 namespace cc_vrwrapper
 {
-    using namespace sc_core;
+    namespace cast
+{    using namespace sc_core;
     using namespace sc_dt;
     using namespace std;
 
@@ -306,7 +307,7 @@ namespace cc_vrwrapper
             return val;
         }
     }
-
+}
 } // namespace cc_vrwrapper
 
 #endif // CC_VRWRAPPER_UTILS_HPP

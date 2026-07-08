@@ -10,7 +10,8 @@
 
 namespace cc_vrwrapper
 {
-    // ===== TO sc_lv<W> =====
+    namespace cast
+{    // ===== TO sc_lv<W> =====
 
     template <ScLv LV>
     LV sc_cast(const LV& lv) { return lv; }
@@ -327,7 +328,7 @@ namespace cc_vrwrapper
     {
         return sc_cast<T>(str, mode, base);
     }
-
+}
 } // namespace cc_vrwrapper
 
 #endif // CC_VRWRAPPER_LV_HPP

@@ -10,6 +10,8 @@
 
 namespace cc_vrwrapper
 {
+    namespace cast {    
+    
     // ===== TO sc_bv<W> =====
 
     template <ScBv BV>
@@ -342,7 +344,7 @@ namespace cc_vrwrapper
     {
         return sc_cast<T>(str, mode, base);
     }
-
+}
 } // namespace cc_vrwrapper
 
 #endif // CC_VRWRAPPER_BV_HPP

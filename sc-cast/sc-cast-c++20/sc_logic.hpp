@@ -11,7 +11,8 @@
 
 namespace cc_vrwrapper
 {
-    // ===== TO sc_logic =====
+    namespace cast
+{    // ===== TO sc_logic =====
     // All "TO sc_logic" functions are templated on <ScLogic T> so that
     // sc_cast<sc_logic>(...) works with explicit template argument.
 
@@ -157,7 +158,7 @@ namespace cc_vrwrapper
     {
         return sc_cast<T>(str, mode, base);
     }
-
+}
 } // namespace cc_vrwrapper
 
 #endif // CC_VRWRAPPER_LOGIC_HPP

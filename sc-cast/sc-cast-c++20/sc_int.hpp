@@ -11,6 +11,8 @@
 
 namespace cc_vrwrapper
 {
+    namespace cast
+{
     // ===== TO sc_int family =====
 
     // Identity
@@ -295,7 +297,7 @@ namespace cc_vrwrapper
     {
         return sc_cast<T>(str, mode, base);
     }
-
+}
 } // namespace cc_vrwrapper
 
 #endif // CC_VRWRAPPER_INT_HPP
