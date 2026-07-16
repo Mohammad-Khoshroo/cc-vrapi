@@ -94,6 +94,33 @@ namespace cc_vrwrapper
     struct is_sc_signal_or_port : std::integral_constant<bool,
         is_sc_signal<T>::value || is_sc_in<T>::value || is_sc_out<T>::value> {};
 
+    template <typename T> struct is_sc_in          : std::false_type {};
+    template <typename T> struct is_sc_in<sc_in<T>>     : std::true_type {};
+
+    template <typename T> struct is_sc_out         : std::false_type {};
+    template <typename T> struct is_sc_out<sc_out<T>>    : std::true_type {};
+
+    template <typename T>
+    struct is_sc_signal_or_port : std::integral_constant<bool,
+        is_sc_signal<T>::value || is_sc_in<T>::value || is_sc_out<T>::value> {};
+
+    // ----------------------------------------------------------------
+    // Check if T is a signal or port
+    // ----------------------------------------------------------------
+    template <typename T> struct is_sc_signal     : std::false_type {};
+    template <typename T> struct is_sc_signal<sc_signal<T>> : std::true_type {};
+    template <> struct is_sc_signal<sc_core::sc_clock> : std::true_type {};
+
+    template <typename T> struct is_sc_in          : std::false_type {};
+    template <typename T> struct is_sc_in<sc_in<T>>     : std::true_type {};
+
+    template <typename T> struct is_sc_out         : std::false_type {};
+    template <typename T> struct is_sc_out<sc_out<T>>    : std::true_type {};
+
+    template <typename T>
+    struct is_sc_signal_or_port : std::integral_constant<bool,
+        is_sc_signal<T>::value || is_sc_in<T>::value || is_sc_out<T>::value> {};
+        
     template <typename T>
     struct is_sc_logiclike : std::integral_constant<bool,
         is_sc_lv<T>::value || is_sc_bv<T>::value || is_sc_logic<T>::value> {};
@@ -123,7 +150,7 @@ namespace cc_vrwrapper
     // ========================================================================
     // CONCEPTS  [C++20]
     // ========================================================================
-    
+
     template<typename T>
     concept ScPortOrSignal = is_sc_signal_or_port<T>::value;
     
