@@ -143,7 +143,7 @@ namespace cc_vrwrapper
             return detail::from_bitstr<LV>(substr2);
         }
 
-                // Hex prefix
+        // Hex prefix
         bool has_hex_prefix = (size >= 2 && c0 == '0' && (c1 == 'x' || c1 == 'X'));
         if (has_hex_prefix || base == 16) {
             std::string hex_str = has_hex_prefix ? std::string(str.substr(2)) : str;
