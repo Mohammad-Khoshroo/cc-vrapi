@@ -143,10 +143,15 @@ namespace cc_vrwrapper
             return detail::from_bitstr<LV>(substr2);
         }
 
+                // Hex prefix
+        bool has_hex_prefix = (size >= 2 && c0 == '0' && (c1 == 'x' || c1 == 'X'));
+        if (has_hex_prefix || base == 16) {
+            std::string hex_str = has_hex_prefix ? std::string(str.substr(2)) : str;
 
-        // Hex prefix
-        if (size >= 3 && c0 == '0' && (c1 == 'x' || c1 == 'X')) {
-            std::string hex_str = substr2;
+            if (hex_str.empty()) {
+                SC_REPORT_ERROR("sc_cast", "Empty hex string. X signal issue.");
+                return detail::make_unknown<LV>();
+            }
             if (!std::regex_match(hex_str, std::regex("^[0-9a-fA-FxzXZ]+$"))) {
                 SC_REPORT_ERROR("sc_cast", "Invalid characters in hex string. X signal issue.");
                 return detail::make_unknown<LV>();

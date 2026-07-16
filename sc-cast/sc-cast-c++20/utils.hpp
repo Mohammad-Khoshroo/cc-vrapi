@@ -77,7 +77,40 @@ namespace cc_vrwrapper
 
     template <typename T> struct is_sc_biguint : std::false_type {};
     template <int W>      struct is_sc_biguint<sc_biguint<W>> : std::true_type {};
+    // ----------------------------------------------------------------
+    // Check if T is a signal or port
+    // ----------------------------------------------------------------
+    template <typename T> struct is_sc_signal     : std::false_type {};
+    template <typename T> struct is_sc_signal<sc_signal<T>> : std::true_type {};
+    template <> struct is_sc_signal<sc_core::sc_clock> : std::true_type {};
 
+    template <typename T> struct is_sc_in          : std::false_type {};
+    template <typename T> struct is_sc_in<sc_in<T>>     : std::true_type {};
+
+    template <typename T> struct is_sc_out         : std::false_type {};
+    template <typename T> struct is_sc_out<sc_out<T>>    : std::true_type {};
+
+    template <typename T>
+    struct is_sc_signal_or_port : std::integral_constant<bool,
+        is_sc_signal<T>::value || is_sc_in<T>::value || is_sc_out<T>::value> {};
+
+    // ----------------------------------------------------------------
+    // Check if T is a signal or port
+    // ----------------------------------------------------------------
+    template <typename T> struct is_sc_signal     : std::false_type {};
+    template <typename T> struct is_sc_signal<sc_signal<T>> : std::true_type {};
+    template <> struct is_sc_signal<sc_core::sc_clock> : std::true_type {};
+
+    template <typename T> struct is_sc_in          : std::false_type {};
+    template <typename T> struct is_sc_in<sc_in<T>>     : std::true_type {};
+
+    template <typename T> struct is_sc_out         : std::false_type {};
+    template <typename T> struct is_sc_out<sc_out<T>>    : std::true_type {};
+
+    template <typename T>
+    struct is_sc_signal_or_port : std::integral_constant<bool,
+        is_sc_signal<T>::value || is_sc_in<T>::value || is_sc_out<T>::value> {};
+        
     template <typename T>
     struct is_sc_logiclike : std::integral_constant<bool,
         is_sc_lv<T>::value || is_sc_bv<T>::value || is_sc_logic<T>::value> {};
@@ -107,13 +140,28 @@ namespace cc_vrwrapper
     // ========================================================================
     // CONCEPTS  [C++20]
     // ========================================================================
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6b9f20804667b96b92aafb89e187d21837dd4bc1
+    
+    template<typename T>
+    concept ScPortOrSignal = is_sc_signal_or_port<T>::value;
+    
     template <typename T>
     concept ScLogicLike = is_sc_lv<T>::value || is_sc_bv<T>::value || is_sc_logic<T>::value;
-
+    
     template <typename T>
     concept ScVector = is_sc_lv<T>::value || is_sc_bv<T>::value;
+    
+    template<typename T>
+    concept AddressIntegral =
+        std::integral<T> && !std::same_as<T, bool>;
+<<<<<<< HEAD
+    
+=======
 
+>>>>>>> 6b9f20804667b96b92aafb89e187d21837dd4bc1
     template <typename T> concept ScLv      = is_sc_lv<T>::value;
     template <typename T> concept ScBv      = is_sc_bv<T>::value;
     template <typename T> concept ScLogic   = is_sc_logic<T>::value;
